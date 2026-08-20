@@ -1,0 +1,5 @@
+cd negokitdev
+npm run dev
+http://localhost:3000
+
+d
