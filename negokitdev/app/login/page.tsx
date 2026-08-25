@@ -18,22 +18,26 @@ export default function LoginPage() {
     else setEnviado(true)
   }
 
-  if (enviado) {
-    return <p>Revisa tu correo, te hemos enviado un enlace para entrar.</p>
-  }
-
   return (
-    <form onSubmit={handleLogin} style={{ padding: 40 }}>
-      <h1>Entrar</h1>
-      <input
-        type="email"
-        placeholder="tu@correo.com"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <button type="submit">Enviar enlace</button>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </form>
+    <div className="contenedor">
+      <div className="card">
+        {enviado ? (
+          <p>Revisa tu correo, te hemos enviado un enlace para entrar.</p>
+        ) : (
+          <form onSubmit={handleLogin}>
+            <h1>Entrar</h1>
+            <input
+              type="email"
+              placeholder="tu@correo.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button type="submit">Enviar enlace</button>
+            {error && <p style={{ color: 'var(--peligro)' }}>{error}</p>}
+          </form>
+        )}
+      </div>
+    </div>
   )
 }
