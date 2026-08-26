@@ -19,7 +19,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="contenedor">
+    <div className="contenedor" style={{ minHeight: '100vh', background: '#dbeafe' }}>
       <div className="card">
         {enviado ? (
           <p>Revisa tu correo, te hemos enviado un enlace para entrar.</p>
