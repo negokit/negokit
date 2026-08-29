@@ -1,9 +1,17 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import QRCode from 'qrcode'
+import { validarPrecio, validarTitulo } from '@/lib/validaciones'
+import MenuPanel from './MenuPanel'
+import AvatarNegocio from '@/components/AvatarNegocio'
+
+const TAMANO_MAXIMO_FOTO = 5 * 1024 * 1024 // 5 MB
+const TIPOS_FOTO_PERMITIDOS = ['image/png', 'image/jpeg']
 
 export default function PanelPage() {
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [emprendedor, setEmprendedor] = useState<any>(null)
   const [servicios, setServicios] = useState<any[]>([])
@@ -28,24 +36,31 @@ export default function PanelPage() {
   async function cargarDatos() {
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { setLoading(false); return }
+    if (!user) {
+      router.replace('/login')
+      return
+    }
 
     const { data: emp } = await supabase
       .from('emprendedores')
       .select('*')
       .eq('auth_user_id', user.id)
-      .single()
+      .maybeSingle()
+
+    if (!emp) {
+      router.replace('/registro')
+      return
+    }
 
     setEmprendedor(emp)
 
-    if (emp) {
-      const { data: servs } = await supabase
-        .from('servicios')
-        .select('*')
-        .eq('emprendedor_id', emp.id)
-        .order('orden', { ascending: true })
-      setServicios(servs || [])
-    }
+    const { data: servs } = await supabase
+      .from('servicios')
+      .select('*')
+      .eq('emprendedor_id', emp.id)
+      .order('orden', { ascending: true })
+    setServicios(servs || [])
+
     setLoading(false)
   }
 
@@ -71,15 +86,15 @@ export default function PanelPage() {
     setError('')
   }
 
-  function validarPrecio(valor: string) {
-    if (!valor) return true
-    return /^\d+(\.\d{1,2})?$/.test(valor) && parseFloat(valor) > 0
-  }
-
   async function guardarServicio(e: React.FormEvent) {
     e.preventDefault()
     setError('')
     if (!emprendedor) return
+
+    if (!validarTitulo(titulo)) {
+      setError('El título es obligatorio y no puede pasar de 50 caracteres.')
+      return
+    }
 
     if (!servicioEditando && servicios.length >= 12) {
       setError('Ya tienes el máximo de 12 servicios.')
@@ -89,6 +104,17 @@ export default function PanelPage() {
     if (precio && !validarPrecio(precio)) {
       setError('El precio debe ser un número positivo con hasta 2 decimales.')
       return
+    }
+
+    if (foto) {
+      if (!TIPOS_FOTO_PERMITIDOS.includes(foto.type)) {
+        setError('La foto debe ser un archivo .png o .jpg/.jpeg.')
+        return
+      }
+      if (foto.size > TAMANO_MAXIMO_FOTO) {
+        setError('La foto pesa demasiado (máximo 5 MB). Prueba con otra o hazle una captura más pequeña.')
+        return
+      }
     }
 
     setGuardando(true)
@@ -156,11 +182,37 @@ export default function PanelPage() {
   }
 
   if (loading) return <div className="contenedor"><p>Cargando...</p></div>
-  if (!emprendedor) return <div className="contenedor"><p>No se encontró tu perfil de emprendedor. Revisa el paso del SQL insert.</p></div>
+  if (!emprendedor) return <div className="contenedor"><p>Cargando...</p></div>
 
   return (
-    <div className="contenedor">
-      <h1>Panel de {emprendedor.nombre_negocio}</h1>
+    <div className="contenedor" style={{ paddingTop: 96 }}>
+      <MenuPanel emprendedor={emprendedor} />
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '1rem' }}>
+        <AvatarNegocio emprendedor={emprendedor} tamano={44} conAnillo />
+        <h1 style={{ margin: 0 }}>Panel de {emprendedor.nombre_negocio}</h1>
+      </div>
+
+      {servicios.length === 0 && (
+        <div className="card" style={{ borderColor: 'var(--accent)' }}>
+          <strong>¡Bienvenida, {emprendedor.nombre_contacto || emprendedor.nombre_negocio}!</strong>
+          <p style={{ margin: '8px 0 0' }}>Tu página ya existe, pero todavía está vacía. Para dejarla lista solo faltan 3 pasos:</p>
+          <ol style={{ margin: '8px 0 0', paddingLeft: 20 }}>
+            <li>Añade tu primer servicio abajo (con foto si puedes).</li>
+            <li>Revisa cómo se ve tu página con el botón "Ver mi página →" del menú.</li>
+            <li>Descarga tu código QR y compártelo o imprímelo.</li>
+          </ol>
+        </div>
+      )}
+
+      {servicios.length > 0 && servicios.every((s) => !s.foto_url) && (
+        <div className="card" style={{ borderColor: 'var(--accent)' }}>
+          <strong>Tu página se ve mejor con fotos</strong>
+          <p style={{ margin: '4px 0 0' }}>
+            Ninguno de tus servicios tiene foto todavía. Sube al menos una — inspira mucha más confianza que solo texto.
+          </p>
+        </div>
+      )}
 
       <div className="card">
         <h2 style={{ marginTop: 0 }}>Tu código QR</h2>
@@ -230,6 +282,7 @@ export default function PanelPage() {
             placeholder="Título"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
+            maxLength={50}
             required
           />
           <textarea

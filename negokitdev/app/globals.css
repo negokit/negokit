@@ -2,8 +2,8 @@
 
 :root {
   --background: #FAFAF7;
-  --foreground: #22223B;
-  --accent: #C9713D;
+  --foreground: #1C1C27;
+  --accent: #5B6472;
   --surface: #FFFFFF;
   --border: #E4DFD4;
   --muted: #8a8a99;
@@ -16,10 +16,22 @@
   --font-sans: var(--font-inter);
 }
 
+html {
+  min-height: 100%;
+  background: var(--background);
+}
+
 body {
+  min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+/* Solo se activa cuando corres "npm run dev" en tu ordenador — nunca en producción.
+   Ya no cambia el fondo de toda la página, solo dejamos espacio para la franja de arriba. */
+body.entorno-dev {
+  padding-top: 22px;
 }
 
 h1 {
@@ -67,6 +79,7 @@ ul {
   border-radius: 14px;
   padding: 1.25rem;
   margin-bottom: 1.25rem;
+  box-shadow: 0 1px 2px rgba(20, 20, 30, 0.03), 0 10px 28px rgba(20, 20, 30, 0.045);
 }
 
 .servicio {
@@ -124,7 +137,7 @@ input[type="file"] {
 }
 
 input[type="file"]::file-selector-button {
-  background: var(--accent);
+  background: var(--foreground);
   color: #fff;
   border: none;
   padding: 0.55rem 1rem;
@@ -153,11 +166,11 @@ label {
 }
 
 button {
-  background: var(--accent);
+  background: var(--foreground);
   color: #fff;
   border: none;
-  padding: 0.55rem 1rem;
-  border-radius: 8px;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -183,4 +196,491 @@ button.peligro {
   background: transparent;
   color: var(--peligro);
   border: 1px solid var(--peligro);
+}
+
+/* ==== Página pública: diseño tipo tarjeta de reserva ==== */
+
+.pagina-publica .fila-cabecera {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.avatar-circulo {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--foreground);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.info-negocio {
+  flex: 1;
+  min-width: 0;
+}
+
+.info-negocio h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.subtitulo-oficio {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.iconos-cabecera {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.icono-circular {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--foreground);
+  text-decoration: none;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0;
+}
+
+.icono-circular:hover {
+  opacity: 0.8;
+}
+
+.meta-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 0.6rem;
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.1rem;
+}
+
+.etiqueta {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: var(--foreground);
+  background: var(--surface);
+}
+
+.boton-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  background: var(--foreground);
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  box-sizing: border-box;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(28, 28, 39, 0.16);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.boton-pill:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.boton-pill-claro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  background: #fff;
+  color: var(--foreground);
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.boton-pill-claro:hover {
+  opacity: 0.9;
+}
+
+.etiqueta-seccion {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.seccion-servicios {
+  margin-top: 2rem;
+}
+
+.seccion-servicios h2 {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-top: 0;
+}
+
+.lista-servicios-nueva {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tarjeta-servicio-nueva {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(20, 20, 30, 0.04), 0 10px 26px rgba(20, 20, 30, 0.06);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.tarjeta-servicio-nueva:hover {
+  box-shadow: 0 4px 10px rgba(20, 20, 30, 0.07), 0 18px 38px rgba(20, 20, 30, 0.1);
+  transform: translateY(-2px);
+}
+
+.imagen-servicio-nueva {
+  position: relative;
+}
+
+.imagen-servicio-nueva img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.numero-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #fff;
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.cuerpo-servicio-nueva {
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+.fila-titulo-precio {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.precio-servicio-nueva {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.tarjeta-oscura {
+  background: var(--foreground);
+  color: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 16px 40px rgba(28, 28, 39, 0.32);
+}
+
+/* Botón flotante de WhatsApp en la página pública: siempre visible,
+   fuera del flujo de la página, con icono genérico (no el logo de WhatsApp). */
+.boton-whatsapp-flotante {
+  position: fixed;
+  bottom: 22px;
+  right: 18px;
+  z-index: 400;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--foreground);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(20, 20, 30, 0.3);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.boton-whatsapp-flotante svg {
+  width: 24px;
+  height: 24px;
+}
+
+.boton-whatsapp-flotante:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+}
+
+.etiqueta-oscura {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+/* ==== Botón de menú del panel: flotante, fuera del flujo de tarjetas ==== */
+
+.boton-hamburguesa-flotante {
+  position: fixed;
+  top: 66px;
+  left: 18px;
+  z-index: 500;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(20, 20, 30, 0.08);
+}
+
+.boton-hamburguesa-flotante span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--foreground);
+  border-radius: 2px;
+}
+
+.panel-drawer-seccion-titulo {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.68rem;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+/* Menú lateral deslizante: aparece/desaparece sobre el contenido, no lo empuja */
+
+.panel-drawer-fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 15, 22, 0.45);
+  z-index: 998;
+}
+
+.panel-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 82vw;
+  background: var(--surface);
+  box-shadow: 4px 0 28px rgba(0, 0, 0, 0.18);
+  z-index: 999;
+  padding: 1.5rem 1.25rem;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.panel-drawer.abierto {
+  transform: translateX(0);
+}
+
+.panel-drawer-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.boton-cerrar-drawer {
+  background: transparent;
+  border: none;
+  color: var(--foreground);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px 9px;
+  border-radius: 8px;
+}
+
+.boton-cerrar-drawer:hover {
+  background: var(--background);
+}
+
+.panel-drawer-identidad {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 1.25rem;
+  background: var(--background);
+  border-radius: 12px;
+}
+
+.panel-drawer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.panel-drawer-nav a {
+  text-decoration: none;
+  display: block;
+}
+
+/* ==== Login / registro: layout premium tipo "split screen" ==== */
+
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-panel-marca {
+  background: var(--foreground);
+  color: #fff;
+  padding: 2.75rem 1.5rem 2.25rem;
+}
+
+.auth-panel-marca .auth-titulo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 1.75rem 0 0.75rem;
+}
+
+.auth-panel-marca .auth-titulo em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.auth-panel-marca .auth-subtitulo {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.92rem;
+  max-width: 420px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.auth-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.auth-lista li {
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.auth-panel-formulario {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.25rem 1.25rem 3.5rem;
+  background: var(--background);
+}
+
+.auth-panel-formulario > div {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-enlace-secundario {
+  text-align: center;
+  margin: 1rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.auth-enlace-secundario a {
+  color: var(--foreground);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  .auth-layout {
+    flex-direction: row;
+  }
+
+  .auth-panel-marca {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+  }
+
+  .auth-panel-marca .auth-titulo {
+    font-size: 2.2rem;
+    margin: 2rem 0 1rem;
+  }
+
+  .auth-panel-marca .auth-subtitulo {
+    font-size: 1rem;
+  }
+
+  .auth-panel-formulario {
+    flex: 1;
+  }
 }

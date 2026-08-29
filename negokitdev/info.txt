@@ -3,3 +3,35 @@ npm run dev
 http://localhost:3000
 
 d
+
+sta https://negokit-git-dev-negokit1.vercel.app/login
+prod https://negokit-git-main-negokit1.vercel.app/login
+
+rama 
+git checkout -b dev
+
+
+
+STA
+=====
+git add .
+git commit -m "prueba"
+git push -u origin dev
+https://negokit-git-dev-negokit1.vercel.app/login
+
+
+PRO
+=======
+git checkout main
+git pull
+git merge dev
+git push
+
+https://negokit-git-main-negokit1.vercel.app/login
+
+
+
+
+git branch para saber en que rama estoy
+
+git checkout dev/main => para cambiar de rama
