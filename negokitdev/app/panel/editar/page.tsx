@@ -318,7 +318,7 @@ export default function EditarNegocioPage() {
           <label>Ciudad</label>
           <input
             type="text"
-            placeholder={emprendedor ? undefined : 'ej: Getafe'}
+            placeholder={emprendedor ? undefined : 'ej: Madrid'}
             value={ciudad}
             onChange={(e) => setCiudad(e.target.value)}
             maxLength={LONGITUD_MAXIMA.ciudad}

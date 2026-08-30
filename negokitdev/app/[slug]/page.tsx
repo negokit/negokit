@@ -24,13 +24,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const titulo = emp.oficio ? `${emp.nombre_negocio} · ${emp.oficio}` : emp.nombre_negocio
   const descripcion = emp.ciudad
-    ? `${emp.nombre_negocio} en ${emp.ciudad}. Contacta directamente por WhatsApp.`
-    : `${emp.nombre_negocio}. Contacta directamente por WhatsApp.`
+    ? `Descubre los servicios de ${emp.nombre_negocio} en ${emp.ciudad} y contacta directo por WhatsApp.`
+    : `Descubre los servicios de ${emp.nombre_negocio} y contacta directo por WhatsApp.`
 
   return {
     title: titulo,
     description: descripcion,
     openGraph: {
+      title: titulo,
+      description: descripcion,
+      siteName: 'servix',
+      locale: 'es_ES',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
       title: titulo,
       description: descripcion,
     },
