@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
+import AuthLayout from '@/components/AuthLayout'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -19,13 +20,20 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="contenedor" style={{ minHeight: '100vh', background: '#dbeafe' }}>
+    <AuthLayout
+      titulo={<>Tu oficio, con la página que <em>merece</em>.</>}
+      subtitulo="Sube tus servicios, comparte tu enlace o tu código QR, y deja que te escriban directo por WhatsApp — sin páginas complicadas ni nada que aprender."
+      puntos={['Página profesional', 'Código QR permanente', 'Contacto por WhatsApp', 'Sin conocimientos técnicos']}
+    >
       <div className="card">
         {enviado ? (
-          <p>Revisa tu correo, te hemos enviado un enlace para entrar.</p>
+          <p style={{ marginBottom: 0 }}>Revisa tu correo, te hemos enviado un enlace para entrar.</p>
         ) : (
           <form onSubmit={handleLogin}>
-            <h1>Entrar</h1>
+            <h1 style={{ marginBottom: 4 }}>Entrar</h1>
+            <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
+              Te enviamos un enlace a tu correo — nada de contraseñas que recordar.
+            </p>
             <input
               type="email"
               placeholder="tu@correo.com"
@@ -33,11 +41,14 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <button type="submit">Enviar enlace</button>
+            <button type="submit" style={{ width: '100%' }}>Enviar enlace</button>
             {error && <p style={{ color: 'var(--peligro)' }}>{error}</p>}
           </form>
         )}
+        <p className="auth-enlace-secundario">
+          ¿Aún no tienes página? <a href="/registro">Crear mi página</a>
+        </p>
       </div>
-    </div>
+    </AuthLayout>
   )
 }
