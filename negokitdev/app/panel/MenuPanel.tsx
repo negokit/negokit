@@ -1,13 +1,12 @@
 'use client'
 import { useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import { generarQrDataUrl } from '@/lib/qr'
 import LogoServix from '@/components/LogoServix'
 import AvatarNegocio from '@/components/AvatarNegocio'
 
 export default function MenuPanel({ emprendedor }: { emprendedor: any }) {
-  const router = useRouter()
   const pathname = usePathname()
   const [abierto, setAbierto] = useState(false)
   const [qrUrl, setQrUrl] = useState<string | null>(null)
@@ -15,7 +14,10 @@ export default function MenuPanel({ emprendedor }: { emprendedor: any }) {
 
   async function cerrarSesion() {
     await supabase.auth.signOut()
-    router.replace('/login')
+    // Navegación completa (no del router de Next) a propósito: así se descarta
+    // cualquier dato en memoria de la sesión anterior, y no se puede volver
+    // "hacia atrás" a una vista del panel que quedó cacheada como si siguieras dentro.
+    window.location.href = '/login'
   }
 
   async function alternarQR() {

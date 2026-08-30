@@ -39,7 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               opacity: 0.85,
             }}
           >
-            DESARROLLO (local)
+          
           </div>
         )}
         {children}

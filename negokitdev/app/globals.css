@@ -97,9 +97,19 @@ ul {
 
 .acciones {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   margin-top: 0.6rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+}
+
+.acciones button {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.4rem;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 input[type="text"],
@@ -605,7 +615,7 @@ button.peligro {
 }
 
 .auth-panel-marca .auth-titulo em {
-  color: var(--accent);
+  color: #C3CAD6;
   font-style: italic;
 }
 

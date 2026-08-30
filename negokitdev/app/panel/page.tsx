@@ -48,7 +48,9 @@ export default function PanelPage() {
       .maybeSingle()
 
     if (!emp) {
-      router.replace('/registro')
+      // Sin página todavía: la crea en "Editar mi negocio" (un único
+      // formulario para crear y editar, sin duplicarlo en /registro).
+      router.replace('/panel/editar')
       return
     }
 
