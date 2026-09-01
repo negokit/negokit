@@ -40,15 +40,6 @@ function IconoTelefono() {
   )
 }
 
-function IconoReloj() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 7v5l3 3" />
-    </svg>
-  )
-}
-
 function IconoCompartir() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -240,9 +231,11 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
   if (loading) return <div className="contenedor"><p>Cargando...</p></div>
   if (!emprendedor) return <div className="contenedor"><p>No se encontró esta página.</p></div>
 
+  // Las 3 insignias se muestran siempre juntas y de la misma forma — antes
+  // "Respuesta en menos de 24h" se separaba en la fila de arriba con un
+  // icono de reloj, y daba la impresión de que solo había 2 insignias en
+  // vez de 3.
   const insigniasNegocio = obtenerInsignias(emprendedor)
-  const tieneRespuesta24h = insigniasNegocio.includes('Respuesta en menos de 24h')
-  const otrasInsignias = insigniasNegocio.filter((i) => i !== 'Respuesta en menos de 24h')
 
   return (
     <div className="contenedor pagina-publica">
@@ -311,14 +304,11 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
             <IconoTelefono /> {formatearTelefono(emprendedor.whatsapp_number)}
           </a>
         )}
-        {tieneRespuesta24h && (
-          <span className="meta-item"><IconoReloj /> Respuesta &lt; 24h</span>
-        )}
       </div>
 
-      {otrasInsignias.length > 0 && (
+      {insigniasNegocio.length > 0 && (
         <div className="etiquetas">
-          {otrasInsignias.map((texto) => (
+          {insigniasNegocio.map((texto) => (
             <span key={texto} className="etiqueta">{texto}</span>
           ))}
         </div>
