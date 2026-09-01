@@ -269,13 +269,18 @@ export default function EditarNegocioPage() {
               conAnillo
             />
             <div style={{ flex: 1, minWidth: 0 }}>
+              <label htmlFor="logo-input" className="boton-subir-archivo">
+                {logoActualUrl || logo ? 'Cambiar logo' : 'Subir logo (cámara o galería)'}
+              </label>
               <input
+                id="logo-input"
                 type="file"
                 accept="image/png, image/jpeg"
                 onChange={(e) => setLogo(e.target.files?.[0] || null)}
+                style={{ position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden' }}
               />
               {logo && (
-                <p style={{ fontSize: '0.85rem', color: 'var(--muted)', marginTop: -6 }}>Seleccionado: {logo.name}</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--muted)', marginTop: 4 }}>Seleccionado: {logo.name}</p>
               )}
             </div>
           </div>
@@ -318,7 +323,7 @@ export default function EditarNegocioPage() {
           <label>Ciudad</label>
           <input
             type="text"
-            placeholder={emprendedor ? undefined : 'ej: Madrid'}
+            placeholder={emprendedor ? undefined : 'ej: Getafe'}
             value={ciudad}
             onChange={(e) => setCiudad(e.target.value)}
             maxLength={LONGITUD_MAXIMA.ciudad}
@@ -344,12 +349,17 @@ export default function EditarNegocioPage() {
           <label>Tu WhatsApp</label>
           <input
             type="tel"
-            placeholder={emprendedor ? undefined : 'con código de país, ej. +34...'}
+            inputMode="tel"
+            placeholder={emprendedor ? undefined : 'ej: 600 123 456'}
             value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value)}
             maxLength={20}
             required
           />
+          <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.85rem' }}>
+            Escribe solo tu número — si no pones prefijo de país, asumimos España (+34). Si tu negocio está en otro
+            país, escribe el prefijo delante (ej. +52 para México).
+          </p>
 
           <label>Instagram (opcional)</label>
           <input

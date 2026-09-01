@@ -208,6 +208,30 @@ button.peligro {
   border: 1px solid var(--peligro);
 }
 
+/* Botón de "Subir foto/logo" — es un <label> que activa un input[type=file]
+   oculto, para poder controlar el texto y que se vea igual en todos los
+   navegadores (el botón nativo del input varía mucho de un móvil a otro). */
+.boton-subir-archivo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+  width: auto;
+}
+
+.boton-subir-archivo:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /* ==== Página pública: diseño tipo tarjeta de reserva ==== */
 
 .pagina-publica .fila-cabecera {

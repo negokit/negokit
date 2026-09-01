@@ -303,6 +303,8 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
               required
             />
             <input
+              type="tel"
+              inputMode="tel"
               placeholder="Tu teléfono"
               value={telefono}
               onChange={(e) => setTelefono(e.target.value)}

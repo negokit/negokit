@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import QRCode from 'qrcode'
@@ -28,6 +28,10 @@ export default function PanelPage() {
 
   const [qrUrl, setQrUrl] = useState<string | null>(null)
   const [qrVisible, setQrVisible] = useState(false)
+
+  // Miniatura: si acaban de seleccionar una foto nueva, se ve al instante
+  // (antes de guardar); si no, se ve la que ya tenía guardada.
+  const fotoPreviewUrl = useMemo(() => (foto ? URL.createObjectURL(foto) : fotoActualUrl), [foto, fotoActualUrl])
 
   useEffect(() => {
     cargarDatos()
@@ -298,6 +302,8 @@ export default function PanelPage() {
 
           <input
             type="text"
+            inputMode="decimal"
+            pattern="[0-9]*[.,]?[0-9]*"
             placeholder="Precio (opcional)"
             value={precio}
             onChange={(e) => setPrecio(e.target.value)}
@@ -311,20 +317,26 @@ export default function PanelPage() {
             Mostrar precio en la página pública
           </label>
 
-          {fotoActualUrl && !foto && (
-            <div style={{ marginBottom: 10 }}>
-              <img src={fotoActualUrl} alt="Foto actual" style={{ maxWidth: 150, display: 'block', marginBottom: 4, borderRadius: 8 }} />
-              <span style={{ fontSize: '0.85rem', color: 'var(--muted)' }}>Foto actual (sube una nueva para reemplazarla)</span>
-            </div>
-          )}
           <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4 }}>
             Foto del servicio (opcional)
           </label>
+          {fotoPreviewUrl && (
+            <div style={{ marginBottom: 10 }}>
+              <img src={fotoPreviewUrl} alt="Vista previa de la foto" style={{ maxWidth: 150, display: 'block', marginBottom: 4, borderRadius: 8 }} />
+              <span style={{ fontSize: '0.85rem', color: 'var(--muted)' }}>
+                {foto ? 'Nueva foto seleccionada (guarda para aplicarla)' : 'Foto actual (sube una nueva para reemplazarla)'}
+              </span>
+            </div>
+          )}
+          <label htmlFor="foto-servicio-input" className="boton-subir-archivo">
+            {fotoPreviewUrl ? 'Cambiar foto' : 'Subir foto (cámara o galería)'}
+          </label>
           <input
+            id="foto-servicio-input"
             type="file"
             accept="image/png, image/jpeg"
-            capture="environment"
             onChange={(e) => setFoto(e.target.files?.[0] || null)}
+            style={{ position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden' }}
           />
           {foto && <p style={{ fontSize: '0.85rem', color: 'var(--muted)', marginTop: -6 }}>Seleccionada: {foto.name}</p>}
 
