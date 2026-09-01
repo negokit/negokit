@@ -10,6 +10,7 @@ import {
   validarNombreContacto,
   validarOficio,
   validarCiudad,
+  validarDireccionNegocio,
   LONGITUD_MAXIMA,
 } from '@/lib/validaciones'
 import { INSIGNIAS_PRESET, MAX_INSIGNIAS, obtenerInsignias, validarInsignias } from '@/lib/insignias'
@@ -25,6 +26,7 @@ type BorradorNegocio = {
   contacto: string
   oficio: string
   ciudad: string
+  direccion: string
   slug: string
   whatsapp: string
   instagram: string
@@ -47,6 +49,7 @@ export default function EditarNegocioPage() {
   const [contacto, setContacto] = useState('')
   const [oficio, setOficio] = useState('')
   const [ciudad, setCiudad] = useState('')
+  const [direccion, setDireccion] = useState('')
   const [slug, setSlug] = useState('')
   const [slugTocadoAMano, setSlugTocadoAMano] = useState(false)
   // El enlace es un campo delicado: una vez la página ya existe, se muestra
@@ -98,6 +101,7 @@ export default function EditarNegocioPage() {
       setContacto(borrador.contacto)
       setOficio(borrador.oficio)
       setCiudad(borrador.ciudad)
+      setDireccion(borrador.direccion)
       setSlug(borrador.slug)
       setWhatsapp(borrador.whatsapp)
       setInstagram(borrador.instagram)
@@ -112,6 +116,7 @@ export default function EditarNegocioPage() {
       setContacto(emp?.nombre_contacto || '')
       setOficio(emp?.oficio || '')
       setCiudad(emp?.ciudad || '')
+      setDireccion(emp?.direccion || '')
       setSlug(emp?.slug || '')
       setWhatsapp(emp?.whatsapp_number || '')
       setInstagram(emp?.instagram_url || '')
@@ -132,10 +137,10 @@ export default function EditarNegocioPage() {
   useEffect(() => {
     if (loading || !usuario) return
     guardarBorrador(`negocio-${usuario.id}`, {
-      nombre, contacto, oficio, ciudad, slug, whatsapp, instagram, tiktok, web,
+      nombre, contacto, oficio, ciudad, direccion, slug, whatsapp, instagram, tiktok, web,
       presetsSeleccionados, otroTexto,
     } satisfies BorradorNegocio)
-  }, [loading, usuario, nombre, contacto, oficio, ciudad, slug, whatsapp, instagram, tiktok, web, presetsSeleccionados, otroTexto])
+  }, [loading, usuario, nombre, contacto, oficio, ciudad, direccion, slug, whatsapp, instagram, tiktok, web, presetsSeleccionados, otroTexto])
 
   function alternarPreset(texto: string) {
     setError('')
@@ -184,6 +189,10 @@ export default function EditarNegocioPage() {
     }
     if (!validarCiudad(ciudad)) {
       setError('Tu ciudad solo puede tener letras y espacios (2 a 40 caracteres).')
+      return
+    }
+    if (!validarDireccionNegocio(direccion)) {
+      setError(`La dirección no puede pasar de ${LONGITUD_MAXIMA.direccionNegocio} caracteres.`)
       return
     }
     const slugLimpio = slugify(slug)
@@ -245,6 +254,7 @@ export default function EditarNegocioPage() {
       nombre_contacto: contacto,
       oficio,
       ciudad,
+      direccion: direccion.trim() || null,
       slug: slugLimpio,
       whatsapp_number: normalizarWhatsapp(whatsapp),
       instagram_url: instagramUrl || null,
@@ -408,6 +418,19 @@ export default function EditarNegocioPage() {
               maxLength={LONGITUD_MAXIMA.ciudad}
               required
             />
+
+            <label>Dirección (opcional)</label>
+            <input
+              type="text"
+              placeholder="ej: Calle Mayor 12"
+              value={direccion}
+              onChange={(e) => setDireccion(e.target.value)}
+              maxLength={LONGITUD_MAXIMA.direccionNegocio}
+            />
+            <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.85rem' }}>
+              Si la rellenas, aparece en tu página pública junto a tu teléfono — da más confianza para que te
+              contacten. Si prefieres no mostrar tu calle exacta, déjala vacía y se queda solo la ciudad.
+            </p>
 
             <label>Enlace de tu página</label>
             {slugBloqueado ? (

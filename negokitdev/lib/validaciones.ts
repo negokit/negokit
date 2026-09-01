@@ -41,6 +41,7 @@ export const LONGITUD_MAXIMA = {
   nombreContacto: 60,
   oficio: 40,
   ciudad: 40,
+  direccionNegocio: 150,
   slug: 60,
   nombreCliente: 60,
   telefonoCliente: 20,
@@ -67,6 +68,15 @@ export function validarOficio(valor: string) {
 
 export function validarCiudad(valor: string) {
   return /^[a-zA-ZÀ-ÿ\s'-]{2,40}$/.test(valor.trim())
+}
+
+// La dirección del negocio es opcional (vacío es válido) — quien no quiera
+// mostrar su calle exacta puede dejarla en blanco y quedarse solo con la
+// ciudad. Sin restricción de caracteres (una dirección real lleva números,
+// comas, etc.), solo límite de longitud.
+export function validarDireccionNegocio(valor: string) {
+  if (!valor.trim()) return true
+  return valor.trim().length <= LONGITUD_MAXIMA.direccionNegocio
 }
 
 // Nombre del cliente final en el formulario público de contacto.
