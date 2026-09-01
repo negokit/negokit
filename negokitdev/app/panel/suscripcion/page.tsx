@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import { WHATSAPP_SOPORTE, EMAIL_SOPORTE } from '@/lib/config'
@@ -15,7 +15,17 @@ const ESTADOS: Record<string, string> = {
   incomplete_expired: 'Pago sin completar (caducado)',
 }
 
+// useSearchParams() obliga a envolver la página en Suspense, si no Next.js
+// falla al construir la web (no es un bug nuestro, es cómo funciona Next).
 export default function SuscripcionPage() {
+  return (
+    <Suspense fallback={<div className="contenedor"><p>Cargando...</p></div>}>
+      <SuscripcionContenido />
+    </Suspense>
+  )
+}
+
+function SuscripcionContenido() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(true)
