@@ -332,6 +332,42 @@ button.peligro {
   border-color: var(--foreground);
 }
 
+/* Aviso de cookies/privacidad, fijo abajo de toda la app hasta que se acepta. */
+.aviso-cookies {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 900;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 0.9rem 1.1rem;
+  background: var(--foreground);
+  color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.18);
+}
+
+.aviso-cookies p {
+  flex: 1;
+  min-width: 220px;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.aviso-cookies a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.aviso-cookies button {
+  background: #fff;
+  color: var(--foreground);
+  flex-shrink: 0;
+}
+
 /* ==== Página pública: diseño tipo tarjeta de reserva ==== */
 
 .pagina-publica .fila-cabecera {
@@ -575,10 +611,12 @@ button.peligro {
   bottom: 22px;
   right: 18px;
   z-index: 400;
-  width: 56px;
-  height: 56px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  background: var(--foreground);
+  /* Verde de WhatsApp a propósito, aunque el resto de la app sea monocromo:
+     es el color con el que la gente ya reconoce este botón de un vistazo. */
+  background: #25D366;
   color: #fff;
   border: none;
   display: flex;
@@ -590,8 +628,8 @@ button.peligro {
 }
 
 .boton-whatsapp-flotante svg {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
 }
 
 .boton-whatsapp-flotante:hover {

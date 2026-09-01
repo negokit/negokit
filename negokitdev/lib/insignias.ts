@@ -4,12 +4,16 @@
 // (mostrar_insignia_respuesta + insignia_personalizada, una sola); ahora es
 // una lista de hasta 3, elegidas de una lista de sugeridas o escritas a mano.
 
+// A propósito sin números ni cantidades concretas (nada de "+200 clientes"
+// o "10 años de experiencia") — cada negocio es distinto y una cifra fija
+// no le sirve a todos; para eso está la opción "+ Otros", donde cada quien
+// escribe su propio número si quiere mostrarlo.
 export const INSIGNIAS_PRESET = [
   'Respuesta en menos de 24h',
-  '+200 clientes atendidos',
+  'Clientes satisfechos',
   'Precios claros, sin sorpresas',
   'Trabajo garantizado',
-  'Más de 10 años de experiencia',
+  'Amplia experiencia',
   'Presupuesto gratuito',
 ]
 
