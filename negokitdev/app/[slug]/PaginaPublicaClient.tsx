@@ -202,7 +202,14 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
 
     const servicio = servicios.find((s) => s.id === servicioSeleccionado)
     const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
-    const mensaje = `"${servicio?.titulo}" - ${servicio?.descripcion}, enviado el ${fecha}.\n\nSoy ${nombre}, mi teléfono es ${telefono} y mi dirección ${direccion}.`
+    const mensaje =
+      `¡Hola! Vengo desde tu página y quiero contactarte por esto:\n\n` +
+      `Servicio - "${servicio?.titulo}"\n` +
+      `Nombre - ${nombre}\n` +
+      `Teléfono - ${telefono}\n` +
+      `Dirección - ${direccion}\n` +
+      `Fecha - ${fecha}\n\n` +
+      `Quedo pendiente, ¡gracias!`
     const numeroLimpio = emprendedor.whatsapp_number.replace(/\D/g, '')
     const url = `https://wa.me/${numeroLimpio}?text=${encodeURIComponent(mensaje)}`
     window.open(url, '_blank')

@@ -57,8 +57,10 @@ export default async function Image({ params }: Props) {
           }}
         >
           {logoUrl ? (
+            // "contain", no "cover": un logo casi nunca es cuadrado, así que
+            // se ve completo sobre el fondo en vez de recortado.
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logoUrl} width={148} height={148} style={{ objectFit: 'cover' }} alt="" />
+            <img src={logoUrl} width={148} height={148} style={{ objectFit: 'contain' }} alt="" />
           ) : (
             <span style={{ fontSize: 58, fontWeight: 700, color: '#fff' }}>{iniciales}</span>
           )}

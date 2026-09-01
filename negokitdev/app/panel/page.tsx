@@ -356,7 +356,11 @@ export default function PanelPage() {
           </label>
           {fotoPreviewUrl && (
             <div style={{ marginBottom: 10 }}>
-              <img src={fotoPreviewUrl} alt="Vista previa de la foto" style={{ maxWidth: 150, display: 'block', marginBottom: 4, borderRadius: 8 }} />
+              <img
+                src={fotoPreviewUrl}
+                alt="Vista previa de la foto"
+                style={{ width: 150, height: 110, objectFit: 'cover', display: 'block', marginBottom: 4, borderRadius: 8 }}
+              />
               <span style={{ fontSize: '0.85rem', color: 'var(--muted)' }}>
                 {foto ? 'Nueva foto seleccionada (guarda para aplicarla)' : 'Foto actual (sube una nueva para reemplazarla)'}
               </span>
