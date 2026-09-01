@@ -232,6 +232,106 @@ button.peligro {
   color: var(--accent);
 }
 
+/* Zona destacada para subir el logo en "Editar mi negocio": una tarjeta con
+   borde punteado, en vez de un input suelto que pasa desapercibido. */
+.zona-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 1.5rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  background: var(--background);
+}
+
+/* Agrupa el formulario largo de "Editar mi negocio" en secciones, con un
+   pequeño rótulo y una línea separadora — para que no se sienta como un
+   único bloque interminable de campos. */
+.seccion-formulario {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.seccion-formulario.sin-borde {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* Campo "delicado" bloqueado (el enlace de la página, una vez ya existe):
+   se muestra en gris, de solo lectura, con un botón discreto para
+   desbloquearlo a propósito en vez de dejarlo editable por defecto. */
+.campo-bloqueado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.campo-bloqueado span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.enlace-boton {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--foreground);
+  font-weight: 600;
+  font-size: 0.82rem;
+  text-decoration: underline;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.aviso-cambio-enlace {
+  margin-top: -4px;
+  color: var(--peligro);
+  font-size: 0.82rem;
+}
+
+/* Insignias de confianza: chips que se activan/desactivan al tocarlos. */
+.chips-insignias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.chip-insignia {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--foreground);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.chip-insignia.activo {
+  background: var(--foreground);
+  color: #fff;
+  border-color: var(--foreground);
+}
+
 /* ==== Página pública: diseño tipo tarjeta de reserva ==== */
 
 .pagina-publica .fila-cabecera {

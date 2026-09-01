@@ -4,8 +4,11 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import QRCode from 'qrcode'
 import { validarPrecio, validarTitulo } from '@/lib/validaciones'
+import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
 import MenuPanel from './MenuPanel'
 import AvatarNegocio from '@/components/AvatarNegocio'
+
+type BorradorServicio = { titulo: string; descripcion: string; precio: string; mostrarPrecio: boolean }
 
 const TAMANO_MAXIMO_FOTO = 5 * 1024 * 1024 // 5 MB
 const TIPOS_FOTO_PERMITIDOS = ['image/png', 'image/jpeg']
@@ -67,10 +70,32 @@ export default function PanelPage() {
       .order('orden', { ascending: true })
     setServicios(servs || [])
 
+    // Si había un borrador de un servicio nuevo sin guardar (se fue de la
+    // pantalla sin darle a "Añadir servicio"), lo recuperamos para que no
+    // tenga que volver a escribirlo.
+    if (!servicioEditando) {
+      const borrador = leerBorrador<BorradorServicio>(`servicio-${emp.id}-nuevo`)
+      if (borrador) {
+        setTitulo(borrador.titulo)
+        setDescripcion(borrador.descripcion)
+        setPrecio(borrador.precio)
+        setMostrarPrecio(borrador.mostrarPrecio)
+      }
+    }
+
     setLoading(false)
   }
 
+  // Guarda automáticamente lo que se va escribiendo en el formulario de
+  // servicio, para no perderlo si sale de la pantalla sin pulsar "Guardar".
+  useEffect(() => {
+    if (!emprendedor) return
+    const clave = `servicio-${emprendedor.id}-${servicioEditando || 'nuevo'}`
+    guardarBorrador(clave, { titulo, descripcion, precio, mostrarPrecio })
+  }, [emprendedor, servicioEditando, titulo, descripcion, precio, mostrarPrecio])
+
   function limpiarFormulario() {
+    if (emprendedor) borrarBorrador(`servicio-${emprendedor.id}-${servicioEditando || 'nuevo'}`)
     setServicioEditando(null)
     setTitulo('')
     setDescripcion('')
@@ -82,11 +107,14 @@ export default function PanelPage() {
   }
 
   function iniciarEdicion(s: any) {
+    // Si había cambios sin guardar de una edición anterior de este mismo
+    // servicio, se recuperan en vez de partir de lo que ya estaba guardado.
+    const borrador = emprendedor ? leerBorrador<BorradorServicio>(`servicio-${emprendedor.id}-${s.id}`) : null
     setServicioEditando(s.id)
-    setTitulo(s.titulo || '')
-    setDescripcion(s.descripcion || '')
-    setPrecio(s.precio != null ? String(s.precio) : '')
-    setMostrarPrecio(!!s.mostrar_precio)
+    setTitulo(borrador?.titulo ?? s.titulo ?? '')
+    setDescripcion(borrador?.descripcion ?? s.descripcion ?? '')
+    setPrecio(borrador?.precio ?? (s.precio != null ? String(s.precio) : ''))
+    setMostrarPrecio(borrador?.mostrarPrecio ?? !!s.mostrar_precio)
     setFoto(null)
     setFotoActualUrl(s.foto_url || null)
     setError('')
@@ -157,6 +185,9 @@ export default function PanelPage() {
       })
       if (error) { setError(error.message); setGuardando(false); return }
     }
+
+    // Ya se guardó de verdad — el borrador local ya no hace falta.
+    borrarBorrador(`servicio-${emprendedor.id}-${servicioEditando || 'nuevo'}`)
 
     setGuardando(false)
     limpiarFormulario()
@@ -278,6 +309,9 @@ export default function PanelPage() {
             </li>
           ))}
         </ul>
+        <a href={`/${emprendedor.slug}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginTop: 12 }}>
+          <button type="button" className="secundario" style={{ width: '100%' }}>Ver mi página →</button>
+        </a>
       </div>
 
       <div className="card">

@@ -9,6 +9,8 @@ import {
   validarDireccionCliente,
   LONGITUD_MAXIMA,
 } from '@/lib/validaciones'
+import { obtenerInsignias } from '@/lib/insignias'
+import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
 
 function IconoPin() {
   return (
@@ -68,10 +70,28 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState('')
   const [copiado, setCopiado] = useState(false)
+  const [listoParaGuardarBorrador, setListoParaGuardarBorrador] = useState(false)
 
   useEffect(() => {
     cargar()
   }, [slug])
+
+  // Recupera lo que el cliente ya había escrito en el formulario de
+  // contacto, por si salió de la página sin llegar a enviarlo.
+  useEffect(() => {
+    const borrador = leerBorrador<{ nombre: string; telefono: string; direccion: string }>(`contacto-${slug}`)
+    if (borrador) {
+      setNombre(borrador.nombre)
+      setTelefono(borrador.telefono)
+      setDireccion(borrador.direccion)
+    }
+    setListoParaGuardarBorrador(true)
+  }, [slug])
+
+  useEffect(() => {
+    if (!listoParaGuardarBorrador) return
+    guardarBorrador(`contacto-${slug}`, { nombre, telefono, direccion })
+  }, [listoParaGuardarBorrador, slug, nombre, telefono, direccion])
 
   useEffect(() => {
     if (servicioSeleccionado) {
@@ -175,12 +195,17 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
     const numeroLimpio = emprendedor.whatsapp_number.replace(/\D/g, '')
     const url = `https://wa.me/${numeroLimpio}?text=${encodeURIComponent(mensaje)}`
     window.open(url, '_blank')
+    borrarBorrador(`contacto-${slug}`)
     setEnviando(false)
     setEnviado(true)
   }
 
   if (loading) return <div className="contenedor"><p>Cargando...</p></div>
   if (!emprendedor) return <div className="contenedor"><p>No se encontró esta página.</p></div>
+
+  const insigniasNegocio = obtenerInsignias(emprendedor)
+  const tieneRespuesta24h = insigniasNegocio.includes('Respuesta en menos de 24h')
+  const otrasInsignias = insigniasNegocio.filter((i) => i !== 'Respuesta en menos de 24h')
 
   return (
     <div className="contenedor pagina-publica">
@@ -239,14 +264,16 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
         {emprendedor.ciudad && (
           <span className="meta-item"><IconoPin /> {emprendedor.ciudad}</span>
         )}
-        {emprendedor.mostrar_insignia_respuesta !== false && (
+        {tieneRespuesta24h && (
           <span className="meta-item"><IconoReloj /> Respuesta &lt; 24h</span>
         )}
       </div>
 
-      {emprendedor.insignia_personalizada && (
+      {otrasInsignias.length > 0 && (
         <div className="etiquetas">
-          <span className="etiqueta">{emprendedor.insignia_personalizada}</span>
+          {otrasInsignias.map((texto) => (
+            <span key={texto} className="etiqueta">{texto}</span>
+          ))}
         </div>
       )}
 
