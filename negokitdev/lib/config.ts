@@ -9,3 +9,9 @@ export const WHATSAPP_SOPORTE = ''
 
 // Email de soporte, usado como alternativa si no hay WhatsApp configurado.
 export const EMAIL_SOPORTE = ''
+
+// Nombre y precio del plan tal como se muestran en "Mi suscripción". Como de
+// momento solo hay un plan, se dejan fijos aquí — si el precio cambia en
+// Stripe, actualiza también este texto para que coincida.
+export const PLAN_NOMBRE = 'Servix — Plan fundador'
+export const PLAN_PRECIO = '14,99 €/mes'

@@ -36,11 +36,18 @@ export async function POST(req: NextRequest) {
       case 'customer.subscription.created':
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription
+        const item = subscription.items.data[0]
         await supabaseAdmin
           .from('emprendedores')
           .update({
             stripe_subscription_id: subscription.id,
             stripe_subscription_status: subscription.status,
+            stripe_trial_ends_at: subscription.trial_end
+              ? new Date(subscription.trial_end * 1000).toISOString()
+              : null,
+            stripe_proximo_cobro: item?.current_period_end
+              ? new Date(item.current_period_end * 1000).toISOString()
+              : null,
           })
           .eq('stripe_customer_id', subscription.customer as string)
         break

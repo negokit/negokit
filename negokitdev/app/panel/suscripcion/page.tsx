@@ -2,8 +2,12 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
-import { WHATSAPP_SOPORTE, EMAIL_SOPORTE } from '@/lib/config'
+import { WHATSAPP_SOPORTE, EMAIL_SOPORTE, PLAN_NOMBRE, PLAN_PRECIO } from '@/lib/config'
 import MenuPanel from '../MenuPanel'
+
+function formatearFecha(iso: string) {
+  return new Date(iso).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+}
 
 const ESTADOS: Record<string, string> = {
   trialing: 'En periodo de prueba gratuita',
@@ -120,47 +124,67 @@ function SuscripcionContenido() {
         </div>
       )}
 
-      <div className="card">
-        <p className="etiqueta-seccion" style={{ marginBottom: 4 }}>Servicio incluido</p>
-        <p style={{ marginTop: 0 }}><strong>Portfolio de servicios</strong> — tu página, tus servicios y tu código QR.</p>
-        <p style={{ color: 'var(--muted)', fontSize: '0.82rem', marginBottom: 0 }}>
-          Es el primer servicio de Servix. Si en el futuro se añaden más (agenda, presupuestos, etc.), aparecerán
-          aquí para que los actives cuando quieras.
-        </p>
-      </div>
+      {tieneSuscripcion ? (
+        <div className="card" style={{ border: '2px solid var(--negro, #111)', background: '#fafafa' }}>
+          <p className="etiqueta-seccion" style={{ marginBottom: 4 }}>Tu plan activo</p>
+          <p style={{ marginTop: 0, marginBottom: 4, fontSize: '1.15rem' }}>
+            <strong>{PLAN_NOMBRE}</strong>
+          </p>
+          <p style={{ marginTop: 0, marginBottom: 12, color: 'var(--muted)' }}>{PLAN_PRECIO}</p>
 
-      <div className="card">
-        {tieneSuscripcion ? (
-          <>
-            <p><strong>Estado:</strong> {ESTADOS[estado || ''] || estado}</p>
-            <p>Para cambiar tu método de pago, ver tus facturas o cancelar, usa el portal de Stripe.</p>
-            <button onClick={() => llamarApi('/api/stripe/portal')} disabled={procesando}>
-              {procesando ? 'Abriendo...' : 'Gestionar suscripción'}
-            </button>
-          </>
-        ) : (
-          <>
-            <p>Todavía no tienes una suscripción activa.</p>
-            <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-              Empieza tu prueba gratuita de 7 días — no se te cobra nada hasta que termine, y puedes cancelar cuando quieras.
+          <p style={{ marginBottom: 4 }}>
+            <strong>Estado:</strong> {ESTADOS[estado || ''] || estado}
+          </p>
+          {estado === 'trialing' && emprendedor.stripe_trial_ends_at && (
+            <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginTop: 0 }}>
+              Tu prueba gratuita termina el {formatearFecha(emprendedor.stripe_trial_ends_at)} — a partir de ese
+              día se te cobrará {PLAN_PRECIO} automáticamente, salvo que canceles antes.
             </p>
-            <button onClick={() => llamarApi('/api/stripe/checkout')} disabled={procesando}>
-              {procesando ? 'Abriendo...' : 'Empezar prueba gratuita de 7 días'}
-            </button>
-          </>
-        )}
+          )}
+          {estado === 'active' && emprendedor.stripe_proximo_cobro && (
+            <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginTop: 0 }}>
+              Próximo cobro: {formatearFecha(emprendedor.stripe_proximo_cobro)}.
+            </p>
+          )}
 
-        {error && <p style={{ color: '#c0392b', fontSize: '0.85rem', marginTop: 8 }}>{error}</p>}
+          <p style={{ marginTop: 12, marginBottom: 8 }}>
+            Para cambiar tu método de pago, ver tus facturas o cancelar, usa el portal de Stripe.
+          </p>
+          <button onClick={() => llamarApi('/api/stripe/portal')} disabled={procesando}>
+            {procesando ? 'Abriendo...' : 'Gestionar suscripción'}
+          </button>
 
-        <button className="peligro" style={{ width: '100%', marginTop: 14 }} onClick={solicitarBaja}>
-          Cancelar suscripción
-        </button>
-        <p style={{ color: 'var(--muted)', fontSize: '0.8rem', marginTop: 8, marginBottom: 0 }}>
-          {avisoBaja
-            ? 'Todavía no hay un canal de baja configurado — escribe directamente a quien te dio de alta.'
-            : 'También puedes cancelar directamente desde "Gestionar suscripción" arriba, sin esperar respuesta.'}
-        </p>
-      </div>
+          {error && <p style={{ color: '#c0392b', fontSize: '0.85rem', marginTop: 8 }}>{error}</p>}
+
+          <p style={{ marginTop: 16, marginBottom: 4, fontSize: '0.8rem', color: 'var(--muted)' }}>
+            ¿No puedes usar el botón de arriba? {avisoBaja ? 'Escribe directamente a quien te dio de alta.' : (
+              <button
+                onClick={solicitarBaja}
+                style={{ background: 'none', border: 'none', padding: 0, textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit', color: 'inherit' }}
+              >
+                Contáctanos para cancelar
+              </button>
+            )}
+          </p>
+        </div>
+      ) : (
+        <div className="card">
+          <p className="etiqueta-seccion" style={{ marginBottom: 4 }}>Servicio incluido</p>
+          <p style={{ marginTop: 0, marginBottom: 4, fontSize: '1.15rem' }}>
+            <strong>{PLAN_NOMBRE}</strong>
+          </p>
+          <p style={{ marginTop: 0, color: 'var(--muted)' }}>{PLAN_PRECIO} — tu página, tus servicios y tu código QR.</p>
+
+          <p>Todavía no tienes una suscripción activa.</p>
+          <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
+            Empieza tu prueba gratuita de 7 días — no se te cobra nada hasta que termine, y puedes cancelar cuando quieras.
+          </p>
+          <button onClick={() => llamarApi('/api/stripe/checkout')} disabled={procesando}>
+            {procesando ? 'Abriendo...' : 'Empezar prueba gratuita de 7 días'}
+          </button>
+          {error && <p style={{ color: '#c0392b', fontSize: '0.85rem', marginTop: 8 }}>{error}</p>}
+        </div>
+      )}
     </div>
   )
 }
