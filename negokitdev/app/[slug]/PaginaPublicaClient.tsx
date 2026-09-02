@@ -11,6 +11,7 @@ import {
 } from '@/lib/validaciones'
 import { obtenerInsignias } from '@/lib/insignias'
 import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
+import { calcularAcceso } from '@/lib/acceso'
 
 function IconoPin() {
   return (
@@ -91,6 +92,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
   const [error, setError] = useState('')
   const [copiado, setCopiado] = useState(false)
   const [listoParaGuardarBorrador, setListoParaGuardarBorrador] = useState(false)
+  const [bloqueada, setBloqueada] = useState(false)
 
   useEffect(() => {
     cargar()
@@ -127,6 +129,17 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
       .eq('slug', slug)
       .eq('activo', true)
       .single()
+
+    // Si el emprendedor no pagó (o nunca llegó a iniciar su prueba y ya pasó
+    // el plazo), su página pública también se oculta — solo puede editar y
+    // ver de nuevo su página en cuanto resuelva el pago desde su panel.
+    if (emp && calcularAcceso(emp).bloqueado) {
+      setBloqueada(true)
+      setEmprendedor(null)
+      setLoading(false)
+      return
+    }
+
     setEmprendedor(emp)
 
     if (emp) {
@@ -229,6 +242,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
   }
 
   if (loading) return <div className="contenedor"><p>Cargando...</p></div>
+  if (bloqueada) return <div className="contenedor"><p>Esta página no está disponible en este momento.</p></div>
   if (!emprendedor) return <div className="contenedor"><p>No se encontró esta página.</p></div>
 
   // Las 3 insignias se muestran siempre juntas y de la misma forma — antes
