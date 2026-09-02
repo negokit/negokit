@@ -15,6 +15,7 @@ import {
 } from '@/lib/validaciones'
 import { INSIGNIAS_PRESET, MAX_INSIGNIAS, obtenerInsignias, validarInsignias } from '@/lib/insignias'
 import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
+import { calcularAcceso } from '@/lib/acceso'
 import MenuPanel from '../MenuPanel'
 import AvatarNegocio from '@/components/AvatarNegocio'
 
@@ -85,6 +86,13 @@ export default function EditarNegocioPage() {
       .select('*')
       .eq('auth_user_id', user.id)
       .maybeSingle()
+
+    // Solo bloqueamos a quien ya tiene página y no resolvió su suscripción —
+    // nunca a quien todavía está creándola por primera vez.
+    if (emp && calcularAcceso(emp).bloqueado) {
+      router.replace('/panel/suscripcion')
+      return
+    }
 
     const heredadas = emp ? obtenerInsignias(emp) : []
     const presetsBase = heredadas.filter((i) => INSIGNIAS_PRESET.includes(i))

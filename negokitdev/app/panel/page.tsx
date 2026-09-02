@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabaseClient'
 import QRCode from 'qrcode'
 import { validarPrecio, validarTitulo } from '@/lib/validaciones'
 import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
+import { calcularAcceso } from '@/lib/acceso'
 import MenuPanel from './MenuPanel'
 import AvatarNegocio from '@/components/AvatarNegocio'
 
@@ -58,6 +59,11 @@ export default function PanelPage() {
       // Sin página todavía: la crea en "Editar mi negocio" (un único
       // formulario para crear y editar, sin duplicarlo en /registro).
       router.replace('/panel/editar')
+      return
+    }
+
+    if (calcularAcceso(emp).bloqueado) {
+      router.replace('/panel/suscripcion')
       return
     }
 

@@ -54,6 +54,10 @@ export async function POST(req: NextRequest) {
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     customer: customerId,
+    // Tarjeta + domiciliación bancaria (IBAN) — así quien no tiene tarjeta
+    // puede pagar igualmente con su cuenta bancaria, y el cobro del mes
+    // siguiente sigue siendo automático en ambos casos.
+    payment_method_types: ['card', 'sepa_debit'],
     line_items: [{ price: process.env.STRIPE_PRICE_ID!, quantity: 1 }],
     subscription_data: { trial_period_days: 7 },
     success_url: `${origen}/panel/suscripcion?exito=1`,

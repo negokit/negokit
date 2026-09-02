@@ -37,11 +37,26 @@ export async function POST(req: NextRequest) {
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription
         const item = subscription.items.data[0]
+
+        // Solo actualizamos "desde cuándo" está en este estado si de verdad
+        // cambió — si no, se quedaría reseteando el contador cada vez que
+        // Stripe reenvía el mismo evento, y el plazo de gracia nunca se
+        // cumpliría.
+        const { data: actual } = await supabaseAdmin
+          .from('emprendedores')
+          .select('stripe_subscription_status, stripe_estado_desde')
+          .eq('stripe_customer_id', subscription.customer as string)
+          .maybeSingle()
+
+        const estadoCambio = !actual || actual.stripe_subscription_status !== subscription.status
+        const estadoDesde = estadoCambio ? new Date().toISOString() : actual?.stripe_estado_desde
+
         await supabaseAdmin
           .from('emprendedores')
           .update({
             stripe_subscription_id: subscription.id,
             stripe_subscription_status: subscription.status,
+            stripe_estado_desde: estadoDesde,
             stripe_trial_ends_at: subscription.trial_end
               ? new Date(subscription.trial_end * 1000).toISOString()
               : null,
@@ -57,7 +72,7 @@ export async function POST(req: NextRequest) {
         const subscription = event.data.object as Stripe.Subscription
         await supabaseAdmin
           .from('emprendedores')
-          .update({ stripe_subscription_status: 'canceled' })
+          .update({ stripe_subscription_status: 'canceled', stripe_estado_desde: new Date().toISOString() })
           .eq('stripe_customer_id', subscription.customer as string)
         break
       }

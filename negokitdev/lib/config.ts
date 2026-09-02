@@ -15,3 +15,9 @@ export const EMAIL_SOPORTE = ''
 // Stripe, actualiza también este texto para que coincida.
 export const PLAN_NOMBRE = 'Servix — Plan fundador'
 export const PLAN_PRECIO = '14,99 €/mes'
+
+// Días de margen antes de bloquear el acceso al panel:
+// - a quien crea su página pero nunca llega a iniciar la prueba gratuita
+//   (para que no pueda usar la app gratis sin límite de tiempo).
+// - a quien tiene un pago pendiente ("past_due") sin resolver.
+export const GRACIA_DIAS_SIN_PAGAR = 3

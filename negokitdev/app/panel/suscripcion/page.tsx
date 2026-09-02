@@ -2,7 +2,8 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
-import { WHATSAPP_SOPORTE, EMAIL_SOPORTE, PLAN_NOMBRE, PLAN_PRECIO } from '@/lib/config'
+import { WHATSAPP_SOPORTE, EMAIL_SOPORTE, PLAN_NOMBRE, PLAN_PRECIO, GRACIA_DIAS_SIN_PAGAR } from '@/lib/config'
+import { calcularAcceso } from '@/lib/acceso'
 import MenuPanel from '../MenuPanel'
 
 function formatearFecha(iso: string) {
@@ -104,12 +105,24 @@ function SuscripcionContenido() {
   const tieneSuscripcion = !!emprendedor.stripe_subscription_id && estado !== 'canceled'
   const exito = searchParams.get('exito')
   const cancelado = searchParams.get('cancelado')
+  const acceso = calcularAcceso(emprendedor)
 
   return (
     <div className="contenedor" style={{ paddingTop: 96 }}>
       <MenuPanel emprendedor={emprendedor} />
 
       <h1>Mi suscripción</h1>
+
+      {acceso.bloqueado && (
+        <div className="card" style={{ background: '#fdecea', borderColor: '#f2b8b5' }}>
+          <p style={{ margin: 0, fontWeight: 600 }}>Tu panel está bloqueado por ahora</p>
+          <p style={{ marginTop: 6, marginBottom: 0, fontSize: '0.9rem' }}>
+            {acceso.motivo === 'sin_iniciar'
+              ? `Pasaron más de ${GRACIA_DIAS_SIN_PAGAR} días desde que creaste tu página sin empezar tu prueba gratuita. Empiézala aquí abajo para recuperar el acceso a tu panel — tu página pública y tus datos siguen intactos.`
+              : 'Hay un problema con tu pago. Resuélvelo con el botón de abajo (o revisa tu método de pago) para recuperar el acceso a tu panel — tu página pública y tus datos siguen intactos.'}
+          </p>
+        </div>
+      )}
 
       {exito && (
         <div className="card" style={{ background: '#eafaf0', borderColor: '#9fe0b8' }}>
