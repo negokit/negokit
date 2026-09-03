@@ -262,6 +262,21 @@ export default function EditarNegocioPage() {
       }
     }
 
+    // Un mismo número de WhatsApp no puede repetirse en dos cuentas — evita
+    // que alguien se cree varias pruebas gratis con correos distintos (un
+    // correo es gratis, pero repetir el mismo WhatsApp ya cuesta más).
+    const whatsappNormalizado = normalizarWhatsapp(whatsapp)
+    if (!emprendedor || whatsappNormalizado !== emprendedor.whatsapp_number) {
+      let consultaTelefono = supabase.from('emprendedores').select('id').eq('whatsapp_number', whatsappNormalizado)
+      if (emprendedor) consultaTelefono = consultaTelefono.neq('id', emprendedor.id)
+      const { data: telefonoExistente } = await consultaTelefono.maybeSingle()
+      if (telefonoExistente) {
+        setError('Ya existe una cuenta con este número de teléfono. Si es tuya, inicia sesión con el correo con el que la creaste.')
+        setGuardando(false)
+        return
+      }
+    }
+
     let instagramUrl = instagram.trim()
     if (instagramUrl && !/^https?:\/\//i.test(instagramUrl)) {
       instagramUrl = `https://instagram.com/${instagramUrl.replace(/^@/, '')}`
