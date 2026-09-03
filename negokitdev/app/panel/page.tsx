@@ -1,11 +1,16 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import QRCode from 'qrcode'
 import { validarPrecio, validarTitulo } from '@/lib/validaciones'
+import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
+import { calcularAcceso } from '@/lib/acceso'
+import { comprimirImagen } from '@/lib/imagenes'
 import MenuPanel from './MenuPanel'
 import AvatarNegocio from '@/components/AvatarNegocio'
+
+type BorradorServicio = { titulo: string; descripcion: string; precio: string; mostrarPrecio: boolean }
 
 const TAMANO_MAXIMO_FOTO = 5 * 1024 * 1024 // 5 MB
 const TIPOS_FOTO_PERMITIDOS = ['image/png', 'image/jpeg']
@@ -23,11 +28,16 @@ export default function PanelPage() {
   const [mostrarPrecio, setMostrarPrecio] = useState(false)
   const [foto, setFoto] = useState<File | null>(null)
   const [fotoActualUrl, setFotoActualUrl] = useState<string | null>(null)
+  const [comprimiendoFoto, setComprimiendoFoto] = useState(false)
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState('')
 
   const [qrUrl, setQrUrl] = useState<string | null>(null)
   const [qrVisible, setQrVisible] = useState(false)
+
+  // Miniatura: si acaban de seleccionar una foto nueva, se ve al instante
+  // (antes de guardar); si no, se ve la que ya tenía guardada.
+  const fotoPreviewUrl = useMemo(() => (foto ? URL.createObjectURL(foto) : fotoActualUrl), [foto, fotoActualUrl])
 
   useEffect(() => {
     cargarDatos()
@@ -54,6 +64,11 @@ export default function PanelPage() {
       return
     }
 
+    if (calcularAcceso(emp).bloqueado) {
+      router.replace('/panel/suscripcion')
+      return
+    }
+
     setEmprendedor(emp)
 
     const { data: servs } = await supabase
@@ -63,10 +78,32 @@ export default function PanelPage() {
       .order('orden', { ascending: true })
     setServicios(servs || [])
 
+    // Si había un borrador de un servicio nuevo sin guardar (se fue de la
+    // pantalla sin darle a "Añadir servicio"), lo recuperamos para que no
+    // tenga que volver a escribirlo.
+    if (!servicioEditando) {
+      const borrador = leerBorrador<BorradorServicio>(`servicio-${emp.id}-nuevo`)
+      if (borrador) {
+        setTitulo(borrador.titulo)
+        setDescripcion(borrador.descripcion)
+        setPrecio(borrador.precio)
+        setMostrarPrecio(borrador.mostrarPrecio)
+      }
+    }
+
     setLoading(false)
   }
 
+  // Guarda automáticamente lo que se va escribiendo en el formulario de
+  // servicio, para no perderlo si sale de la pantalla sin pulsar "Guardar".
+  useEffect(() => {
+    if (!emprendedor) return
+    const clave = `servicio-${emprendedor.id}-${servicioEditando || 'nuevo'}`
+    guardarBorrador(clave, { titulo, descripcion, precio, mostrarPrecio })
+  }, [emprendedor, servicioEditando, titulo, descripcion, precio, mostrarPrecio])
+
   function limpiarFormulario() {
+    if (emprendedor) borrarBorrador(`servicio-${emprendedor.id}-${servicioEditando || 'nuevo'}`)
     setServicioEditando(null)
     setTitulo('')
     setDescripcion('')
@@ -78,14 +115,35 @@ export default function PanelPage() {
   }
 
   function iniciarEdicion(s: any) {
+    // Si había cambios sin guardar de una edición anterior de este mismo
+    // servicio, se recuperan en vez de partir de lo que ya estaba guardado.
+    const borrador = emprendedor ? leerBorrador<BorradorServicio>(`servicio-${emprendedor.id}-${s.id}`) : null
     setServicioEditando(s.id)
-    setTitulo(s.titulo || '')
-    setDescripcion(s.descripcion || '')
-    setPrecio(s.precio != null ? String(s.precio) : '')
-    setMostrarPrecio(!!s.mostrar_precio)
+    setTitulo(borrador?.titulo ?? s.titulo ?? '')
+    setDescripcion(borrador?.descripcion ?? s.descripcion ?? '')
+    setPrecio(borrador?.precio ?? (s.precio != null ? String(s.precio) : ''))
+    setMostrarPrecio(borrador?.mostrarPrecio ?? !!s.mostrar_precio)
     setFoto(null)
     setFotoActualUrl(s.foto_url || null)
     setError('')
+  }
+
+  async function manejarSeleccionFoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const archivo = e.target.files?.[0] || null
+    if (!archivo) return
+
+    if (!TIPOS_FOTO_PERMITIDOS.includes(archivo.type)) {
+      setError('La foto debe ser un archivo .png o .jpg/.jpeg.')
+      return
+    }
+
+    setError('')
+    setComprimiendoFoto(true)
+    // Se comprime aquí, al elegirla, para que una foto de móvil (6-10 MB es
+    // normal hoy) no choque luego contra el límite de tamaño al guardar.
+    const comprimida = await comprimirImagen(archivo)
+    setComprimiendoFoto(false)
+    setFoto(comprimida)
   }
 
   async function guardarServicio(e: React.FormEvent) {
@@ -153,6 +211,9 @@ export default function PanelPage() {
       })
       if (error) { setError(error.message); setGuardando(false); return }
     }
+
+    // Ya se guardó de verdad — el borrador local ya no hace falta.
+    borrarBorrador(`servicio-${emprendedor.id}-${servicioEditando || 'nuevo'}`)
 
     setGuardando(false)
     limpiarFormulario()
@@ -274,6 +335,9 @@ export default function PanelPage() {
             </li>
           ))}
         </ul>
+        <a href={`/${emprendedor.slug}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginTop: 12 }}>
+          <button type="button" className="secundario" style={{ width: '100%' }}>Ver mi página →</button>
+        </a>
       </div>
 
       <div className="card">
@@ -298,6 +362,8 @@ export default function PanelPage() {
 
           <input
             type="text"
+            inputMode="decimal"
+            pattern="[0-9]*[.,]?[0-9]*"
             placeholder="Precio (opcional)"
             value={precio}
             onChange={(e) => setPrecio(e.target.value)}
@@ -311,25 +377,38 @@ export default function PanelPage() {
             Mostrar precio en la página pública
           </label>
 
-          {fotoActualUrl && !foto && (
-            <div style={{ marginBottom: 10 }}>
-              <img src={fotoActualUrl} alt="Foto actual" style={{ maxWidth: 150, display: 'block', marginBottom: 4, borderRadius: 8 }} />
-              <span style={{ fontSize: '0.85rem', color: 'var(--muted)' }}>Foto actual (sube una nueva para reemplazarla)</span>
-            </div>
-          )}
           <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4 }}>
             Foto del servicio (opcional)
           </label>
+          {fotoPreviewUrl && (
+            <div style={{ marginBottom: 10 }}>
+              <img
+                src={fotoPreviewUrl}
+                alt="Vista previa de la foto"
+                style={{ width: 150, height: 110, objectFit: 'cover', display: 'block', marginBottom: 4, borderRadius: 8 }}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--muted)' }}>
+                {foto ? 'Nueva foto seleccionada (guarda para aplicarla)' : 'Foto actual (sube una nueva para reemplazarla)'}
+              </span>
+            </div>
+          )}
+          <label htmlFor="foto-servicio-input" className="boton-subir-archivo">
+            {comprimiendoFoto ? 'Preparando foto...' : fotoPreviewUrl ? 'Cambiar foto' : 'Subir foto (cámara o galería)'}
+          </label>
           <input
+            id="foto-servicio-input"
             type="file"
             accept="image/png, image/jpeg"
-            capture="environment"
-            onChange={(e) => setFoto(e.target.files?.[0] || null)}
+            disabled={comprimiendoFoto}
+            onChange={manejarSeleccionFoto}
+            style={{ position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden' }}
           />
-          {foto && <p style={{ fontSize: '0.85rem', color: 'var(--muted)', marginTop: -6 }}>Seleccionada: {foto.name}</p>}
+          {foto && !comprimiendoFoto && (
+            <p style={{ fontSize: '0.85rem', color: 'var(--muted)', marginTop: -6 }}>Seleccionada: {foto.name}</p>
+          )}
 
           <div className="acciones">
-            <button type="submit" disabled={guardando}>
+            <button type="submit" disabled={guardando || comprimiendoFoto}>
               {guardando ? 'Guardando...' : servicioEditando ? 'Guardar cambios' : '+ Añadir servicio'}
             </button>
             {servicioEditando && (

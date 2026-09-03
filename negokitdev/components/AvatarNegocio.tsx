@@ -18,20 +18,33 @@ export default function AvatarNegocio({
     : {}
 
   if (emprendedor?.logo_url) {
+    // "contain" (no "cover"): un logo casi nunca es cuadrado — con "cover"
+    // se recortaba de forma rara según la foto (caras cortadas, logos
+    // "descuadrados"). Con "contain" y un fondo detrás, el logo siempre se
+    // ve completo y sin deformarse, sea cual sea su forma original.
     return (
-      <img
-        src={emprendedor.logo_url}
-        alt={emprendedor.nombre_negocio || 'Logo'}
+      <div
         style={{
           width: tamano,
           height: tamano,
           borderRadius,
-          objectFit: 'cover',
+          background: 'var(--border)',
           flexShrink: 0,
-          display: 'block',
+          overflow: 'hidden',
           ...anillo,
         }}
-      />
+      >
+        <img
+          src={emprendedor.logo_url}
+          alt={emprendedor.nombre_negocio || 'Logo'}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            display: 'block',
+          }}
+        />
+      </div>
     )
   }
 

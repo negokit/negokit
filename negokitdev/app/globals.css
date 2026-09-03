@@ -208,13 +208,173 @@ button.peligro {
   border: 1px solid var(--peligro);
 }
 
+/* Botón de "Subir foto/logo" — es un <label> que activa un input[type=file]
+   oculto, para poder controlar el texto y que se vea igual en todos los
+   navegadores (el botón nativo del input varía mucho de un móvil a otro). */
+.boton-subir-archivo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+  width: auto;
+}
+
+.boton-subir-archivo:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Zona destacada para subir el logo en "Editar mi negocio": una tarjeta con
+   borde punteado, en vez de un input suelto que pasa desapercibido. */
+.zona-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 1.5rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  background: var(--background);
+}
+
+/* Agrupa el formulario largo de "Editar mi negocio" en secciones, con un
+   pequeño rótulo y una línea separadora — para que no se sienta como un
+   único bloque interminable de campos. */
+.seccion-formulario {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.seccion-formulario.sin-borde {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* Campo "delicado" bloqueado (el enlace de la página, una vez ya existe):
+   se muestra en gris, de solo lectura, con un botón discreto para
+   desbloquearlo a propósito en vez de dejarlo editable por defecto. */
+.campo-bloqueado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.campo-bloqueado span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.enlace-boton {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--foreground);
+  font-weight: 600;
+  font-size: 0.82rem;
+  text-decoration: underline;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.aviso-cambio-enlace {
+  margin-top: -4px;
+  color: var(--peligro);
+  font-size: 0.82rem;
+}
+
+/* Insignias de confianza: chips que se activan/desactivan al tocarlos. */
+.chips-insignias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.chip-insignia {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--foreground);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.chip-insignia.activo {
+  background: var(--foreground);
+  color: #fff;
+  border-color: var(--foreground);
+}
+
+/* Aviso de cookies/privacidad, fijo abajo de toda la app hasta que se acepta. */
+.aviso-cookies {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 900;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 0.9rem 1.1rem;
+  background: var(--foreground);
+  color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.18);
+}
+
+.aviso-cookies p {
+  flex: 1;
+  min-width: 220px;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.aviso-cookies a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.aviso-cookies button {
+  background: #fff;
+  color: var(--foreground);
+  flex-shrink: 0;
+}
+
 /* ==== Página pública: diseño tipo tarjeta de reserva ==== */
 
 .pagina-publica .fila-cabecera {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 0.6rem;
+  gap: 0.85rem;
+  margin-bottom: 1.1rem;
 }
 
 .avatar-circulo {
@@ -237,14 +397,16 @@ button.peligro {
 }
 
 .info-negocio h1 {
-  margin: 0;
-  font-size: 1.25rem;
+  margin: 0 0 4px;
+  font-size: 1.3rem;
+  line-height: 1.3;
 }
 
 .subtitulo-oficio {
-  margin: 2px 0 0;
+  margin: 4px 0 0;
   color: var(--muted);
   font-size: 0.88rem;
+  line-height: 1.4;
 }
 
 .iconos-cabecera {
@@ -277,15 +439,17 @@ button.peligro {
 .meta-fila {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 0.6rem;
+  row-gap: 8px;
+  column-gap: 16px;
+  margin: 0 0 1rem;
 }
 
 .meta-item {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   font-size: 0.85rem;
+  line-height: 1.3;
   color: var(--muted);
 }
 
@@ -293,7 +457,7 @@ button.peligro {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.4rem;
 }
 
 .etiqueta {
@@ -451,10 +615,12 @@ button.peligro {
   bottom: 22px;
   right: 18px;
   z-index: 400;
-  width: 56px;
-  height: 56px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  background: var(--foreground);
+  /* Verde de WhatsApp a propósito, aunque el resto de la app sea monocromo:
+     es el color con el que la gente ya reconoce este botón de un vistazo. */
+  background: #25D366;
   color: #fff;
   border: none;
   display: flex;
@@ -466,8 +632,8 @@ button.peligro {
 }
 
 .boton-whatsapp-flotante svg {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
 }
 
 .boton-whatsapp-flotante:hover {
