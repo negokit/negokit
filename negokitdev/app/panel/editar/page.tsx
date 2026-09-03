@@ -336,7 +336,11 @@ export default function EditarNegocioPage() {
 
     borrarBorrador(`negocio-${usuario.id}`)
     setGuardando(false)
-    router.replace('/panel')
+    // Justo al crear la página la mandamos a activar su prueba gratuita, no
+    // al panel de servicios — así, si está delante de la clienta en el
+    // momento, puede pedirle la tarjeta ahí mismo mientras la tiene enfrente,
+    // en vez de esperar a que se le ocurra hacerlo ella sola más tarde.
+    router.replace('/panel/suscripcion?nueva=1')
   }
 
   const logoPreviewUrl = useMemo(() => (logo ? URL.createObjectURL(logo) : logoActualUrl), [logo, logoActualUrl])

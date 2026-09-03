@@ -36,6 +36,8 @@ function SuscripcionContenido() {
   const [loading, setLoading] = useState(true)
   const [emprendedor, setEmprendedor] = useState<any>(null)
   const [avisoBaja, setAvisoBaja] = useState(false)
+  const [emailBaja, setEmailBaja] = useState('')
+  const [bajaEnviada, setBajaEnviada] = useState(false)
   const [procesando, setProcesando] = useState(false)
   const [error, setError] = useState('')
 
@@ -92,11 +94,21 @@ function SuscripcionContenido() {
       window.open(`https://wa.me/${WHATSAPP_SOPORTE}?text=${encodeURIComponent(mensaje)}`, '_blank')
       return
     }
-    if (EMAIL_SOPORTE) {
-      window.location.href = `mailto:${EMAIL_SOPORTE}?subject=${encodeURIComponent('Cancelar suscripción')}&body=${encodeURIComponent(mensaje)}`
-      return
-    }
+    // Ojo: NO usamos mailto aquí a propósito — igual que pasaba con los
+    // enlaces "tel:", un mailto puede no abrir nada si el dispositivo no
+    // tiene un cliente de correo configurado. Mejor un formulario sencillo
+    // que guarda la petición directamente en la base de datos.
     setAvisoBaja(true)
+  }
+
+  async function enviarSolicitudBaja(e: React.FormEvent) {
+    e.preventDefault()
+    if (!emailBaja.trim()) return
+    await supabase
+      .from('emprendedores')
+      .update({ baja_solicitada_en: new Date().toISOString(), baja_contacto_email: emailBaja.trim() })
+      .eq('id', emprendedor.id)
+    setBajaEnviada(true)
   }
 
   if (loading || !emprendedor) return <div className="contenedor"><p>Cargando...</p></div>
@@ -105,6 +117,7 @@ function SuscripcionContenido() {
   const tieneSuscripcion = !!emprendedor.stripe_subscription_id && estado !== 'canceled'
   const exito = searchParams.get('exito')
   const cancelado = searchParams.get('cancelado')
+  const nueva = searchParams.get('nueva')
   const acceso = calcularAcceso(emprendedor)
 
   return (
@@ -120,6 +133,16 @@ function SuscripcionContenido() {
             {acceso.motivo === 'sin_iniciar'
               ? `Pasaron más de ${GRACIA_HORAS_SIN_INICIAR} horas desde que creaste tu página sin empezar tu prueba gratuita. Empiézala aquí abajo para recuperar el acceso a tu panel — tu página pública y tus datos siguen intactos.`
               : 'Hay un problema con tu pago. Resuélvelo con el botón de abajo (o revisa tu método de pago) para recuperar el acceso a tu panel — tu página pública y tus datos siguen intactos.'}
+          </p>
+        </div>
+      )}
+
+      {nueva && !tieneSuscripcion && (
+        <div className="card" style={{ background: '#eafaf0', borderColor: '#9fe0b8' }}>
+          <p style={{ margin: 0, fontWeight: 600 }}>¡Tu página ya está creada! 🎉</p>
+          <p style={{ marginTop: 6, marginBottom: 0, fontSize: '0.9rem' }}>
+            Un último paso: activa tu prueba gratuita de 7 días aquí abajo para que tu página y tu código QR queden
+            disponibles. No se te cobra nada hasta que termine la prueba.
           </p>
         </div>
       )}
@@ -169,16 +192,42 @@ function SuscripcionContenido() {
 
           {error && <p style={{ color: '#c0392b', fontSize: '0.85rem', marginTop: 8 }}>{error}</p>}
 
-          <p style={{ marginTop: 16, marginBottom: 4, fontSize: '0.8rem', color: 'var(--muted)' }}>
-            ¿No puedes usar el botón de arriba? {avisoBaja ? 'Escribe directamente a quien te dio de alta.' : (
+          {!avisoBaja && (
+            <p style={{ marginTop: 16, marginBottom: 4, fontSize: '0.8rem', color: 'var(--muted)' }}>
+              ¿No puedes usar el botón de arriba?{' '}
               <button
                 onClick={solicitarBaja}
                 style={{ background: 'none', border: 'none', padding: 0, textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit', color: 'inherit' }}
               >
                 Contáctanos para cancelar
               </button>
-            )}
-          </p>
+            </p>
+          )}
+
+          {avisoBaja && !bajaEnviada && (
+            <form onSubmit={enviarSolicitudBaja} style={{ marginTop: 16 }}>
+              <p style={{ marginTop: 0, marginBottom: 6, fontSize: '0.8rem', color: 'var(--muted)' }}>
+                Déjanos tu email y te ayudamos a cancelar la suscripción a mano.
+              </p>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input
+                  type="email"
+                  required
+                  placeholder="tu@email.com"
+                  value={emailBaja}
+                  onChange={(e) => setEmailBaja(e.target.value)}
+                  style={{ flex: 1 }}
+                />
+                <button type="submit">Enviar</button>
+              </div>
+            </form>
+          )}
+
+          {avisoBaja && bajaEnviada && (
+            <p style={{ marginTop: 16, marginBottom: 0, fontSize: '0.85rem', color: 'var(--muted)' }}>
+              Recibido. Te contactaremos a {emailBaja} para gestionar la cancelación.
+            </p>
+          )}
         </div>
       ) : (
         <div className="card">
