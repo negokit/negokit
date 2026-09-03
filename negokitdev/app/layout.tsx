@@ -9,6 +9,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  // Sin esto, Next.js no sabe convertir la imagen de "vista previa" (la que
+  // genera opengraph-image.tsx) en una dirección web completa y absoluta.
+  // Resultado: apps como WhatsApp no consiguen descargarla y enseñan un
+  // icono pequeño y feo en su lugar, en vez de la tarjeta grande con el
+  // logo y el nombre del negocio.
+  metadataBase: new URL(
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
+  ),
   title: {
     default: "Servix — Tu página, lista para que te escriban.",
     template: "%s · Servix",
