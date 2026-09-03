@@ -20,6 +20,19 @@ const ESTADOS: Record<string, string> = {
   incomplete_expired: 'Pago sin completar (caducado)',
 }
 
+// Insignia de color junto al nombre del plan — de un vistazo, sin tener que
+// leer texto largo. Verde = todo bien, ámbar = necesita atención, rojo =
+// problema, gris = ya no está activa.
+const INSIGNIA_ESTADO: Record<string, { texto: string; fondo: string; color: string }> = {
+  trialing: { texto: 'Prueba gratis', fondo: '#eafaf0', color: '#1f7a43' },
+  active: { texto: 'Activo', fondo: '#eafaf0', color: '#1f7a43' },
+  past_due: { texto: 'Pago pendiente', fondo: '#fff4e0', color: '#a15c00' },
+  unpaid: { texto: 'Pago fallido', fondo: '#fdecea', color: '#c0392b' },
+  incomplete: { texto: 'Pago sin completar', fondo: '#fff4e0', color: '#a15c00' },
+  incomplete_expired: { texto: 'Caducado', fondo: '#fdecea', color: '#c0392b' },
+  canceled: { texto: 'Cancelada', fondo: '#eee', color: '#666' },
+}
+
 // useSearchParams() obliga a envolver la página en Suspense, si no Next.js
 // falla al construir la web (no es un bug nuestro, es cómo funciona Next).
 export default function SuscripcionPage() {
@@ -161,81 +174,102 @@ function SuscripcionContenido() {
       )}
 
       {tieneSuscripcion ? (
-        <div className="card" style={{ border: '2px solid var(--negro, #111)', background: '#fafafa' }}>
-          <p className="etiqueta-seccion" style={{ marginBottom: 4 }}>Tu plan activo</p>
-          <p style={{ marginTop: 0, marginBottom: 4, fontSize: '1.15rem' }}>
-            <strong>{PLAN_NOMBRE}</strong>
-          </p>
-          <p style={{ marginTop: 0, marginBottom: 12, color: 'var(--muted)' }}>{PLAN_PRECIO}</p>
-
-          <p style={{ marginBottom: 4 }}>
-            <strong>Estado:</strong> {ESTADOS[estado || ''] || estado}
-          </p>
-          {estado === 'trialing' && emprendedor.stripe_trial_ends_at && (
-            <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginTop: 0 }}>
-              Tu prueba gratuita termina el {formatearFecha(emprendedor.stripe_trial_ends_at)} — a partir de ese
-              día se te cobrará {PLAN_PRECIO} automáticamente, salvo que canceles antes.
+        <>
+          <div className="card" style={{ border: '2px solid var(--negro, #111)', background: '#fafafa' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 2 }}>
+              <p className="etiqueta-seccion" style={{ margin: 0 }}>Tu plan activo</p>
+              {INSIGNIA_ESTADO[estado || ''] && (
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    padding: '3px 10px',
+                    borderRadius: 999,
+                    background: INSIGNIA_ESTADO[estado || ''].fondo,
+                    color: INSIGNIA_ESTADO[estado || ''].color,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {INSIGNIA_ESTADO[estado || ''].texto}
+                </span>
+              )}
+            </div>
+            <p style={{ marginTop: 0, marginBottom: 4, fontSize: '1.15rem' }}>
+              <strong>{PLAN_NOMBRE}</strong>
             </p>
-          )}
-          {estado === 'active' && emprendedor.stripe_proximo_cobro && (
-            <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginTop: 0 }}>
-              Próximo cobro: {formatearFecha(emprendedor.stripe_proximo_cobro)}.
-            </p>
-          )}
+            <p style={{ marginTop: 0, marginBottom: 12, color: 'var(--muted)' }}>{PLAN_PRECIO}</p>
 
-          <p style={{ marginTop: 12, marginBottom: 8 }}>
-            Para cambiar tu método de pago, ver tus facturas o cancelar, usa el portal de Stripe.
-          </p>
-          <button onClick={() => llamarApi('/api/stripe/portal')} disabled={procesando}>
-            {procesando ? 'Abriendo...' : 'Gestionar suscripción'}
-          </button>
-
-          {error && <p style={{ color: '#c0392b', fontSize: '0.85rem', marginTop: 8 }}>{error}</p>}
-
-          {!avisoBaja && (
-            <p style={{ marginTop: 16, marginBottom: 4, fontSize: '0.8rem', color: 'var(--muted)' }}>
-              ¿No puedes usar el botón de arriba?{' '}
-              <button
-                onClick={solicitarBaja}
-                style={{ background: 'none', border: 'none', padding: 0, textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit', color: 'inherit' }}
-              >
-                Contáctanos para cancelar
-              </button>
-            </p>
-          )}
-
-          {avisoBaja && EMAIL_SOPORTE && (
-            <p style={{ marginTop: 16, marginBottom: 0, fontSize: '0.85rem', color: 'var(--muted)' }}>
-              Si quieres cancelar tu suscripción, envía un correo a{' '}
-              <a href={`mailto:${EMAIL_SOPORTE}`}>{EMAIL_SOPORTE}</a> con el nombre de tu negocio.
-            </p>
-          )}
-
-          {avisoBaja && !EMAIL_SOPORTE && !bajaEnviada && (
-            <form onSubmit={enviarSolicitudBaja} style={{ marginTop: 16 }}>
-              <p style={{ marginTop: 0, marginBottom: 6, fontSize: '0.8rem', color: 'var(--muted)' }}>
-                Déjanos tu email y te ayudamos a cancelar la suscripción a mano.
+            {estado === 'trialing' && emprendedor.stripe_trial_ends_at && (
+              <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                Primer cobro: <strong>{formatearFecha(emprendedor.stripe_trial_ends_at)}</strong>
               </p>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <input
-                  type="email"
-                  required
-                  placeholder="tu@email.com"
-                  value={emailBaja}
-                  onChange={(e) => setEmailBaja(e.target.value)}
-                  style={{ flex: 1 }}
-                />
-                <button type="submit">Enviar</button>
-              </div>
-            </form>
-          )}
+            )}
+            {estado === 'active' && emprendedor.stripe_proximo_cobro && (
+              <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                Próximo cobro: <strong>{formatearFecha(emprendedor.stripe_proximo_cobro)}</strong>
+              </p>
+            )}
+            {!['trialing', 'active'].includes(estado || '') && (
+              <p style={{ margin: 0, fontSize: '0.9rem' }}>{ESTADOS[estado || ''] || estado}</p>
+            )}
+          </div>
 
-          {avisoBaja && !EMAIL_SOPORTE && bajaEnviada && (
-            <p style={{ marginTop: 16, marginBottom: 0, fontSize: '0.85rem', color: 'var(--muted)' }}>
-              Recibido. Te contactaremos a {emailBaja} para gestionar la cancelación.
+          <div className="card">
+            <p className="etiqueta-seccion" style={{ marginBottom: 4 }}>Gestionar suscripción</p>
+            <p style={{ marginTop: 0, marginBottom: 12, color: 'var(--muted)', fontSize: '0.9rem' }}>
+              Para cambiar tu método de pago, ver tus facturas o cancelar, usa el portal de Stripe.
             </p>
-          )}
-        </div>
+            <button onClick={() => llamarApi('/api/stripe/portal')} disabled={procesando}>
+              {procesando ? 'Abriendo...' : 'Gestionar suscripción'}
+            </button>
+
+            {error && <p style={{ color: '#c0392b', fontSize: '0.85rem', marginTop: 8 }}>{error}</p>}
+
+            {!avisoBaja && (
+              <p style={{ marginTop: 16, marginBottom: 4, fontSize: '0.8rem', color: 'var(--muted)' }}>
+                ¿No puedes usar el botón de arriba?{' '}
+                <button
+                  onClick={solicitarBaja}
+                  style={{ background: 'none', border: 'none', padding: 0, textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit', color: 'inherit' }}
+                >
+                  Contáctanos para cancelar
+                </button>
+              </p>
+            )}
+
+            {avisoBaja && EMAIL_SOPORTE && (
+              <p style={{ marginTop: 16, marginBottom: 0, fontSize: '0.85rem', color: 'var(--muted)' }}>
+                Si quieres cancelar tu suscripción, envía un correo a{' '}
+                <a href={`mailto:${EMAIL_SOPORTE}`}>{EMAIL_SOPORTE}</a> con el nombre de tu negocio.
+              </p>
+            )}
+
+            {avisoBaja && !EMAIL_SOPORTE && !bajaEnviada && (
+              <form onSubmit={enviarSolicitudBaja} style={{ marginTop: 16 }}>
+                <p style={{ marginTop: 0, marginBottom: 6, fontSize: '0.8rem', color: 'var(--muted)' }}>
+                  Déjanos tu email y te ayudamos a cancelar la suscripción a mano.
+                </p>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <input
+                    type="email"
+                    required
+                    placeholder="tu@email.com"
+                    value={emailBaja}
+                    onChange={(e) => setEmailBaja(e.target.value)}
+                    style={{ flex: 1 }}
+                  />
+                  <button type="submit">Enviar</button>
+                </div>
+              </form>
+            )}
+
+            {avisoBaja && !EMAIL_SOPORTE && bajaEnviada && (
+              <p style={{ marginTop: 16, marginBottom: 0, fontSize: '0.85rem', color: 'var(--muted)' }}>
+                Recibido. Te contactaremos a {emailBaja} para gestionar la cancelación.
+              </p>
+            )}
+          </div>
+        </>
       ) : (
         <div className="card">
           <p className="etiqueta-seccion" style={{ marginBottom: 4 }}>Servicio incluido</p>
