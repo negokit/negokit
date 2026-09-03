@@ -16,8 +16,13 @@ export const EMAIL_SOPORTE = ''
 export const PLAN_NOMBRE = 'Servix — Plan fundador'
 export const PLAN_PRECIO = '14,99 €/mes'
 
-// Días de margen antes de bloquear el acceso al panel:
-// - a quien crea su página pero nunca llega a iniciar la prueba gratuita
-//   (para que no pueda usar la app gratis sin límite de tiempo).
-// - a quien tiene un pago pendiente ("past_due") sin resolver.
-export const GRACIA_DIAS_SIN_PAGAR = 3
+// Horas de margen para quien crea su página pero nunca llega a iniciar la
+// prueba gratuita (para que no pueda usar la app gratis sin límite de
+// tiempo). Pasadas estas horas, se bloquea hasta que ponga tarjeta o cuenta.
+export const GRACIA_HORAS_SIN_INICIAR = 24
+
+// Días de margen para quien YA tiene una suscripción pero le falló un cobro
+// ("past_due") — más margen que el de arriba porque aquí ya es una clienta
+// de pago, no alguien probando gratis; le damos tiempo a que actualice su
+// método de pago antes de bloquearla.
+export const GRACIA_DIAS_PAGO_PENDIENTE = 3

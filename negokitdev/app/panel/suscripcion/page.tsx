@@ -2,7 +2,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
-import { WHATSAPP_SOPORTE, EMAIL_SOPORTE, PLAN_NOMBRE, PLAN_PRECIO, GRACIA_DIAS_SIN_PAGAR } from '@/lib/config'
+import { WHATSAPP_SOPORTE, EMAIL_SOPORTE, PLAN_NOMBRE, PLAN_PRECIO, GRACIA_HORAS_SIN_INICIAR } from '@/lib/config'
 import { calcularAcceso } from '@/lib/acceso'
 import MenuPanel from '../MenuPanel'
 
@@ -118,7 +118,7 @@ function SuscripcionContenido() {
           <p style={{ margin: 0, fontWeight: 600 }}>Tu panel está bloqueado por ahora</p>
           <p style={{ marginTop: 6, marginBottom: 0, fontSize: '0.9rem' }}>
             {acceso.motivo === 'sin_iniciar'
-              ? `Pasaron más de ${GRACIA_DIAS_SIN_PAGAR} días desde que creaste tu página sin empezar tu prueba gratuita. Empiézala aquí abajo para recuperar el acceso a tu panel — tu página pública y tus datos siguen intactos.`
+              ? `Pasaron más de ${GRACIA_HORAS_SIN_INICIAR} horas desde que creaste tu página sin empezar tu prueba gratuita. Empiézala aquí abajo para recuperar el acceso a tu panel — tu página pública y tus datos siguen intactos.`
               : 'Hay un problema con tu pago. Resuélvelo con el botón de abajo (o revisa tu método de pago) para recuperar el acceso a tu panel — tu página pública y tus datos siguen intactos.'}
           </p>
         </div>
