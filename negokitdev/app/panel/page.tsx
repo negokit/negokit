@@ -6,6 +6,7 @@ import QRCode from 'qrcode'
 import { validarPrecio, validarTitulo } from '@/lib/validaciones'
 import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
 import { calcularAcceso } from '@/lib/acceso'
+import { comprimirImagen } from '@/lib/imagenes'
 import MenuPanel from './MenuPanel'
 import AvatarNegocio from '@/components/AvatarNegocio'
 
@@ -27,6 +28,7 @@ export default function PanelPage() {
   const [mostrarPrecio, setMostrarPrecio] = useState(false)
   const [foto, setFoto] = useState<File | null>(null)
   const [fotoActualUrl, setFotoActualUrl] = useState<string | null>(null)
+  const [comprimiendoFoto, setComprimiendoFoto] = useState(false)
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState('')
 
@@ -124,6 +126,24 @@ export default function PanelPage() {
     setFoto(null)
     setFotoActualUrl(s.foto_url || null)
     setError('')
+  }
+
+  async function manejarSeleccionFoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const archivo = e.target.files?.[0] || null
+    if (!archivo) return
+
+    if (!TIPOS_FOTO_PERMITIDOS.includes(archivo.type)) {
+      setError('La foto debe ser un archivo .png o .jpg/.jpeg.')
+      return
+    }
+
+    setError('')
+    setComprimiendoFoto(true)
+    // Se comprime aquí, al elegirla, para que una foto de móvil (6-10 MB es
+    // normal hoy) no choque luego contra el límite de tamaño al guardar.
+    const comprimida = await comprimirImagen(archivo)
+    setComprimiendoFoto(false)
+    setFoto(comprimida)
   }
 
   async function guardarServicio(e: React.FormEvent) {
@@ -373,19 +393,22 @@ export default function PanelPage() {
             </div>
           )}
           <label htmlFor="foto-servicio-input" className="boton-subir-archivo">
-            {fotoPreviewUrl ? 'Cambiar foto' : 'Subir foto (cámara o galería)'}
+            {comprimiendoFoto ? 'Preparando foto...' : fotoPreviewUrl ? 'Cambiar foto' : 'Subir foto (cámara o galería)'}
           </label>
           <input
             id="foto-servicio-input"
             type="file"
             accept="image/png, image/jpeg"
-            onChange={(e) => setFoto(e.target.files?.[0] || null)}
+            disabled={comprimiendoFoto}
+            onChange={manejarSeleccionFoto}
             style={{ position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden' }}
           />
-          {foto && <p style={{ fontSize: '0.85rem', color: 'var(--muted)', marginTop: -6 }}>Seleccionada: {foto.name}</p>}
+          {foto && !comprimiendoFoto && (
+            <p style={{ fontSize: '0.85rem', color: 'var(--muted)', marginTop: -6 }}>Seleccionada: {foto.name}</p>
+          )}
 
           <div className="acciones">
-            <button type="submit" disabled={guardando}>
+            <button type="submit" disabled={guardando || comprimiendoFoto}>
               {guardando ? 'Guardando...' : servicioEditando ? 'Guardar cambios' : '+ Añadir servicio'}
             </button>
             {servicioEditando && (

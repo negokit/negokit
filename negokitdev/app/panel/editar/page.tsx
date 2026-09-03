@@ -16,6 +16,7 @@ import {
 import { INSIGNIAS_PRESET, MAX_INSIGNIAS, obtenerInsignias, validarInsignias } from '@/lib/insignias'
 import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
 import { calcularAcceso } from '@/lib/acceso'
+import { comprimirImagen } from '@/lib/imagenes'
 import MenuPanel from '../MenuPanel'
 import AvatarNegocio from '@/components/AvatarNegocio'
 
@@ -63,6 +64,7 @@ export default function EditarNegocioPage() {
   const [web, setWeb] = useState('')
   const [logo, setLogo] = useState<File | null>(null)
   const [logoActualUrl, setLogoActualUrl] = useState<string | null>(null)
+  const [comprimiendoLogo, setComprimiendoLogo] = useState(false)
   const [presetsSeleccionados, setPresetsSeleccionados] = useState<string[]>([])
   const [otrosVisible, setOtrosVisible] = useState(false)
   const [otroTexto, setOtroTexto] = useState('')
@@ -175,6 +177,24 @@ export default function EditarNegocioPage() {
     }
     setError('')
     setOtrosVisible(true)
+  }
+
+  async function manejarSeleccionLogo(e: React.ChangeEvent<HTMLInputElement>) {
+    const archivo = e.target.files?.[0] || null
+    if (!archivo) return
+
+    if (!TIPOS_LOGO_PERMITIDOS.includes(archivo.type)) {
+      setError('El logo debe ser un archivo .png o .jpg/.jpeg.')
+      return
+    }
+
+    setError('')
+    setComprimiendoLogo(true)
+    // Se comprime aquí, al elegirlo, para que un logo/foto de móvil (6-10 MB
+    // es normal hoy) no choque luego contra el límite de tamaño al guardar.
+    const comprimido = await comprimirImagen(archivo)
+    setComprimiendoLogo(false)
+    setLogo(comprimido)
   }
 
   async function guardar(e: React.FormEvent) {
@@ -373,17 +393,22 @@ export default function EditarNegocioPage() {
                 conAnillo
               />
               <label htmlFor="logo-input" className="boton-subir-archivo">
-                {logoActualUrl || logo ? 'Cambiar logo' : 'Subir logo (cámara o galería)'}
+                {comprimiendoLogo ? 'Preparando logo...' : logoActualUrl || logo ? 'Cambiar logo' : 'Subir logo (cámara o galería)'}
               </label>
               <input
                 id="logo-input"
                 type="file"
                 accept="image/png, image/jpeg"
-                onChange={(e) => setLogo(e.target.files?.[0] || null)}
+                disabled={comprimiendoLogo}
+                onChange={manejarSeleccionLogo}
                 style={{ position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden' }}
               />
               <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.82rem' }}>
-                {logo ? `Seleccionado: ${logo.name}` : 'Aparece en tu página, tu panel y el menú. Sin logo, se muestran tus iniciales.'}
+                {comprimiendoLogo
+                  ? 'Un momento...'
+                  : logo
+                    ? `Seleccionado: ${logo.name}`
+                    : 'Aparece en tu página, tu panel y el menú. Sin logo, se muestran tus iniciales.'}
               </p>
             </div>
 
@@ -567,7 +592,7 @@ export default function EditarNegocioPage() {
             )}
           </div>
 
-          <button type="submit" disabled={guardando} style={{ marginTop: 8 }}>
+          <button type="submit" disabled={guardando || comprimiendoLogo} style={{ marginTop: 8 }}>
             {guardando ? (esNueva ? 'Creando...' : 'Guardando...') : esNueva ? 'Crear mi página' : 'Guardar cambios'}
           </button>
           {guardadoOk && <p style={{ color: 'var(--accent)', marginTop: 10 }}>Guardado correctamente.</p>}
