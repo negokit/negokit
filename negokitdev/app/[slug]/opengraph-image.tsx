@@ -10,6 +10,27 @@ export const contentType = 'image/png'
 
 type Props = { params: Promise<{ slug: string }> }
 
+// Convierte los bytes de la imagen a una cadena "data:" que se puede meter
+// directa en el <img>. Lo hacemos nosotras mismas (en vez de dejar que la
+// propia generadora de imagen descargue la URL directamente) porque esa
+// descarga automática fallaba en silencio con las fotos de Supabase: no
+// daba ningún error, simplemente el logo salía en blanco y el resto de la
+// imagen (nombre, oficio, "servix") sí se generaba bien — por eso solo
+// faltaba el logo.
+async function descargarComoDataUrl(url: string): Promise<string | null> {
+  try {
+    const resp = await fetch(url)
+    if (!resp.ok) return null
+    const bytes = new Uint8Array(await resp.arrayBuffer())
+    let binario = ''
+    for (let i = 0; i < bytes.length; i++) binario += String.fromCharCode(bytes[i])
+    const tipo = resp.headers.get('content-type') || 'image/png'
+    return `data:${tipo};base64,${btoa(binario)}`
+  } catch {
+    return null
+  }
+}
+
 export default async function Image({ params }: Props) {
   const { slug } = await params
 
@@ -23,7 +44,7 @@ export default async function Image({ params }: Props) {
   const nombre = emp?.nombre_negocio || 'servix'
   const oficio = emp?.oficio || ''
   const ciudad = emp?.ciudad || ''
-  const logoUrl = emp?.logo_url || null
+  const logoUrl = emp?.logo_url ? await descargarComoDataUrl(emp.logo_url) : null
 
   const partes = nombre.trim().split(/\s+/).filter(Boolean)
   const iniciales =
