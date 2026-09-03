@@ -20,6 +20,19 @@ const ESTADOS: Record<string, string> = {
   incomplete_expired: 'Pago sin completar (caducado)',
 }
 
+// Insignia de color junto al nombre del plan — de un vistazo, sin tener que
+// leer texto largo. Verde = todo bien, ámbar = necesita atención, rojo =
+// problema, gris = ya no está activa.
+const INSIGNIA_ESTADO: Record<string, { texto: string; fondo: string; color: string }> = {
+  trialing: { texto: 'Prueba gratis', fondo: '#eafaf0', color: '#1f7a43' },
+  active: { texto: 'Activo', fondo: '#eafaf0', color: '#1f7a43' },
+  past_due: { texto: 'Pago pendiente', fondo: '#fff4e0', color: '#a15c00' },
+  unpaid: { texto: 'Pago fallido', fondo: '#fdecea', color: '#c0392b' },
+  incomplete: { texto: 'Pago sin completar', fondo: '#fff4e0', color: '#a15c00' },
+  incomplete_expired: { texto: 'Caducado', fondo: '#fdecea', color: '#c0392b' },
+  canceled: { texto: 'Cancelada', fondo: '#eee', color: '#666' },
+}
+
 // useSearchParams() obliga a envolver la página en Suspense, si no Next.js
 // falla al construir la web (no es un bug nuestro, es cómo funciona Next).
 export default function SuscripcionPage() {
@@ -163,25 +176,41 @@ function SuscripcionContenido() {
       {tieneSuscripcion ? (
         <>
           <div className="card" style={{ border: '2px solid var(--negro, #111)', background: '#fafafa' }}>
-            <p className="etiqueta-seccion" style={{ marginBottom: 4 }}>Tu plan activo</p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 2 }}>
+              <p className="etiqueta-seccion" style={{ margin: 0 }}>Tu plan activo</p>
+              {INSIGNIA_ESTADO[estado || ''] && (
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    padding: '3px 10px',
+                    borderRadius: 999,
+                    background: INSIGNIA_ESTADO[estado || ''].fondo,
+                    color: INSIGNIA_ESTADO[estado || ''].color,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {INSIGNIA_ESTADO[estado || ''].texto}
+                </span>
+              )}
+            </div>
             <p style={{ marginTop: 0, marginBottom: 4, fontSize: '1.15rem' }}>
               <strong>{PLAN_NOMBRE}</strong>
             </p>
             <p style={{ marginTop: 0, marginBottom: 12, color: 'var(--muted)' }}>{PLAN_PRECIO}</p>
 
-            <p style={{ marginBottom: 4 }}>
-              <strong>Estado:</strong> {ESTADOS[estado || ''] || estado}
-            </p>
             {estado === 'trialing' && emprendedor.stripe_trial_ends_at && (
-              <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginTop: 0, marginBottom: 0 }}>
-                Tu prueba gratuita termina el {formatearFecha(emprendedor.stripe_trial_ends_at)} — a partir de ese
-                día se te cobrará {PLAN_PRECIO} automáticamente, salvo que canceles antes.
+              <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                Primer cobro: <strong>{formatearFecha(emprendedor.stripe_trial_ends_at)}</strong>
               </p>
             )}
             {estado === 'active' && emprendedor.stripe_proximo_cobro && (
-              <p style={{ color: 'var(--muted)', fontSize: '0.85rem', marginTop: 0, marginBottom: 0 }}>
-                Próximo cobro: {formatearFecha(emprendedor.stripe_proximo_cobro)}.
+              <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                Próximo cobro: <strong>{formatearFecha(emprendedor.stripe_proximo_cobro)}</strong>
               </p>
+            )}
+            {!['trialing', 'active'].includes(estado || '') && (
+              <p style={{ margin: 0, fontSize: '0.9rem' }}>{ESTADOS[estado || ''] || estado}</p>
             )}
           </div>
 
