@@ -20,13 +20,28 @@ type Props = { params: Promise<{ slug: string }> }
 async function descargarComoDataUrl(url: string): Promise<string | null> {
   try {
     const resp = await fetch(url)
-    if (!resp.ok) return null
+    if (!resp.ok) {
+      console.error('[opengraph-image] el logo respondio', resp.status, url)
+      return null
+    }
     const bytes = new Uint8Array(await resp.arrayBuffer())
+    if (bytes.length === 0) {
+      console.error('[opengraph-image] el logo llego vacio', url)
+      return null
+    }
     let binario = ''
     for (let i = 0; i < bytes.length; i++) binario += String.fromCharCode(bytes[i])
-    const tipo = resp.headers.get('content-type') || 'image/png'
+    const cabecera = resp.headers.get('content-type') || ''
+    // Algunas subidas pueden llegar con un content-type que no empieza por
+    // "image/" (o con parametros extra tipo "; charset=..."), así que nos
+    // curamos en salud: si no es un tipo de imagen reconocible, forzamos
+    // png en vez de dejar que el navegador (o Satori) descarte la imagen
+    // por un "data:" con un tipo raro.
+    const tipo = cabecera.split(';')[0].trim().startsWith('image/') ? cabecera.split(';')[0].trim() : 'image/png'
+    console.log('[opengraph-image] logo descargado OK', { url, bytes: bytes.length, tipo, cabecera })
     return `data:${tipo};base64,${btoa(binario)}`
-  } catch {
+  } catch (e) {
+    console.error('[opengraph-image] fallo al descargar el logo', url, e)
     return null
   }
 }
