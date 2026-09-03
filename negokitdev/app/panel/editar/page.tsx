@@ -336,11 +336,12 @@ export default function EditarNegocioPage() {
 
     borrarBorrador(`negocio-${usuario.id}`)
     setGuardando(false)
-    // Justo al crear la página la mandamos a activar su prueba gratuita, no
-    // al panel de servicios — así, si está delante de la clienta en el
-    // momento, puede pedirle la tarjeta ahí mismo mientras la tiene enfrente,
-    // en vez de esperar a que se le ocurra hacerlo ella sola más tarde.
-    router.replace('/panel/suscripcion?nueva=1')
+    // Al panel normal, no directo a pedir la tarjeta — así el cliente puede
+    // ver y probar cómo funciona primero (con Gabriela explicándoselo en
+    // persona). Si le gusta, se le lleva a la pasarela de pago desde ahí.
+    // El límite de 24h sin iniciar prueba (lib/config.ts) sigue protegiendo
+    // de que alguien use la app gratis sin fecha límite.
+    router.replace('/panel')
   }
 
   const logoPreviewUrl = useMemo(() => (logo ? URL.createObjectURL(logo) : logoActualUrl), [logo, logoActualUrl])

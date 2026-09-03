@@ -35,6 +35,7 @@ export default function AvisoCookies() {
       <p>
         Usamos únicamente cookies técnicas necesarias para que la web funcione (como mantener tu sesión iniciada).
         No usamos cookies de publicidad ni de analítica. Más información en nuestra{' '}
+        <a href="/cookies" target="_blank" rel="noopener noreferrer">política de cookies</a> y nuestra{' '}
         <a href="/privacidad" target="_blank" rel="noopener noreferrer">política de privacidad</a>.
       </p>
       <button type="button" onClick={aceptar}>Entendido</button>

@@ -204,7 +204,14 @@ function SuscripcionContenido() {
             </p>
           )}
 
-          {avisoBaja && !bajaEnviada && (
+          {avisoBaja && EMAIL_SOPORTE && (
+            <p style={{ marginTop: 16, marginBottom: 0, fontSize: '0.85rem', color: 'var(--muted)' }}>
+              Si quieres cancelar tu suscripción, envía un correo a{' '}
+              <a href={`mailto:${EMAIL_SOPORTE}`}>{EMAIL_SOPORTE}</a> con el nombre de tu negocio.
+            </p>
+          )}
+
+          {avisoBaja && !EMAIL_SOPORTE && !bajaEnviada && (
             <form onSubmit={enviarSolicitudBaja} style={{ marginTop: 16 }}>
               <p style={{ marginTop: 0, marginBottom: 6, fontSize: '0.8rem', color: 'var(--muted)' }}>
                 Déjanos tu email y te ayudamos a cancelar la suscripción a mano.
@@ -223,7 +230,7 @@ function SuscripcionContenido() {
             </form>
           )}
 
-          {avisoBaja && bajaEnviada && (
+          {avisoBaja && !EMAIL_SOPORTE && bajaEnviada && (
             <p style={{ marginTop: 16, marginBottom: 0, fontSize: '0.85rem', color: 'var(--muted)' }}>
               Recibido. Te contactaremos a {emailBaja} para gestionar la cancelación.
             </p>
@@ -245,6 +252,11 @@ function SuscripcionContenido() {
             {procesando ? 'Abriendo...' : 'Empezar prueba gratuita de 7 días'}
           </button>
           {error && <p style={{ color: '#c0392b', fontSize: '0.85rem', marginTop: 8 }}>{error}</p>}
+
+          <p style={{ marginTop: 12, marginBottom: 0, fontSize: '0.75rem', color: 'var(--muted)' }}>
+            Al continuar aceptas nuestros <a href="/terminos" target="_blank" rel="noopener noreferrer">Términos y condiciones</a>{' '}
+            y nuestra <a href="/privacidad" target="_blank" rel="noopener noreferrer">política de privacidad</a>.
+          </p>
         </div>
       )}
     </div>
