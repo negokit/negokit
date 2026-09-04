@@ -39,15 +39,15 @@ const INSIGNIA_ESTADO: Record<string, { texto: string; fondo: string; color: str
 const SERVICIOS_ADICIONALES = [
   {
     titulo: 'Página web a medida',
-    texto: '¿Quieres además una web propia, más completa que tu página Servix? Te la diseño yo misma.',
+    texto: '¿Quieres además una web propia, más completa que tu página Servix? Contáctanos para verlo juntos.',
   },
   {
     titulo: 'Flyers profesionales',
-    texto: '¿Necesitas flyers o carteles para repartir o imprimir? Te los diseño yo misma.',
+    texto: '¿Necesitas flyers o carteles para repartir o imprimir? Contáctanos para verlo juntos.',
   },
   {
     titulo: 'Gestión de redes sociales',
-    texto: '¿Necesitas ayuda llevando tus redes sociales? Podemos verlo juntas.',
+    texto: '¿Tienes redes sociales y no te da tiempo llevarlas, o todavía no tienes ninguna? Contáctanos para verlo juntos.',
   },
 ]
 
