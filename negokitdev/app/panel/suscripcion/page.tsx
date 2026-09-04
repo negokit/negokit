@@ -33,6 +33,24 @@ const INSIGNIA_ESTADO: Record<string, { texto: string; fondo: string; color: str
   canceled: { texto: 'Cancelada', fondo: '#eee', color: '#666' },
 }
 
+// Servicios extra que Gabriela ofrece aparte de Servix — no se cobran aquí
+// (no hay Stripe de por medio, el precio se acuerda hablando por WhatsApp),
+// así que cada uno es solo una tarjeta informativa con un botón de contacto.
+const SERVICIOS_ADICIONALES = [
+  {
+    titulo: 'Página web a medida',
+    texto: '¿Quieres además una web propia, más completa que tu página Servix? Contáctanos para verlo juntos.',
+  },
+  {
+    titulo: 'Flyers profesionales',
+    texto: '¿Necesitas flyers o carteles para repartir o imprimir? Contáctanos para verlo juntos.',
+  },
+  {
+    titulo: 'Gestión de redes sociales',
+    texto: '¿Tienes redes sociales y no te da tiempo llevarlas, o todavía no tienes ninguna? Contáctanos para verlo juntos.',
+  },
+]
+
 // useSearchParams() obliga a envolver la página en Suspense, si no Next.js
 // falla al construir la web (no es un bug nuestro, es cómo funciona Next).
 export default function SuscripcionPage() {
@@ -291,6 +309,29 @@ function SuscripcionContenido() {
             Al continuar aceptas nuestros <a href="/terminos" target="_blank" rel="noopener noreferrer">Términos y condiciones</a>{' '}
             y nuestra <a href="/privacidad" target="_blank" rel="noopener noreferrer">política de privacidad</a>.
           </p>
+        </div>
+      )}
+
+      {WHATSAPP_SOPORTE && (
+        <div style={{ marginTop: 28 }}>
+          <p className="etiqueta-seccion" style={{ marginBottom: 10 }}>¿Necesitas algo más?</p>
+          {SERVICIOS_ADICIONALES.map((s) => (
+            <div key={s.titulo} className="card">
+              <p style={{ marginTop: 0, marginBottom: 4, fontWeight: 700 }}>{s.titulo}</p>
+              <p style={{ marginTop: 0, marginBottom: 12, color: 'var(--muted)', fontSize: '0.9rem' }}>{s.texto}</p>
+              <a
+                href={`https://wa.me/${WHATSAPP_SOPORTE}?text=${encodeURIComponent(
+                  `Hola, me interesa "${s.titulo}" para mi negocio "${emprendedor.nombre_negocio}".`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="boton-pill"
+                style={{ textDecoration: 'none' }}
+              >
+                Hablemos por WhatsApp →
+              </a>
+            </div>
+          ))}
         </div>
       )}
     </div>
