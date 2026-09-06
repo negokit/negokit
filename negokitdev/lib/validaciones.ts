@@ -42,6 +42,7 @@ export const LONGITUD_MAXIMA = {
   oficio: 40,
   ciudad: 40,
   direccionNegocio: 150,
+  descripcion: 200,
   slug: 60,
   nombreCliente: 60,
   telefonoCliente: 20,
@@ -77,6 +78,13 @@ export function validarCiudad(valor: string) {
 export function validarDireccionNegocio(valor: string) {
   if (!valor.trim()) return true
   return valor.trim().length <= LONGITUD_MAXIMA.direccionNegocio
+}
+
+// Descripción corta del negocio (opcional), se muestra arriba de todo en la
+// página pública, justo debajo del nombre/oficio.
+export function validarDescripcion(valor: string) {
+  if (!valor.trim()) return true
+  return valor.trim().length <= LONGITUD_MAXIMA.descripcion
 }
 
 // Nombre del cliente final en el formulario público de contacto.

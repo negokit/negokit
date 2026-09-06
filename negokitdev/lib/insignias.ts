@@ -1,8 +1,8 @@
-// Insignias de confianza: hasta 3 "sellos" que el emprendedor elige para
+// Insignias de confianza: hasta 2 "sellos" que el emprendedor elige para
 // mostrar en su página pública (ej. "Respuesta en menos de 24h",
 // "+200 clientes atendidos"). Antes existían como dos campos sueltos
 // (mostrar_insignia_respuesta + insignia_personalizada, una sola); ahora es
-// una lista de hasta 3, elegidas de una lista de sugeridas o escritas a mano.
+// una lista de hasta 2, elegidas de una lista de sugeridas o escritas a mano.
 
 // A propósito sin números ni cantidades concretas (nada de "+200 clientes"
 // o "10 años de experiencia") — cada negocio es distinto y una cifra fija
@@ -17,7 +17,7 @@ export const INSIGNIAS_PRESET = [
   'Presupuesto gratuito',
 ]
 
-export const MAX_INSIGNIAS = 3
+export const MAX_INSIGNIAS = 2
 export const LONGITUD_MAXIMA_INSIGNIA = 40
 
 // Lee la lista de insignias de un negocio. Si todavía no tiene la columna

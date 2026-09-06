@@ -12,7 +12,7 @@ const BASE_URL = 'https://emprenia.com'
 async function buscarEmprendedor(slug: string) {
   const { data } = await supabase
     .from('emprendedores')
-    .select('nombre_negocio, oficio, ciudad, direccion, whatsapp_number, logo_url')
+    .select('nombre_negocio, oficio, ciudad, direccion, whatsapp_number, logo_url, descripcion')
     .eq('slug', slug)
     .eq('activo', true)
     .maybeSingle()
@@ -28,9 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const titulo = emp.oficio ? `${emp.nombre_negocio} · ${emp.oficio}` : emp.nombre_negocio
-  const descripcion = emp.ciudad
-    ? `Descubre los servicios de ${emp.nombre_negocio} en ${emp.ciudad} y contacta directo por WhatsApp.`
-    : `Descubre los servicios de ${emp.nombre_negocio} y contacta directo por WhatsApp.`
+  // La descripción que escribió el emprendedor tiene prioridad (es más
+  // concreta y suya) — si no la rellenó, usamos una genérica.
+  const descripcion =
+    emp.descripcion ||
+    (emp.ciudad
+      ? `Descubre los servicios de ${emp.nombre_negocio} en ${emp.ciudad} y contacta directo por WhatsApp.`
+      : `Descubre los servicios de ${emp.nombre_negocio} y contacta directo por WhatsApp.`)
 
   return {
     title: titulo,
@@ -38,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: titulo,
       description: descripcion,
-      siteName: 'emprenia',
+      siteName: 'Emprenia',
       locale: 'es_ES',
       type: 'website',
     },
@@ -62,7 +66,7 @@ export default async function PaginaPublica({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: emp.nombre_negocio,
-    description: emp.oficio || undefined,
+    description: emp.descripcion || emp.oficio || undefined,
     image: emp.logo_url || undefined,
     telephone: emp.whatsapp_number || undefined,
     url: `${BASE_URL}/${slug}`,

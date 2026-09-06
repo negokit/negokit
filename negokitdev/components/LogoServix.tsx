@@ -45,7 +45,7 @@ export default function LogoServix({
           letterSpacing: '-0.01em',
         }}
       >
-        emprenia
+        Emprenia
       </span>
     </span>
   )

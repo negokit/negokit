@@ -459,6 +459,22 @@ button.peligro {
   margin: 0 0 1rem;
 }
 
+/* Dirección, ciudad y teléfono uno debajo del otro, en vez de en fila. */
+.meta-columna {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 1rem;
+}
+
+/* Descripción corta del negocio, justo debajo del nombre/oficio/contacto. */
+.descripcion-negocio {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
 .meta-item {
   display: inline-flex;
   align-items: center;
@@ -582,6 +598,60 @@ button.peligro {
   height: 200px;
   object-fit: cover;
   display: block;
+}
+
+/* Sección "Clientes" del panel — lista/cuadrícula de leads. */
+.selector-vista {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.1rem;
+}
+
+.selector-vista button {
+  width: auto;
+  padding: 0.5rem 1rem;
+  font-size: 0.82rem;
+}
+
+.lista-clientes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rejilla-clientes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+
+.tarjeta-cliente {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(20, 20, 30, 0.03), 0 10px 28px rgba(20, 20, 30, 0.045);
+}
+
+.tarjeta-cliente-cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.tarjeta-cliente-cabecera strong {
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fecha-cliente {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  color: var(--muted);
 }
 
 .numero-badge {

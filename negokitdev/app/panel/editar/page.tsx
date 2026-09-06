@@ -11,6 +11,7 @@ import {
   validarOficio,
   validarCiudad,
   validarDireccionNegocio,
+  validarDescripcion,
   LONGITUD_MAXIMA,
 } from '@/lib/validaciones'
 import { INSIGNIAS_PRESET, MAX_INSIGNIAS, obtenerInsignias, validarInsignias } from '@/lib/insignias'
@@ -29,11 +30,11 @@ type BorradorNegocio = {
   oficio: string
   ciudad: string
   direccion: string
+  descripcion: string
   slug: string
   whatsapp: string
   instagram: string
   tiktok: string
-  web: string
   presetsSeleccionados: string[]
   otroTexto: string
 }
@@ -52,6 +53,7 @@ export default function EditarNegocioPage() {
   const [oficio, setOficio] = useState('')
   const [ciudad, setCiudad] = useState('')
   const [direccion, setDireccion] = useState('')
+  const [descripcion, setDescripcion] = useState('')
   const [slug, setSlug] = useState('')
   const [slugTocadoAMano, setSlugTocadoAMano] = useState(false)
   // El enlace es un campo delicado: una vez la página ya existe, se muestra
@@ -61,7 +63,6 @@ export default function EditarNegocioPage() {
   const [whatsapp, setWhatsapp] = useState('')
   const [instagram, setInstagram] = useState('')
   const [tiktok, setTiktok] = useState('')
-  const [web, setWeb] = useState('')
   const [logo, setLogo] = useState<File | null>(null)
   const [logoActualUrl, setLogoActualUrl] = useState<string | null>(null)
   const [comprimiendoLogo, setComprimiendoLogo] = useState(false)
@@ -112,11 +113,11 @@ export default function EditarNegocioPage() {
       setOficio(borrador.oficio)
       setCiudad(borrador.ciudad)
       setDireccion(borrador.direccion)
+      setDescripcion(borrador.descripcion)
       setSlug(borrador.slug)
       setWhatsapp(borrador.whatsapp)
       setInstagram(borrador.instagram)
       setTiktok(borrador.tiktok)
-      setWeb(borrador.web)
       setPresetsSeleccionados(borrador.presetsSeleccionados)
       setOtroTexto(borrador.otroTexto)
       setOtrosVisible(!!borrador.otroTexto)
@@ -127,11 +128,11 @@ export default function EditarNegocioPage() {
       setOficio(emp?.oficio || '')
       setCiudad(emp?.ciudad || '')
       setDireccion(emp?.direccion || '')
+      setDescripcion(emp?.descripcion || '')
       setSlug(emp?.slug || '')
       setWhatsapp(emp?.whatsapp_number || '')
       setInstagram(emp?.instagram_url || '')
       setTiktok(emp?.tiktok_url || '')
-      setWeb(emp?.web_url || '')
       setPresetsSeleccionados(presetsBase)
       setOtroTexto(otroBase)
       setOtrosVisible(!!otroBase)
@@ -147,10 +148,10 @@ export default function EditarNegocioPage() {
   useEffect(() => {
     if (loading || !usuario) return
     guardarBorrador(`negocio-${usuario.id}`, {
-      nombre, contacto, oficio, ciudad, direccion, slug, whatsapp, instagram, tiktok, web,
+      nombre, contacto, oficio, ciudad, direccion, descripcion, slug, whatsapp, instagram, tiktok,
       presetsSeleccionados, otroTexto,
     } satisfies BorradorNegocio)
-  }, [loading, usuario, nombre, contacto, oficio, ciudad, direccion, slug, whatsapp, instagram, tiktok, web, presetsSeleccionados, otroTexto])
+  }, [loading, usuario, nombre, contacto, oficio, ciudad, direccion, descripcion, slug, whatsapp, instagram, tiktok, presetsSeleccionados, otroTexto])
 
   function alternarPreset(texto: string) {
     setError('')
@@ -223,6 +224,10 @@ export default function EditarNegocioPage() {
       setError(`La dirección no puede pasar de ${LONGITUD_MAXIMA.direccionNegocio} caracteres.`)
       return
     }
+    if (!validarDescripcion(descripcion)) {
+      setError(`La descripción no puede pasar de ${LONGITUD_MAXIMA.descripcion} caracteres.`)
+      return
+    }
     const slugLimpio = slugify(slug)
     if (!slugLimpio) {
       setError('El enlace de tu página no puede quedar vacío.')
@@ -287,22 +292,17 @@ export default function EditarNegocioPage() {
       tiktokUrl = `https://tiktok.com/@${tiktokUrl.replace(/^@/, '')}`
     }
 
-    let webUrl = web.trim()
-    if (webUrl && !/^https?:\/\//i.test(webUrl)) {
-      webUrl = `https://${webUrl}`
-    }
-
     const camposComunes = {
       nombre_negocio: nombre,
       nombre_contacto: contacto,
       oficio,
       ciudad,
       direccion: direccion.trim() || null,
+      descripcion: descripcion.trim() || null,
       slug: slugLimpio,
       whatsapp_number: normalizarWhatsapp(whatsapp),
       instagram_url: instagramUrl || null,
       tiktok_url: tiktokUrl || null,
-      web_url: webUrl || null,
       insignias: insigniasFinal,
     }
 
@@ -485,6 +485,18 @@ export default function EditarNegocioPage() {
               contacten. Si prefieres no mostrar tu calle exacta, déjala vacía y se queda solo la ciudad.
             </p>
 
+            <label>Descripción breve (opcional)</label>
+            <textarea
+              placeholder="ej: Más de 10 años arreglando jardines en Madrid, presupuesto sin compromiso."
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              maxLength={LONGITUD_MAXIMA.descripcion}
+              rows={3}
+            />
+            <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.85rem' }}>
+              Aparece arriba de todo en tu página pública, debajo de tu nombre. {descripcion.length}/{LONGITUD_MAXIMA.descripcion}
+            </p>
+
             <label>Enlace de tu página</label>
             {slugBloqueado ? (
               <div className="campo-bloqueado">
@@ -557,18 +569,6 @@ export default function EditarNegocioPage() {
               onChange={(e) => setTiktok(e.target.value)}
               maxLength={200}
             />
-
-            <label>Página web</label>
-            <input
-              type="text"
-              placeholder="tuweb.com"
-              value={web}
-              onChange={(e) => setWeb(e.target.value)}
-              maxLength={200}
-            />
-            <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.85rem' }}>
-              Lo que rellenes aparece como enlace en tu página pública.
-            </p>
           </div>
 
           <div className="seccion-formulario">
