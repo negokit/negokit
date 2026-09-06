@@ -684,11 +684,78 @@ button.peligro {
   white-space: nowrap;
 }
 
-/* Sección "Cómo funciona" y "Qué incluye" de la portada (landing/venta). */
+/* ==== Página de venta (/landing) — pensada mobile-first desde cero ==== */
+
+.landing-pagina {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.landing-hero {
+  width: 100%;
+  background: var(--foreground);
+  padding: 2.75rem 1.25rem 2.5rem;
+  box-sizing: border-box;
+}
+
+.landing-hero-contenido {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.landing-titulo {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.landing-titulo em {
+  color: #C3CAD6;
+  font-style: italic;
+}
+
+.landing-subtitulo {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.landing-cta-fila {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+.landing-cta-fila a {
+  display: block;
+  width: 100%;
+}
+
+.landing-cta-fila button {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.landing-centrado {
+  text-align: center;
+}
+
+.landing-h2 {
+  border: none;
+  padding-bottom: 0;
+  margin-top: 0.4rem;
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+
 .lista-pasos-landing {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 1.2rem;
   margin-top: 1.5rem;
 }
 
@@ -712,11 +779,17 @@ button.peligro {
   font-weight: 700;
 }
 
-.paso-landing p {
+.paso-landing-texto {
+  min-width: 0;
+  flex: 1;
+}
+
+.paso-landing-texto p {
   margin: 2px 0 0;
   color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.45;
+  overflow-wrap: break-word;
 }
 
 .rejilla-caracteristicas-landing {
@@ -731,6 +804,7 @@ button.peligro {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.1rem;
+  box-sizing: border-box;
 }
 
 .tarjeta-caracteristica-landing p {
@@ -738,6 +812,57 @@ button.peligro {
   color: var(--muted);
   font-size: 0.88rem;
   line-height: 1.45;
+  overflow-wrap: break-word;
+}
+
+.landing-precio {
+  text-align: center;
+  margin-top: 2.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.landing-h2-precio {
+  color: #fff;
+  border: none;
+  margin: 4px 0 8px;
+  padding-bottom: 0;
+  font-size: 1.6rem;
+}
+
+.landing-precio-texto {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.landing-pie {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 640px) {
+  .landing-titulo {
+    font-size: 2rem;
+  }
+
+  .landing-cta-fila {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .landing-cta-fila a {
+    width: auto;
+  }
+
+  .landing-cta-fila button {
+    width: auto;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+  }
+
+  .rejilla-caracteristicas-landing {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .tarjeta-oscura {
