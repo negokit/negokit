@@ -7,6 +7,19 @@ export function slugify(texto: string) {
     .replace(/(^-+|-+$)/g, '')
 }
 
+// Filtra en tiempo real lo que se escribe en el campo de enlace: minúsculas,
+// letras sin acentos, números y guiones — nada más. Así lo que se ve mientras
+// se escribe ya coincide con lo que se va a guardar (slugify() sigue
+// aplicándose al guardar, por si acaso, pero esto evita que lleguen a
+// escribirse acentos o símbolos en primer lugar).
+export function sanitizarSlugInput(valor: string) {
+  return valor
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9-]+/g, '-')
+}
+
 export function validarPrecio(valor: string) {
   if (!valor) return true
   return /^\d+(\.\d{1,2})?$/.test(valor) && parseFloat(valor) > 0
@@ -55,8 +68,19 @@ function textoValido(valor: string, min: number, max: number) {
   return limpio.length >= min && limpio.length <= max
 }
 
+// Solo letras (con acentos y ñ), espacios y separadores típicos de nombres
+// compuestos ("María José", "Pérez-García") — para campos que son siempre
+// un nombre de persona o de oficio, nunca números ni símbolos.
+const SOLO_LETRAS_REGEX = /^[a-zA-ZÀ-ÿ\s'-]+$/
+
+// Bloquea asteriscos y símbolos raros mientras sigue permitiendo números,
+// comas, puntos y almohadillas — habituales en nombres de negocio reales
+// ("Bar 2000", "Taller Nº 3") y en direcciones ("Calle Mayor 12, 2ºA").
+const SIN_SIMBOLOS_RAROS_REGEX = /^[a-zA-Z0-9À-ÿ\s.,'ºª#/-]+$/
+
 export function validarNombreNegocio(valor: string) {
-  return textoValido(valor, 2, LONGITUD_MAXIMA.nombreNegocio)
+  const limpio = valor.trim()
+  return textoValido(valor, 2, LONGITUD_MAXIMA.nombreNegocio) && SIN_SIMBOLOS_RAROS_REGEX.test(limpio)
 }
 
 export function validarNombreContacto(valor: string) {
@@ -64,7 +88,8 @@ export function validarNombreContacto(valor: string) {
 }
 
 export function validarOficio(valor: string) {
-  return textoValido(valor, 2, LONGITUD_MAXIMA.oficio)
+  const limpio = valor.trim()
+  return textoValido(valor, 2, LONGITUD_MAXIMA.oficio) && SOLO_LETRAS_REGEX.test(limpio)
 }
 
 export function validarCiudad(valor: string) {
@@ -76,8 +101,9 @@ export function validarCiudad(valor: string) {
 // ciudad. Sin restricción de caracteres (una dirección real lleva números,
 // comas, etc.), solo límite de longitud.
 export function validarDireccionNegocio(valor: string) {
-  if (!valor.trim()) return true
-  return valor.trim().length <= LONGITUD_MAXIMA.direccionNegocio
+  const limpio = valor.trim()
+  if (!limpio) return true
+  return limpio.length <= LONGITUD_MAXIMA.direccionNegocio && SIN_SIMBOLOS_RAROS_REGEX.test(limpio)
 }
 
 // Descripción corta del negocio (opcional), se muestra arriba de todo en la
