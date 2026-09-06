@@ -5,8 +5,9 @@
 // en formato internacional, solo números.
 export const WHATSAPP_SOPORTE = '34692209204'
 
-// Email de soporte, usado como alternativa si no hay WhatsApp configurado.
-export const EMAIL_SOPORTE = ''
+// Email de soporte — canal alternativo al WhatsApp, sobre todo para quien
+// prefiere escribir (dudas, facturación, cancelaciones).
+export const EMAIL_SOPORTE = 'emprenia.app@gmail.com'
 
 // Nombre y precio del plan tal como se muestran en "Mi suscripción". Como de
 // momento solo hay un plan, se dejan fijos aquí — si el precio cambia en
