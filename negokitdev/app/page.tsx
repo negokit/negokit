@@ -1,8 +1,27 @@
 import AuthLayout from '@/components/AuthLayout'
 
+// Datos estructurados (schema.org Organization) de la plataforma en sí,
+// para que Google entienda qué es "Servix" cuando alguien lo busque
+// (no confundir con los datos de cada negocio individual, que van en
+// app/[slug]/page.tsx).
+const datosEstructurados = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Servix',
+  url: 'https://emprenia.com',
+  description:
+    'Tu propia página para que tus clientes te encuentren, vean tus servicios y te escriban directo por WhatsApp.',
+}
+
 export default function Home() {
   return (
-    <AuthLayout
+    <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
+      />
+      <AuthLayout
       titulo={<>Tu oficio, con la página que <em>merece</em>.</>}
       subtitulo="Tu propia página para que tus clientes te encuentren, vean tus servicios y te escriban directo por WhatsApp — sin páginas complicadas ni nada que aprender."
       puntos={['Página profesional', 'Código QR permanente', 'Contacto por WhatsApp', 'Sin conocimientos técnicos']}
@@ -19,6 +38,7 @@ export default function Home() {
           <button type="button" className="secundario" style={{ width: '100%' }}>Crear mi página</button>
         </a>
       </div>
-    </AuthLayout>
+      </AuthLayout>
+    </>
   )
 }
