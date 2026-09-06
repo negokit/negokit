@@ -61,6 +61,10 @@ const OBJECIONES = [
     pregunta: '"¿Y si no me funciona?"',
     respuesta: 'Por eso hay 7 días de prueba gratis, sin compromiso. Si no te aporta nada, lo dejas y no pasa nada.',
   },
+  {
+    pregunta: '"No tengo tarjeta."',
+    respuesta: 'No pasa nada — también puedes pagar con tu cuenta bancaria (domiciliación), sin necesidad de tarjeta.',
+  },
 ]
 
 const SERVICIOS_EXTRA = [
@@ -156,8 +160,9 @@ export default function LandingPage() {
           <h2 className="landing-h2-precio-titulo">Entra ahora y congela tu precio para siempre.</h2>
           <p className="landing-precio-numero">{PLAN_PRECIO}</p>
           <p className="landing-precio-texto">
-            Este precio no vuelve a subir mientras sigas con nosotras, aunque el precio normal suba más
-            adelante. 7 días de prueba gratis. Cancela cuando quieras, sin permanencia.
+            Esto es lo que pagas por tu página, y no sube mientras sigas con nosotras — aunque el precio normal
+            suba más adelante. Si algún día quieres algo extra (una web a medida, flyers...), se habla aparte y
+            decides tú. 7 días de prueba gratis. Cancela cuando quieras, sin permanencia.
           </p>
           <a href="/registro" style={{ display: 'block', marginTop: 8 }}>
             <button type="button" className="boton-pill-claro">Quiero mi página →</button>
