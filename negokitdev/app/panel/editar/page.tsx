@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import {
   slugify,
+  sanitizarSlugInput,
   validarWhatsapp,
   normalizarWhatsapp,
   validarNombreNegocio,
@@ -205,7 +206,7 @@ export default function EditarNegocioPage() {
     if (!usuario) return
 
     if (!validarNombreNegocio(nombre)) {
-      setError('El nombre de tu negocio debe tener entre 2 y 60 caracteres.')
+      setError('El nombre de tu negocio debe tener entre 2 y 60 caracteres y no puede llevar símbolos como *.')
       return
     }
     if (!validarNombreContacto(contacto)) {
@@ -213,7 +214,7 @@ export default function EditarNegocioPage() {
       return
     }
     if (!validarOficio(oficio)) {
-      setError('Tu oficio debe tener entre 2 y 40 caracteres.')
+      setError('Tu oficio solo puede tener letras y espacios (2 a 40 caracteres), sin números ni símbolos.')
       return
     }
     if (!validarCiudad(ciudad)) {
@@ -221,7 +222,7 @@ export default function EditarNegocioPage() {
       return
     }
     if (!validarDireccionNegocio(direccion)) {
-      setError(`La dirección no puede pasar de ${LONGITUD_MAXIMA.direccionNegocio} caracteres.`)
+      setError(`La dirección no puede pasar de ${LONGITUD_MAXIMA.direccionNegocio} caracteres ni contener símbolos como *.`)
       return
     }
     if (!validarDescripcion(descripcion)) {
@@ -512,7 +513,7 @@ export default function EditarNegocioPage() {
                   value={slug}
                   onChange={(e) => {
                     setSlugTocadoAMano(true)
-                    setSlug(e.target.value)
+                    setSlug(sanitizarSlugInput(e.target.value))
                   }}
                   maxLength={LONGITUD_MAXIMA.slug}
                   required

@@ -93,29 +93,39 @@ export default async function Image({ params }: Props) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div
-            style={{
-              display: 'flex',
-              width: 148,
-              height: 148,
-              borderRadius: 34,
-              overflow: 'hidden',
-              background: '#1C1C27',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              boxShadow: '0 12px 32px rgba(28, 28, 39, 0.18)',
-            }}
-          >
-            {logoUrl ? (
-              // "contain", no "cover": un logo casi nunca es cuadrado, así que
-              // se ve completo sobre el fondo en vez de recortado.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={logoUrl} width={148} height={148} style={{ objectFit: 'contain' }} alt="" />
-            ) : (
+          {logoUrl ? (
+            // Sin caja de fondo alrededor: si el logo tiene su propio fondo
+            // (blanco, de color, lo que sea) se ve tal cual, flotando sobre
+            // la página — nada de "recuadro" detrás que desentone con el
+            // archivo real que ha subido el negocio.
+            // "contain", no "cover": un logo casi nunca es cuadrado, así que
+            // se ve completo en vez de recortado.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={logoUrl}
+              width={148}
+              height={148}
+              style={{ objectFit: 'contain', borderRadius: 24, flexShrink: 0 }}
+              alt=""
+            />
+          ) : (
+            // Solo cuando no hay logo subido usamos un círculo de iniciales
+            // como respaldo — igual que en el resto de la web (AvatarNegocio).
+            <div
+              style={{
+                display: 'flex',
+                width: 148,
+                height: 148,
+                borderRadius: '50%',
+                background: '#1C1C27',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
               <span style={{ fontSize: 58, fontWeight: 700, color: '#fff' }}>{iniciales}</span>
-            )}
-          </div>
+            </div>
+          )}
 
           <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 40 }}>
             <div style={{ display: 'flex', fontSize: 60, fontWeight: 700, color: '#1C1C27', lineHeight: 1.15 }}>
