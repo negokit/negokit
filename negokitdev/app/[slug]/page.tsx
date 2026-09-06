@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: titulo,
       description: descripcion,
-      siteName: 'servix',
+      siteName: 'emprenia',
       locale: 'es_ES',
       type: 'website',
     },

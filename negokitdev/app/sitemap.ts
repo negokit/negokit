@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { supabase } from '@/lib/supabaseClient'
 
-// Dominio real de Servix/Emprenia — hay que actualizar esto a mano si el
+// Dominio real de Emprenia — hay que actualizar esto a mano si el
 // dominio cambia de nuevo en el futuro (no usamos VERCEL_URL aquí porque
 // Google solo debe indexar la web de verdad, nunca una preview).
 const BASE_URL = 'https://emprenia.com'

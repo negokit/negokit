@@ -33,13 +33,13 @@ const INSIGNIA_ESTADO: Record<string, { texto: string; fondo: string; color: str
   canceled: { texto: 'Cancelada', fondo: '#eee', color: '#666' },
 }
 
-// Servicios extra que Gabriela ofrece aparte de Servix — no se cobran aquí
+// Servicios extra que Gabriela ofrece aparte de Emprenia — no se cobran aquí
 // (no hay Stripe de por medio, el precio se acuerda hablando por WhatsApp),
 // así que cada uno es solo una tarjeta informativa con un botón de contacto.
 const SERVICIOS_ADICIONALES = [
   {
     titulo: 'Página web a medida',
-    texto: '¿Quieres además una web propia, más completa que tu página Servix? Contáctanos para verlo juntos.',
+    texto: '¿Quieres además una web propia, más completa que tu página Emprenia? Contáctanos para verlo juntos.',
   },
   {
     titulo: 'Flyers profesionales',

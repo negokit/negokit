@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 const CLAVE = 'servix-cookies-aceptadas'
 
 // Aviso simple de cookies/privacidad, visible en toda la app hasta que se
-// acepta una vez (se recuerda en este mismo navegador). Servix solo usa la
+// acepta una vez (se recuerda en este mismo navegador). Emprenia solo usa la
 // cookie técnica de sesión (para mantenerte conectada), no cookies de
 // publicidad ni de analítica.
 export default function AvisoCookies() {
