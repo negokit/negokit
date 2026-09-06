@@ -16,19 +16,22 @@ export default function LogoServix({
   const colorS = claro ? 'var(--foreground)' : '#FFFFFF'
   const colorTexto = claro ? '#FFFFFF' : 'var(--foreground)'
 
-  // Icono: 4 marcas de esquina (como el visor de un lector de QR) con un
-  // punto de acento en el centro — representa "aquí te encuentran", ligado
-  // a lo que hace el producto (la página + el QR), en vez de ser una letra.
+  // Icono: 4 marcas de esquina (como puntos de enfoque de una cámara o de
+  // un lector de QR) con un punto de acento en el centro — representa
+  // "aquí te encuentran", ligado a lo que hace el producto (la página +
+  // el QR), en vez de ser una letra. Cuadrados sólidos y rectos a
+  // propósito (nada de curvas ni puntas redondeadas) para que no se
+  // puedan confundir con un corazón.
   const icono = (
     <svg width={tamano} height={tamano} viewBox="0 0 100 100" aria-hidden="true" style={{ flexShrink: 0 }}>
       <rect width="100" height="100" rx="24" fill={fondoIcono} />
-      <g stroke={colorS} strokeWidth="7" strokeLinecap="round" fill="none">
-        <path d="M32 26 H26 V32" />
-        <path d="M68 26 H74 V32" />
-        <path d="M32 74 H26 V68" />
-        <path d="M68 74 H74 V68" />
+      <g fill={colorS}>
+        <rect x="24" y="24" width="12" height="12" />
+        <rect x="64" y="24" width="12" height="12" />
+        <rect x="24" y="64" width="12" height="12" />
+        <rect x="64" y="64" width="12" height="12" />
       </g>
-      <circle cx="50" cy="50" r="7" fill="#C9713D" />
+      <circle cx="50" cy="50" r="8" fill="#C9713D" />
     </svg>
   )
 
