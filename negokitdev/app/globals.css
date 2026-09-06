@@ -684,6 +684,62 @@ button.peligro {
   white-space: nowrap;
 }
 
+/* Sección "Cómo funciona" y "Qué incluye" de la portada (landing/venta). */
+.lista-pasos-landing {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-top: 1.5rem;
+}
+
+.paso-landing {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.numero-paso-landing {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--foreground);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.paso-landing p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.rejilla-caracteristicas-landing {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+.tarjeta-caracteristica-landing {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.1rem;
+}
+
+.tarjeta-caracteristica-landing p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
 .tarjeta-oscura {
   background: var(--foreground);
   color: #fff;
