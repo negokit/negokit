@@ -28,21 +28,18 @@ export default async function Image() {
             height: 120,
             borderRadius: 28,
             background: '#FFFFFF',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 48,
             position: 'relative',
+            marginBottom: 48,
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              width: 18,
-              height: 18,
-              borderRadius: 9,
-              background: '#C9713D',
-            }}
-          />
+          {/* Mismo icono que el resto de la web (4 cuadrados + punto
+              terracota) — reconstruido con divs porque next/og no soporta
+              bien paths de SVG complejos dentro de ImageResponse. */}
+          <div style={{ display: 'flex', position: 'absolute', left: 29, top: 29, width: 14, height: 14, background: '#1C1C27' }} />
+          <div style={{ display: 'flex', position: 'absolute', right: 29, top: 29, width: 14, height: 14, background: '#1C1C27' }} />
+          <div style={{ display: 'flex', position: 'absolute', left: 29, bottom: 29, width: 14, height: 14, background: '#1C1C27' }} />
+          <div style={{ display: 'flex', position: 'absolute', right: 29, bottom: 29, width: 14, height: 14, background: '#1C1C27' }} />
+          <div style={{ display: 'flex', position: 'absolute', left: 50, top: 50, width: 20, height: 20, borderRadius: 10, background: '#C9713D' }} />
         </div>
 
         <div style={{ display: 'flex', fontSize: 76, fontWeight: 700, color: '#fff', lineHeight: 1.1 }}>
