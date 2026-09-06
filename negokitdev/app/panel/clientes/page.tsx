@@ -25,6 +25,14 @@ function IconoPin() {
   )
 }
 
+function IconoTelefono() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z" />
+    </svg>
+  )
+}
+
 function IconoWhatsapp() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -35,6 +43,11 @@ function IconoWhatsapp() {
 
 function formatearFecha(iso: string) {
   return new Date(iso).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+function inicialesDe(nombre: string) {
+  const partes = nombre.trim().split(/\s+/).filter(Boolean)
+  return (partes.length >= 2 ? partes[0][0] + partes[1][0] : partes[0]?.slice(0, 2) || '?').toUpperCase()
 }
 
 export default function ClientesPage() {
@@ -121,17 +134,22 @@ export default function ClientesPage() {
         {leads.map((lead) => (
           <div key={lead.id} className="tarjeta-cliente">
             <div className="tarjeta-cliente-cabecera">
-              <strong>{lead.nombre_cliente}</strong>
-              <span className="fecha-cliente">{formatearFecha(lead.created_at)}</span>
+              <div className="avatar-cliente">{inicialesDe(lead.nombre_cliente)}</div>
+              <div className="tarjeta-cliente-nombre-fecha">
+                <strong>{lead.nombre_cliente}</strong>
+                <span className="fecha-cliente">{formatearFecha(lead.created_at)}</span>
+              </div>
             </div>
             {lead.servicios?.titulo && <span className="etiqueta">{lead.servicios.titulo}</span>}
-            <p className="meta-item" style={{ margin: '8px 0 0' }}>
-              <IconoPin /> {lead.direccion_cliente}
-            </p>
-            <p className="meta-item" style={{ margin: '4px 0 12px' }}>
-              {lead.telefono_cliente}
-            </p>
-            <button type="button" className="boton-pill" onClick={() => hablarPorWhatsapp(lead)}>
+            <div className="meta-columna">
+              <span className="meta-item">
+                <IconoPin /> {lead.direccion_cliente}
+              </span>
+              <span className="meta-item">
+                <IconoTelefono /> {lead.telefono_cliente}
+              </span>
+            </div>
+            <button type="button" className="boton-pill boton-pill-whatsapp" onClick={() => hablarPorWhatsapp(lead)}>
               <IconoWhatsapp /> Hablar por WhatsApp →
             </button>
           </div>

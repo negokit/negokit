@@ -240,78 +240,83 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
   // misma forma.
   const insigniasNegocio = obtenerInsignias(emprendedor)
 
+  // Oficio y nombre de contacto van en una sola línea (en vez de dos
+  // líneas apiladas) — con datos de prueba iguales en ambos campos se veía
+  // como si el nombre estuviera duplicado.
+  const lineaOficioContacto = [emprendedor.oficio, emprendedor.nombre_contacto].filter(Boolean).join(' · ')
+  // Dirección y ciudad juntas en una sola línea, como se escribirían en
+  // una tarjeta de verdad, en vez de repetir el icono de ubicación dos veces.
+  const lineaDireccion = [emprendedor.direccion, emprendedor.ciudad].filter(Boolean).join(', ')
+
   return (
     <div className="contenedor pagina-publica">
-      <div className="fila-cabecera">
-        <AvatarNegocio emprendedor={emprendedor} tamano={56} conAnillo />
-        <div className="info-negocio">
-          <h1>{emprendedor.nombre_negocio}</h1>
-          {emprendedor.oficio && <p className="subtitulo-oficio">{emprendedor.oficio}</p>}
-          {emprendedor.nombre_contacto && (
-            <p className="subtitulo-oficio" style={{ marginTop: 2 }}>{emprendedor.nombre_contacto}</p>
-          )}
-          {emprendedor.descripcion && (
-            <p className="descripcion-negocio">{emprendedor.descripcion}</p>
-          )}
+      <div className="tarjeta-cabecera-negocio">
+        <div className="fila-cabecera">
+          <AvatarNegocio emprendedor={emprendedor} tamano={64} conAnillo />
+          <div className="info-negocio">
+            <h1>{emprendedor.nombre_negocio}</h1>
+            {lineaOficioContacto && <p className="subtitulo-oficio">{lineaOficioContacto}</p>}
+          </div>
+          <div className="iconos-cabecera">
+            {emprendedor.instagram_url && (
+              <a
+                href={emprendedor.instagram_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="icono-circular"
+                title="Instagram"
+                aria-label="Instagram"
+              >
+                IG
+              </a>
+            )}
+            {emprendedor.tiktok_url && (
+              <a
+                href={emprendedor.tiktok_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="icono-circular"
+                title="TikTok"
+                aria-label="TikTok"
+              >
+                TT
+              </a>
+            )}
+            <button type="button" className="icono-circular" onClick={compartir} title="Compartir" aria-label="Compartir">
+              <IconoCompartir />
+            </button>
+          </div>
         </div>
-        <div className="iconos-cabecera">
-          {emprendedor.instagram_url && (
-            <a
-              href={emprendedor.instagram_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="icono-circular"
-              title="Instagram"
-              aria-label="Instagram"
-            >
-              IG
-            </a>
-          )}
-          {emprendedor.tiktok_url && (
-            <a
-              href={emprendedor.tiktok_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="icono-circular"
-              title="TikTok"
-              aria-label="TikTok"
-            >
-              TT
-            </a>
-          )}
-          <button type="button" className="icono-circular" onClick={compartir} title="Compartir" aria-label="Compartir">
-            <IconoCompartir />
-          </button>
-        </div>
+
+        {emprendedor.descripcion && (
+          <p className="descripcion-negocio">{emprendedor.descripcion}</p>
+        )}
+
+        {copiado && <p className="aviso-copiado">Enlace copiado ✓</p>}
+
+        {(lineaDireccion || emprendedor.whatsapp_number) && (
+          <div className="meta-columna">
+            {lineaDireccion && (
+              <span className="meta-item">
+                <IconoPin /> {lineaDireccion}
+              </span>
+            )}
+            {emprendedor.whatsapp_number && (
+              <a className="meta-item" href={`tel:${emprendedor.whatsapp_number}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <IconoTelefono /> {formatearTelefono(emprendedor.whatsapp_number)}
+              </a>
+            )}
+          </div>
+        )}
+
+        {insigniasNegocio.length > 0 && (
+          <div className="etiquetas">
+            {insigniasNegocio.map((texto) => (
+              <span key={texto} className="etiqueta">{texto}</span>
+            ))}
+          </div>
+        )}
       </div>
-
-      {copiado && <p style={{ fontSize: '0.8rem', color: 'var(--accent)', marginTop: -6 }}>Enlace copiado ✓</p>}
-
-      <div className="meta-columna">
-        {emprendedor.direccion && (
-          <span className="meta-item">
-            <IconoPin /> {emprendedor.direccion}
-          </span>
-        )}
-        {emprendedor.ciudad && (
-          <span className="meta-item">
-            <IconoPin /> {emprendedor.ciudad}
-          </span>
-        )}
-        {emprendedor.whatsapp_number && (
-          <a className="meta-item" href={`tel:${emprendedor.whatsapp_number}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <IconoTelefono /> {formatearTelefono(emprendedor.whatsapp_number)}
-          </a>
-        )}
-      </div>
-
-      {insigniasNegocio.length > 0 && (
-        <div className="etiquetas">
-          {insigniasNegocio.map((texto) => (
-            <span key={texto} className="etiqueta">{texto}</span>
-          ))}
-        </div>
-      )}
 
       {servicios.length > 0 && (
         <button type="button" className="boton-pill" onClick={irAServicios}>
