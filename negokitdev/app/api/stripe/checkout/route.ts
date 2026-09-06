@@ -54,10 +54,13 @@ export async function POST(req: NextRequest) {
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     customer: customerId,
-    // Tarjeta + domiciliación bancaria (IBAN) — así quien no tiene tarjeta
-    // puede pagar igualmente con su cuenta bancaria, y el cobro del mes
-    // siguiente sigue siendo automático en ambos casos.
-    payment_method_types: ['card', 'sepa_debit'],
+    // Solo tarjeta por ahora. La domiciliación SEPA (IBAN) está lista aquí
+    // en el código, pero Stripe exige activarla a mano en el Dashboard
+    // (Settings -> Payment methods -> SEPA Direct Debit) antes de poder
+    // usarla — mientras no esté activada, incluirla aquí tira abajo el
+    // checkout entero (también el pago con tarjeta). Cuando se active en
+    // Stripe, volver a añadir 'sepa_debit' a esta lista.
+    payment_method_types: ['card'],
     line_items: [{ price: process.env.STRIPE_PRICE_ID!, quantity: 1 }],
     subscription_data: { trial_period_days: 7 },
     success_url: `${origen}/panel/suscripcion?exito=1`,
