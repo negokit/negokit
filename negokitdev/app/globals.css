@@ -853,35 +853,6 @@ button.peligro {
   overflow-wrap: break-word;
 }
 
-.lista-objeciones {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-  margin-top: 1.5rem;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.objecion-landing {
-  border-left: 3px solid #C9713D;
-  padding: 2px 0 2px 16px;
-}
-
-.objecion-landing strong {
-  display: block;
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 0.88rem;
-}
-
-.objecion-landing p {
-  margin: 4px 0 0;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  overflow-wrap: break-word;
-}
-
 .landing-precio {
   text-align: center;
   margin-top: 2.75rem;
@@ -1001,6 +972,96 @@ button.peligro {
 .boton-whatsapp-flotante:hover {
   opacity: 0.92;
   transform: translateY(-2px);
+}
+
+/* ==== "Las dudas que seguro tienes" — burbujas estilo WhatsApp ====
+   La duda entra como mensaje recibido (claro, alineado a la izquierda);
+   la respuesta sale como si el propio negocio contestara (oscuro, alineado
+   a la derecha) — mismo lenguaje visual que el resto de la marca. */
+
+.chat-objeciones {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.chat-par {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.burbuja-duda,
+.burbuja-respuesta {
+  max-width: 82%;
+  padding: 0.7rem 1rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
+
+.burbuja-duda {
+  align-self: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-weight: 600;
+  border-radius: 4px 16px 16px 16px;
+  box-shadow: 0 2px 8px rgba(28, 28, 39, 0.06);
+}
+
+.burbuja-respuesta {
+  align-self: flex-end;
+  background: var(--foreground);
+  color: rgba(255, 255, 255, 0.92);
+  border-radius: 16px 4px 16px 16px;
+  box-shadow: 0 8px 20px rgba(28, 28, 39, 0.16);
+}
+
+/* ==== Tarjeta de contacto personal por WhatsApp ==== */
+
+.tarjeta-contacto-personal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem 1.5rem;
+  margin-top: 2.75rem;
+  text-align: center;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.tarjeta-contacto-personal .etiqueta-seccion {
+  text-align: center;
+}
+
+.tarjeta-contacto-personal .landing-h2-precio-titulo {
+  color: var(--foreground);
+}
+
+.boton-whatsapp-personal {
+  background: #25D366;
+  color: #fff;
+  width: auto;
+}
+
+.boton-whatsapp-personal:hover {
+  opacity: 0.92;
+}
+
+@media (min-width: 640px) {
+  .burbuja-duda,
+  .burbuja-respuesta {
+    max-width: 72%;
+    font-size: 0.92rem;
+  }
 }
 
 .etiqueta-oscura {
