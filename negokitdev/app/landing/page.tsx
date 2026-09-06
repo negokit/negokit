@@ -10,8 +10,9 @@ export const metadata: Metadata = {
 
 const PASOS = [
   {
-    titulo: 'Creas tu página',
-    texto: 'Nos mandas 2-3 fotos de tus trabajos y qué servicios ofreces. En minutos tienes tu página lista.',
+    titulo: 'Subes tus fotos y tus servicios',
+    texto:
+      'Tú misma, en un par de minutos, desde el móvil o el ordenador, estés donde estés. No hace falta que sepas nada de webs.',
   },
   {
     titulo: 'La compartes',
@@ -26,20 +27,46 @@ const PASOS = [
 const CARACTERISTICAS = [
   {
     titulo: 'Tu página, con tus fotos y tus servicios',
-    texto: 'Escribes lo que ofreces, subes tus fotos, y se ve profesional desde el primer día.',
+    texto: 'Se ve profesional desde el primer minuto, aunque nunca hayas tenido una página web.',
   },
   {
     titulo: 'Código QR permanente',
-    texto: 'Lo imprimes una vez. Aunque cambies cosas de tu página, el QR nunca deja de funcionar.',
+    texto: 'Lo imprimes una vez, en tarjetas o en tu furgoneta. Aunque cambies tu página, nunca deja de funcionar.',
   },
   {
     titulo: 'Contacto directo por WhatsApp',
-    texto: 'Cada visita puede escribirte con un toque, sin intermediarios ni comisiones por cliente.',
+    texto: 'Con la app que ya usas todo el día. Sin comisiones por cliente, sin intermediarios de por medio.',
   },
   {
-    titulo: 'Sin líos técnicos',
-    texto: 'No hace falta que sepas nada de webs. Tú solo mandas las fotos y listo, el resto lo montamos por ti.',
+    titulo: 'Cero cosas técnicas que aprender',
+    texto: 'Subes tus fotos, escribes qué haces, y tu página ya está lista para que te encuentren.',
   },
+]
+
+const OBJECIONES = [
+  {
+    pregunta: '"No tengo tiempo para esto."',
+    respuesta: 'No hace falta tiempo: subes 2-3 fotos y escribes qué ofreces. En minutos tu página está lista.',
+  },
+  {
+    pregunta: '"No entiendo de tecnología."',
+    respuesta: 'No hace falta que entiendas nada. Si sabes escribir por WhatsApp, ya sabes usar Emprenia.',
+  },
+  {
+    pregunta: '"Ya tengo Instagram, ¿para qué quiero esto?"',
+    respuesta:
+      'Emprenia no compite con tus redes — es donde mandas a la gente para que te contacte directo, sin que tengan que buscarte entre publicaciones.',
+  },
+  {
+    pregunta: '"¿Y si no me funciona?"',
+    respuesta: 'Por eso hay 7 días de prueba gratis, sin compromiso. Si no te aporta nada, lo dejas y no pasa nada.',
+  },
+]
+
+const SERVICIOS_EXTRA = [
+  { titulo: 'Página web a medida', texto: 'Si quieres algo más completo que tu página de Emprenia.' },
+  { titulo: 'Flyers profesionales', texto: 'Para repartir o imprimir, listos para usar.' },
+  { titulo: 'Gestión de redes sociales', texto: 'Si no te da tiempo llevarlas tú misma.' },
 ]
 
 export default function LandingPage() {
@@ -48,11 +75,12 @@ export default function LandingPage() {
       <div className="landing-hero">
         <div className="landing-hero-contenido">
           <LogoServix tamano={28} claro />
+          <p className="landing-eyebrow">¿CUÁNTOS CLIENTES SE TE HAN IDO A LA COMPETENCIA ESTA SEMANA?</p>
           <h1 className="landing-titulo">
             Tu negocio, listo para que te <em>encuentren</em>.
           </h1>
           <p className="landing-subtitulo">
-            Tu propia página para que tus clientes te encuentren, vean tus servicios y te escriban directo por
+            Tu propia página, con tus fotos y tus servicios, para que quien te busque te escriba directo por
             WhatsApp — sin páginas complicadas ni nada que aprender.
           </p>
           <div className="landing-cta-fila">
@@ -63,10 +91,15 @@ export default function LandingPage() {
               <button type="button" className="boton-pill-claro">Ya tengo cuenta</button>
             </a>
           </div>
+          <p className="landing-confianza">
+            <span>✓ 7 días gratis</span>
+            <span>✓ Sin permanencia</span>
+            <span>✓ Cancelas cuando quieras</span>
+          </p>
         </div>
       </div>
 
-      <div className="contenedor">
+      <div className="landing-ancho">
         <p className="etiqueta-seccion landing-centrado">CÓMO FUNCIONA</p>
         <h2 className="landing-h2 landing-centrado">De cero a tu página, en un rato.</h2>
 
@@ -94,14 +127,40 @@ export default function LandingPage() {
           ))}
         </div>
 
+        <p className="etiqueta-seccion landing-centrado" style={{ marginTop: '2.75rem' }}>¿QUIERES IR MÁS ALLÁ?</p>
+        <h2 className="landing-h2 landing-centrado">Y si algún día necesitas más.</h2>
+
+        <div className="rejilla-servicios-extra">
+          {SERVICIOS_EXTRA.map((s) => (
+            <div key={s.titulo} className="tarjeta-servicio-extra">
+              <strong>{s.titulo}</strong>
+              <p>{s.texto}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="etiqueta-seccion landing-centrado" style={{ marginTop: '2.75rem' }}>LAS DUDAS QUE SEGURO TIENES</p>
+        <h2 className="landing-h2 landing-centrado">Te leemos la mente un momento.</h2>
+
+        <div className="lista-objeciones">
+          {OBJECIONES.map((o) => (
+            <div key={o.pregunta} className="objecion-landing">
+              <strong>{o.pregunta}</strong>
+              <p>{o.respuesta}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="tarjeta-oscura landing-precio">
-          <p className="etiqueta-oscura">PLAN FUNDADOR</p>
-          <h2 className="landing-h2-precio">{PLAN_PRECIO}</h2>
+          <p className="etiqueta-oscura">ACCESO ANTICIPADO</p>
+          <h2 className="landing-h2-precio-titulo">Entra ahora y congela tu precio para siempre.</h2>
+          <p className="landing-precio-numero">{PLAN_PRECIO}</p>
           <p className="landing-precio-texto">
-            7 días de prueba gratis. Cancela cuando quieras, sin permanencia.
+            Este precio no vuelve a subir mientras sigas con nosotras, aunque el precio normal suba más
+            adelante. 7 días de prueba gratis. Cancela cuando quieras, sin permanencia.
           </p>
           <a href="/registro" style={{ display: 'block', marginTop: 8 }}>
-            <button type="button" className="boton-pill-claro">Crear mi página gratis →</button>
+            <button type="button" className="boton-pill-claro">Quiero mi página →</button>
           </a>
         </div>
 

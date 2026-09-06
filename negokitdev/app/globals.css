@@ -19,6 +19,7 @@
 html {
   min-height: 100%;
   background: var(--background);
+  overflow-x: hidden;
 }
 
 body {
@@ -694,13 +695,23 @@ button.peligro {
 .landing-hero {
   width: 100%;
   background: var(--foreground);
-  padding: 2.75rem 1.25rem 2.5rem;
+  padding: 2.75rem 1.25rem 2.25rem;
   box-sizing: border-box;
 }
 
 .landing-hero-contenido {
-  max-width: 480px;
+  max-width: 620px;
   margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.landing-eyebrow {
+  color: #C9713D;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin: 1.5rem 0 0;
 }
 
 .landing-titulo {
@@ -708,7 +719,7 @@ button.peligro {
   font-size: 1.6rem;
   font-weight: 700;
   line-height: 1.3;
-  margin: 1.5rem 0 0.75rem;
+  margin: 0.6rem 0 0.75rem;
 }
 
 .landing-titulo em {
@@ -721,6 +732,7 @@ button.peligro {
   font-size: 0.92rem;
   line-height: 1.55;
   margin: 0;
+  max-width: 480px;
 }
 
 .landing-cta-fila {
@@ -737,6 +749,25 @@ button.peligro {
 
 .landing-cta-fila button {
   width: 100%;
+  box-sizing: border-box;
+}
+
+.landing-confianza {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 1rem 0 0;
+}
+
+.landing-confianza span {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.landing-ancho {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.75rem 1.25rem 3.5rem;
   box-sizing: border-box;
 }
 
@@ -757,6 +788,9 @@ button.peligro {
   flex-direction: column;
   gap: 1.2rem;
   margin-top: 1.5rem;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .paso-landing {
@@ -792,22 +826,26 @@ button.peligro {
   overflow-wrap: break-word;
 }
 
-.rejilla-caracteristicas-landing {
+.rejilla-caracteristicas-landing,
+.rejilla-servicios-extra {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.9rem;
   margin-top: 1.5rem;
 }
 
-.tarjeta-caracteristica-landing {
+.tarjeta-caracteristica-landing,
+.tarjeta-servicio-extra {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.1rem;
   box-sizing: border-box;
+  min-width: 0;
 }
 
-.tarjeta-caracteristica-landing p {
+.tarjeta-caracteristica-landing p,
+.tarjeta-servicio-extra p {
   margin: 4px 0 0;
   color: var(--muted);
   font-size: 0.88rem;
@@ -815,18 +853,59 @@ button.peligro {
   overflow-wrap: break-word;
 }
 
+.lista-objeciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.objecion-landing {
+  border-left: 3px solid #C9713D;
+  padding: 2px 0 2px 16px;
+}
+
+.objecion-landing strong {
+  display: block;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.objecion-landing p {
+  margin: 4px 0 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
 .landing-precio {
   text-align: center;
   margin-top: 2.75rem;
   margin-bottom: 2.5rem;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
-.landing-h2-precio {
+.landing-h2-precio-titulo {
   color: #fff;
   border: none;
-  margin: 4px 0 8px;
+  margin: 4px 0 10px;
   padding-bottom: 0;
-  font-size: 1.6rem;
+  font-size: 1.35rem;
+  line-height: 1.35;
+}
+
+.landing-precio-numero {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 10px;
 }
 
 .landing-precio-texto {
@@ -842,12 +921,15 @@ button.peligro {
 
 @media (min-width: 640px) {
   .landing-titulo {
-    font-size: 2rem;
+    font-size: 2.1rem;
+  }
+
+  .landing-subtitulo {
+    font-size: 1rem;
   }
 
   .landing-cta-fila {
     flex-direction: row;
-    justify-content: center;
   }
 
   .landing-cta-fila a {
@@ -862,6 +944,20 @@ button.peligro {
 
   .rejilla-caracteristicas-landing {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rejilla-servicios-extra {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .landing-hero-contenido {
+    max-width: 720px;
+  }
+
+  .landing-titulo {
+    font-size: 2.5rem;
   }
 }
 
