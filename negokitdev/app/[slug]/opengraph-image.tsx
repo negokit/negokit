@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabaseClient'
 // Imagen que se ve cuando alguien comparte el enlace de un negocio por
 // WhatsApp, iMessage, etc. — con el logo del negocio (o sus iniciales si no
 // tiene), su nombre y su oficio, en vez del enlace pelado que se veía antes.
-export const alt = 'Página de negocio en servix'
+export const alt = 'Página de negocio en Emprenia'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -15,7 +15,7 @@ type Props = { params: Promise<{ slug: string }> }
 // propia generadora de imagen descargue la URL directamente) porque esa
 // descarga automática fallaba en silencio con las fotos de Supabase: no
 // daba ningún error, simplemente el logo salía en blanco y el resto de la
-// imagen (nombre, oficio, "servix") sí se generaba bien — por eso solo
+// imagen (nombre, oficio, "emprenia") sí se generaba bien — por eso solo
 // faltaba el logo.
 async function descargarComoDataUrl(url: string): Promise<string | null> {
   try {
@@ -56,7 +56,7 @@ export default async function Image({ params }: Props) {
     .eq('activo', true)
     .maybeSingle()
 
-  const nombre = emp?.nombre_negocio || 'servix'
+  const nombre = emp?.nombre_negocio || 'emprenia'
   const oficio = emp?.oficio || ''
   const ciudad = emp?.ciudad || ''
   const logoUrl = emp?.logo_url ? await descargarComoDataUrl(emp.logo_url) : null
@@ -127,10 +127,10 @@ export default async function Image({ params }: Props) {
               color: '#1C1C27',
             }}
           >
-            s
+            e
           </div>
           <span style={{ display: 'flex', fontSize: 24, fontWeight: 600, color: 'rgba(255,255,255,0.78)' }}>
-            servix
+            emprenia
           </span>
         </div>
       </div>

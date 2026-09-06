@@ -12,12 +12,12 @@ export default function TerminosPage() {
       <div className="card">
         <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
           Última actualización: septiembre de 2026. Este es un texto básico, pensado para las primeras páginas
-          creadas con Servix — antes de escalar a más usuarios conviene que lo revise un profesional.
+          creadas con Emprenia — antes de escalar a más usuarios conviene que lo revise un profesional.
         </p>
 
-        <h2 style={{ marginTop: '1.5rem' }}>1. Qué es Servix</h2>
+        <h2 style={{ marginTop: '1.5rem' }}>1. Qué es Emprenia</h2>
         <p>
-          Servix es una plataforma que da a un negocio o profesional una página pública, un panel privado para
+          Emprenia es una plataforma que da a un negocio o profesional una página pública, un panel privado para
           gestionarla, un botón de contacto directo por WhatsApp y un código QR permanente para compartirla.
         </p>
 
@@ -43,7 +43,7 @@ export default function TerminosPage() {
 
         <h2>3. Pagos</h2>
         <p>
-          Los pagos se procesan a través de Stripe. Servix no almacena en ningún momento los datos completos de tu
+          Los pagos se procesan a través de Stripe. Emprenia no almacena en ningún momento los datos completos de tu
           tarjeta o cuenta bancaria. Puedes cambiar tu método de pago en cualquier momento desde el botón
           &quot;Gestionar suscripción&quot; de tu panel.
         </p>
@@ -58,7 +58,7 @@ export default function TerminosPage() {
 
         <h2>5. Disponibilidad del servicio</h2>
         <p>
-          Servix se ofrece &quot;tal cual&quot;, sin garantizar que vaya a estar disponible de forma ininterrumpida
+          Emprenia se ofrece &quot;tal cual&quot;, sin garantizar que vaya a estar disponible de forma ininterrumpida
           o libre de errores. Hacemos lo posible por mantenerlo funcionando correctamente y por avisar de cualquier
           incidencia relevante, pero no respondemos por pérdidas derivadas de caídas puntuales del servicio.
         </p>
@@ -66,7 +66,7 @@ export default function TerminosPage() {
         <h2>6. Uso correcto de la plataforma</h2>
         <p>
           El contenido de tu página (textos, fotos, datos de contacto) es tu responsabilidad. No está permitido
-          usar Servix para publicar contenido ilegal, engañoso o que suplante a otra persona o negocio.
+          usar Emprenia para publicar contenido ilegal, engañoso o que suplante a otra persona o negocio.
         </p>
 
         <h2>7. Cambios en estas condiciones</h2>

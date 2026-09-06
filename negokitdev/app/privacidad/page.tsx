@@ -11,23 +11,23 @@ export default function PrivacidadPage() {
       <div className="card">
         <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
           Última actualización: septiembre de 2026. Este es un texto básico, pensado para las primeras páginas
-          creadas con Servix — antes de escalar a más usuarios conviene que lo revise un profesional.
+          creadas con Emprenia — antes de escalar a más usuarios conviene que lo revise un profesional.
         </p>
 
-        <h2 style={{ marginTop: '1.5rem' }}>1. Datos de quienes contactan a través de una página Servix</h2>
+        <h2 style={{ marginTop: '1.5rem' }}>1. Datos de quienes contactan a través de una página Emprenia</h2>
         <p>
-          Cuando rellenas el formulario de contacto de una página de Servix, se guardan tres datos: tu nombre, tu
+          Cuando rellenas el formulario de contacto de una página de Emprenia, se guardan tres datos: tu nombre, tu
           teléfono y tu dirección. Nada más — no se piden contraseñas, datos de pago ni ningún otro dato personal.
         </p>
         <p>
           Se usan únicamente para que el negocio al que has escrito (por ejemplo, la persona dueña de la página que
           estabas viendo) pueda contactarte por el servicio que le has pedido. Al enviar el formulario, además, se
           abre WhatsApp con un mensaje ya escrito dirigido a esa persona. Pueden verlos el negocio al que escribiste
-          y el equipo de Servix como responsable técnico de la plataforma. Se guardan mientras la página del negocio
+          y el equipo de Emprenia como responsable técnico de la plataforma. Se guardan mientras la página del negocio
           siga activa.
         </p>
 
-        <h2>2. Datos de quienes crean una cuenta en Servix (emprendedores)</h2>
+        <h2>2. Datos de quienes crean una cuenta en Emprenia (emprendedores)</h2>
         <p>
           Si te registras para tener tu propia página, se guardan además: tu email (para iniciar sesión mediante un
           enlace mágico, sin contraseñas), el nombre de tu negocio, tu descripción, dirección y teléfono de
@@ -35,9 +35,9 @@ export default function PrivacidadPage() {
           y para gestionar tu cuenta y tu suscripción.
         </p>
         <p>
-          <strong>Datos de pago:</strong> Servix no almacena en ningún momento los datos de tu tarjeta o cuenta
+          <strong>Datos de pago:</strong> Emprenia no almacena en ningún momento los datos de tu tarjeta o cuenta
           bancaria. La suscripción se gestiona directamente por Stripe, nuestra pasarela de pago, que actúa como
-          encargado del tratamiento para esa parte. Servix solo recibe de Stripe el estado de tu suscripción
+          encargado del tratamiento para esa parte. Emprenia solo recibe de Stripe el estado de tu suscripción
           (activa, en prueba, pago pendiente, etc.) y las fechas de cobro, nunca el número de tarjeta completo.
         </p>
 
@@ -45,7 +45,7 @@ export default function PrivacidadPage() {
         <p>
           Los datos se guardan en una base de datos gestionada por Supabase, protegida con reglas de acceso que
           impiden que un negocio vea los datos de los clientes de otro negocio distinto. Para poder ofrecer el
-          servicio, Servix se apoya en estos encargados del tratamiento, cada uno con sus propias medidas de
+          servicio, Emprenia se apoya en estos encargados del tratamiento, cada uno con sus propias medidas de
           seguridad y su propia política de privacidad:
         </p>
         <p>
@@ -65,7 +65,7 @@ export default function PrivacidadPage() {
 
         <h2>5. Cookies</h2>
         <p>
-          Servix solo usa la cookie técnica necesaria para mantener tu sesión iniciada. No usamos cookies de
+          Emprenia solo usa la cookie técnica necesaria para mantener tu sesión iniciada. No usamos cookies de
           publicidad ni de analítica. Más detalle en nuestra{' '}
           <a href="/cookies">política de cookies</a>.
         </p>
@@ -73,7 +73,7 @@ export default function PrivacidadPage() {
         <h2>6. Tus derechos</h2>
         <p>
           Puedes pedir en cualquier momento acceder a tus datos, corregirlos o que los borremos, escribiendo al
-          negocio correspondiente (si eres quien contactó a través de una página) o a Servix, usando los canales de
+          negocio correspondiente (si eres quien contactó a través de una página) o a Emprenia, usando los canales de
           contacto indicados en tu panel. Si consideras que no hemos atendido tu solicitud correctamente, también
           puedes presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD),{' '}
           <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">www.aepd.es</a>.

@@ -1,13 +1,13 @@
 import AuthLayout from '@/components/AuthLayout'
 
 // Datos estructurados (schema.org Organization) de la plataforma en sí,
-// para que Google entienda qué es "Servix" cuando alguien lo busque
+// para que Google entienda qué es "Emprenia" cuando alguien lo busque
 // (no confundir con los datos de cada negocio individual, que van en
 // app/[slug]/page.tsx).
 const datosEstructurados = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Servix',
+  name: 'Emprenia',
   url: 'https://emprenia.com',
   description:
     'Tu propia página para que tus clientes te encuentren, vean tus servicios y te escriban directo por WhatsApp.',
@@ -22,7 +22,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
       />
       <AuthLayout
-      titulo={<>Tu oficio, con la página que <em>merece</em>.</>}
+      titulo={<>Tu negocio, listo para que te <em>encuentren</em>.</>}
       subtitulo="Tu propia página para que tus clientes te encuentren, vean tus servicios y te escriban directo por WhatsApp — sin páginas complicadas ni nada que aprender."
       puntos={['Página profesional', 'Código QR permanente', 'Contacto por WhatsApp', 'Sin conocimientos técnicos']}
     >

@@ -469,7 +469,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
           }}
         >
           Creado con <LogoServix variante="icono" tamano={16} />
-          <strong style={{ color: 'var(--foreground)' }}>servix</strong>
+          <strong style={{ color: 'var(--foreground)' }}>emprenia</strong>
         </a>
       </div>
 

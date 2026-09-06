@@ -19,9 +19,9 @@ export default function CookiesPage() {
           visitas, como si has iniciado sesión.
         </p>
 
-        <h2>¿Qué cookies usa Servix?</h2>
+        <h2>¿Qué cookies usa Emprenia?</h2>
         <p>
-          Servix usa únicamente cookies técnicas, necesarias para que la web funcione:
+          Emprenia usa únicamente cookies técnicas, necesarias para que la web funcione:
         </p>
         <p>
           <strong>Cookie de sesión (Supabase Auth):</strong> te mantiene conectado a tu cuenta mientras usas el
@@ -33,7 +33,7 @@ export default function CookiesPage() {
           nuevo.
         </p>
 
-        <h2>¿Qué cookies NO usa Servix?</h2>
+        <h2>¿Qué cookies NO usa Emprenia?</h2>
         <p>
           No usamos cookies de publicidad, de seguimiento entre webs, ni de analítica (como Google Analytics). No
           se comparte información de tu navegación con terceros con fines publicitarios.
@@ -49,7 +49,7 @@ export default function CookiesPage() {
         <h2>¿Cómo puedo desactivarlas?</h2>
         <p>
           Puedes borrar o bloquear las cookies desde la configuración de tu navegador. Ten en cuenta que si bloqueas
-          la cookie de sesión, no podrás mantener la sesión iniciada en tu panel de Servix.
+          la cookie de sesión, no podrás mantener la sesión iniciada en tu panel de Emprenia.
         </p>
 
         <h2>Más información</h2>

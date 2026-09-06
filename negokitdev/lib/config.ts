@@ -1,4 +1,4 @@
-// Configuración general de la plataforma Servix (no de cada negocio individual).
+// Configuración general de la plataforma Emprenia (no de cada negocio individual).
 
 // WhatsApp donde llegan las peticiones de soporte, de baja de suscripción, y
 // de interés en los servicios adicionales (web a medida, flyers, redes),
@@ -11,7 +11,7 @@ export const EMAIL_SOPORTE = ''
 // Nombre y precio del plan tal como se muestran en "Mi suscripción". Como de
 // momento solo hay un plan, se dejan fijos aquí — si el precio cambia en
 // Stripe, actualiza también este texto para que coincida.
-export const PLAN_NOMBRE = 'Servix — Plan fundador'
+export const PLAN_NOMBRE = 'Emprenia — Plan fundador'
 export const PLAN_PRECIO = '14,99 €/mes'
 
 // Horas de margen para quien crea su página pero nunca llega a iniciar la
