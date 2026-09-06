@@ -50,15 +50,6 @@ function IconoCompartir() {
   )
 }
 
-function IconoGlobo() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
-    </svg>
-  )
-}
-
 function IconoChat() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -245,10 +236,8 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
   if (bloqueada) return <div className="contenedor"><p>Esta página no está disponible en este momento.</p></div>
   if (!emprendedor) return <div className="contenedor"><p>No se encontró esta página.</p></div>
 
-  // Las 3 insignias se muestran siempre juntas y de la misma forma — antes
-  // "Respuesta en menos de 24h" se separaba en la fila de arriba con un
-  // icono de reloj, y daba la impresión de que solo había 2 insignias en
-  // vez de 3.
+  // Las insignias elegidas (hasta 2) se muestran siempre juntas y de la
+  // misma forma.
   const insigniasNegocio = obtenerInsignias(emprendedor)
 
   return (
@@ -259,7 +248,10 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
           <h1>{emprendedor.nombre_negocio}</h1>
           {emprendedor.oficio && <p className="subtitulo-oficio">{emprendedor.oficio}</p>}
           {emprendedor.nombre_contacto && (
-            <p className="subtitulo-oficio" style={{ marginTop: 2 }}>Atiende {emprendedor.nombre_contacto}</p>
+            <p className="subtitulo-oficio" style={{ marginTop: 2 }}>{emprendedor.nombre_contacto}</p>
+          )}
+          {emprendedor.descripcion && (
+            <p className="descripcion-negocio">{emprendedor.descripcion}</p>
           )}
         </div>
         <div className="iconos-cabecera">
@@ -287,18 +279,6 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
               TT
             </a>
           )}
-          {emprendedor.web_url && (
-            <a
-              href={emprendedor.web_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="icono-circular"
-              title="Página web"
-              aria-label="Página web"
-            >
-              <IconoGlobo />
-            </a>
-          )}
           <button type="button" className="icono-circular" onClick={compartir} title="Compartir" aria-label="Compartir">
             <IconoCompartir />
           </button>
@@ -307,10 +287,15 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
 
       {copiado && <p style={{ fontSize: '0.8rem', color: 'var(--accent)', marginTop: -6 }}>Enlace copiado ✓</p>}
 
-      <div className="meta-fila">
-        {(emprendedor.direccion || emprendedor.ciudad) && (
+      <div className="meta-columna">
+        {emprendedor.direccion && (
           <span className="meta-item">
-            <IconoPin /> {[emprendedor.direccion, emprendedor.ciudad].filter(Boolean).join(', ')}
+            <IconoPin /> {emprendedor.direccion}
+          </span>
+        )}
+        {emprendedor.ciudad && (
+          <span className="meta-item">
+            <IconoPin /> {emprendedor.ciudad}
           </span>
         )}
         {emprendedor.whatsapp_number && (
@@ -469,7 +454,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
           }}
         >
           Creado con <LogoServix variante="icono" tamano={16} />
-          <strong style={{ color: 'var(--foreground)' }}>emprenia</strong>
+          <strong style={{ color: 'var(--foreground)' }}>Emprenia</strong>
         </a>
       </div>
 

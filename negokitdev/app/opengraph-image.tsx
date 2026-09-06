@@ -46,7 +46,7 @@ export default async function Image() {
         </div>
 
         <div style={{ display: 'flex', fontSize: 76, fontWeight: 700, color: '#fff', lineHeight: 1.1 }}>
-          emprenia
+          Emprenia
         </div>
 
         <div style={{ display: 'flex', fontSize: 34, color: 'rgba(255,255,255,0.75)', marginTop: 22, maxWidth: 900 }}>

@@ -130,7 +130,7 @@ export default async function Image({ params }: Props) {
             e
           </div>
           <span style={{ display: 'flex', fontSize: 24, fontWeight: 600, color: 'rgba(255,255,255,0.78)' }}>
-            emprenia
+            Emprenia
           </span>
         </div>
       </div>

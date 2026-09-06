@@ -33,6 +33,7 @@ export default function MenuPanel({ emprendedor }: { emprendedor: any }) {
 
   const enlaces = [
     { href: '/panel', texto: 'Mis servicios' },
+    { href: '/panel/clientes', texto: 'Clientes' },
     { href: '/panel/editar', texto: 'Editar mi negocio' },
     { href: '/panel/suscripcion', texto: 'Mi suscripción' },
   ]
