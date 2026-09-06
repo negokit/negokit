@@ -113,21 +113,15 @@ export default async function Image({ params }: Props) {
         )}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'absolute', bottom: 52, right: 68 }}>
-          <div
-            style={{
-              display: 'flex',
-              width: 30,
-              height: 30,
-              borderRadius: 9,
-              background: '#fff',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 17,
-              fontWeight: 700,
-              color: '#1C1C27',
-            }}
-          >
-            e
+          {/* Mismo icono que el resto de la web (4 cuadrados + punto
+              terracota), a tamaño pequeño — reconstruido con divs porque
+              next/og no soporta bien paths de SVG complejos. */}
+          <div style={{ display: 'flex', position: 'relative', width: 30, height: 30, borderRadius: 9, background: '#fff' }}>
+            <div style={{ display: 'flex', position: 'absolute', left: 7, top: 7, width: 4, height: 4, background: '#1C1C27' }} />
+            <div style={{ display: 'flex', position: 'absolute', right: 7, top: 7, width: 4, height: 4, background: '#1C1C27' }} />
+            <div style={{ display: 'flex', position: 'absolute', left: 7, bottom: 7, width: 4, height: 4, background: '#1C1C27' }} />
+            <div style={{ display: 'flex', position: 'absolute', right: 7, bottom: 7, width: 4, height: 4, background: '#1C1C27' }} />
+            <div style={{ display: 'flex', position: 'absolute', left: 12, top: 12, width: 6, height: 6, borderRadius: 3, background: '#C9713D' }} />
           </div>
           <span style={{ display: 'flex', fontSize: 24, fontWeight: 600, color: 'rgba(255,255,255,0.78)' }}>
             Emprenia
