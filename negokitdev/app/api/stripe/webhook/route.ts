@@ -63,6 +63,11 @@ export async function POST(req: NextRequest) {
             stripe_proximo_cobro: item?.current_period_end
               ? new Date(item.current_period_end * 1000).toISOString()
               : null,
+            // true cuando el cliente (o nosotros a mano en Stripe) programa
+            // la cancelacion para el final del periodo ya pagado — sigue
+            // "activa"/"trialing" hasta esa fecha, así que lo guardamos
+            // aparte para poder avisar en el panel sin bloquear todavia.
+            stripe_cancela_al_final: subscription.cancel_at_period_end,
           })
           .eq('stripe_customer_id', subscription.customer as string)
         break
@@ -72,7 +77,11 @@ export async function POST(req: NextRequest) {
         const subscription = event.data.object as Stripe.Subscription
         await supabaseAdmin
           .from('emprendedores')
-          .update({ stripe_subscription_status: 'canceled', stripe_estado_desde: new Date().toISOString() })
+          .update({
+            stripe_subscription_status: 'canceled',
+            stripe_estado_desde: new Date().toISOString(),
+            stripe_cancela_al_final: false,
+          })
           .eq('stripe_customer_id', subscription.customer as string)
         break
       }
