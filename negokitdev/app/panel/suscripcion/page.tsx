@@ -151,6 +151,12 @@ function SuscripcionContenido() {
   const nueva = searchParams.get('nueva')
   const acceso = calcularAcceso(emprendedor)
 
+  // Fecha en la que se pierde el acceso si la cancelación programada sigue
+  // su curso: mientras está en prueba es cuando acaba la prueba, si no es
+  // el próximo cobro que ya no va a llegar a cobrarse.
+  const fechaFinAcceso = estado === 'trialing' ? emprendedor.stripe_trial_ends_at : emprendedor.stripe_proximo_cobro
+  const cancelacionProgramada = !!emprendedor.stripe_cancela_al_final && tieneSuscripcion && !acceso.bloqueado
+
   return (
     <div className="contenedor" style={{ paddingTop: 96 }}>
       <MenuPanel emprendedor={emprendedor} />
@@ -188,6 +194,21 @@ function SuscripcionContenido() {
       {cancelado && (
         <div className="card">
           <p style={{ margin: 0 }}>No se completó el pago. Puedes intentarlo de nuevo cuando quieras.</p>
+        </div>
+      )}
+
+      {cancelacionProgramada && (
+        <div className="card" style={{ background: '#fdecea', borderColor: '#f2b8b5' }}>
+          <p style={{ margin: 0, fontWeight: 600 }}>Tu suscripción no se va a renovar</p>
+          <p style={{ marginTop: 6, marginBottom: 0, fontSize: '0.9rem' }}>
+            {fechaFinAcceso ? (
+              <>El <strong>{formatearFecha(fechaFinAcceso)}</strong> perderás el acceso a tu página pública y a tu panel.</>
+            ) : (
+              'Al terminar tu periodo actual, perderás el acceso a tu página pública y a tu panel.'
+            )}{' '}
+            Si quieres seguir, deshaz la cancelación desde el botón "Gestionar suscripción" de aquí abajo antes de esa
+            fecha.
+          </p>
         </div>
       )}
 
