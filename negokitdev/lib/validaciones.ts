@@ -20,9 +20,17 @@ export function sanitizarSlugInput(valor: string) {
     .replace(/[^a-z0-9-]+/g, '-')
 }
 
+// Convierte "14,99" (como lo escribe cualquier persona en España) a "14.99"
+// (lo que entiende parseFloat de JS) — sin esto, guardar "14,99" tal cual
+// truncaba el precio a 14 al hacer parseFloat.
+export function normalizarPrecio(valor: string) {
+  return valor.trim().replace(',', '.')
+}
+
 export function validarPrecio(valor: string) {
   if (!valor) return true
-  return /^\d+(\.\d{1,2})?$/.test(valor) && parseFloat(valor) > 0
+  const normalizado = normalizarPrecio(valor)
+  return /^\d+(\.\d{1,2})?$/.test(normalizado) && parseFloat(normalizado) > 0
 }
 
 // Limpia y normaliza un número de WhatsApp: quita espacios/guiones,

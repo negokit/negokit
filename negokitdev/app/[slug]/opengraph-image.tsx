@@ -92,61 +92,67 @@ export default async function Image({ params }: Props) {
           position: 'relative',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          {logoUrl ? (
-            // Sin caja de fondo alrededor: si el logo tiene su propio fondo
-            // (blanco, de color, lo que sea) se ve tal cual, flotando sobre
-            // la página — nada de "recuadro" detrás que desentone con el
-            // archivo real que ha subido el negocio.
-            // "contain", no "cover": un logo casi nunca es cuadrado, así que
-            // se ve completo en vez de recortado.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={logoUrl}
-              width={148}
-              height={148}
-              style={{ objectFit: 'contain', borderRadius: 24, flexShrink: 0 }}
-              alt=""
-            />
-          ) : (
-            // Solo cuando no hay logo subido usamos un círculo de iniciales
-            // como respaldo — igual que en el resto de la web (AvatarNegocio).
-            <div
-              style={{
-                display: 'flex',
-                width: 148,
-                height: 148,
-                borderRadius: '50%',
-                background: '#1C1C27',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
-            >
-              <span style={{ fontSize: 58, fontWeight: 700, color: '#fff' }}>{iniciales}</span>
-            </div>
-          )}
-
-          <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 40 }}>
-            <div style={{ display: 'flex', fontSize: 60, fontWeight: 700, color: '#1C1C27', lineHeight: 1.15 }}>
-              {nombre}
-            </div>
-            {(oficio || ciudad) && (
-              <div style={{ display: 'flex', fontSize: 30, color: '#8a8a99', marginTop: 10 }}>
-                {[oficio, ciudad].filter(Boolean).join(' · ')}
-              </div>
-            )}
+        {/* El logo va completamente solo, sin nada al lado — así no se
+            confunde con el bloque de texto. El nombre/oficio/descripción
+            van despues, separados por una rayita de acento, como un bloque
+            aparte "por fuera" del logo (así lo pidió Gabriela después de
+            que un cliente real dijera que la version con todo en fila se
+            veia mal). */}
+        {logoUrl ? (
+          // Sin caja de fondo alrededor: si el logo tiene su propio fondo
+          // (blanco, de color, lo que sea) se ve tal cual, flotando sobre
+          // la página — nada de "recuadro" detrás que desentone con el
+          // archivo real que ha subido el negocio.
+          // "contain", no "cover": un logo casi nunca es cuadrado, así que
+          // se ve completo en vez de recortado.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={logoUrl}
+            width={130}
+            height={130}
+            style={{ objectFit: 'contain', borderRadius: 20, flexShrink: 0 }}
+            alt=""
+          />
+        ) : (
+          // Solo cuando no hay logo subido usamos un círculo de iniciales
+          // como respaldo — igual que en el resto de la web (AvatarNegocio).
+          <div
+            style={{
+              display: 'flex',
+              width: 130,
+              height: 130,
+              borderRadius: '50%',
+              background: '#1C1C27',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <span style={{ fontSize: 50, fontWeight: 700, color: '#fff' }}>{iniciales}</span>
           </div>
+        )}
+
+        {/* Rayita de acento que marca visualmente donde termina el logo y
+            empieza el bloque de texto — el "por fuera" que pidió Gabriela. */}
+        <div style={{ display: 'flex', width: 64, height: 4, borderRadius: 2, background: '#C9713D', marginTop: 36, marginBottom: 32 }} />
+
+        <div style={{ display: 'flex', fontSize: 56, fontWeight: 700, color: '#1C1C27', lineHeight: 1.15 }}>
+          {nombre}
         </div>
+        {(oficio || ciudad) && (
+          <div style={{ display: 'flex', fontSize: 28, color: '#8a8a99', marginTop: 10 }}>
+            {[oficio, ciudad].filter(Boolean).join(' · ')}
+          </div>
+        )}
 
         {descripcion && (
           <div
             style={{
               display: 'flex',
-              fontSize: 30,
+              fontSize: 28,
               color: '#5B6472',
               lineHeight: 1.5,
-              marginTop: 40,
+              marginTop: 26,
               maxWidth: 920,
             }}
           >

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import QRCode from 'qrcode'
-import { validarPrecio, validarTitulo } from '@/lib/validaciones'
+import { validarPrecio, validarTitulo, normalizarPrecio } from '@/lib/validaciones'
 import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
 import { calcularAcceso } from '@/lib/acceso'
 import { comprimirImagen } from '@/lib/imagenes'
@@ -195,7 +195,7 @@ export default function PanelPage() {
     const valores = {
       titulo,
       descripcion,
-      precio: precio ? parseFloat(precio) : null,
+      precio: precio ? parseFloat(normalizarPrecio(precio)) : null,
       mostrar_precio: mostrarPrecio,
       foto_url,
     }
@@ -319,7 +319,7 @@ export default function PanelPage() {
                     }}
                   />
                 )}
-                <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ flex: 1, minWidth: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                   <strong>{s.titulo}</strong> — {s.descripcion}
                   {s.mostrar_precio && s.precio != null && <span> — {s.precio} €</span>}
                   {!s.activo && <span className="desactivado"> (desactivado)</span>}
@@ -335,9 +335,6 @@ export default function PanelPage() {
             </li>
           ))}
         </ul>
-        <a href={`/${emprendedor.slug}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginTop: 12 }}>
-          <button type="button" className="secundario" style={{ width: '100%' }}>Ver mi página →</button>
-        </a>
       </div>
 
       <div className="card">
@@ -420,6 +417,10 @@ export default function PanelPage() {
           {error && <p style={{ color: 'var(--peligro)', marginTop: 10 }}>{error}</p>}
         </form>
       </div>
+
+      <a href={`/${emprendedor.slug}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
+        <button type="button" className="secundario" style={{ width: '100%' }}>Ver mi página →</button>
+      </a>
     </div>
   )
 }
