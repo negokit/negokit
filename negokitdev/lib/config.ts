@@ -11,8 +11,10 @@ export const EMAIL_SOPORTE = 'emprenia.app@gmail.com'
 
 // Nombre y precio del plan tal como se muestran en "Mi suscripción". Como de
 // momento solo hay un plan, se dejan fijos aquí — si el precio cambia en
-// Stripe, actualiza también este texto para que coincida.
-export const PLAN_NOMBRE = 'Emprenia — Plan fundador'
+// Stripe, actualiza también este texto para que coincida. El nombre tiene
+// que coincidir con el del producto en Stripe (Catálogo de productos) para
+// que no se lean cosas distintas en la web y en el checkout/factura.
+export const PLAN_NOMBRE = 'Emprenia — Portfolio comercial'
 export const PLAN_PRECIO = '14,99 €/mes'
 
 // Horas de margen para quien crea su página pero nunca llega a iniciar la
