@@ -638,33 +638,11 @@ button.peligro {
   display: block;
 }
 
-/* Sección "Clientes" del panel — lista/cuadrícula de leads. */
-.selector-vista {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 1.1rem;
-}
-
-.selector-vista button {
-  width: auto;
-  padding: 0.5rem 1rem;
-  font-size: 0.82rem;
-}
-
+/* Sección "Clientes" del panel. */
 .lista-clientes {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-.rejilla-clientes {
-  display: grid;
-  /* auto-fit + minmax en vez de "repeat(2, 1fr)" fijo: en movil estrecho
-     cabe 1 sola columna (antes se apretujaban 2 y se veia fatal, texto
-     cortado y botones encogidos); en pantallas mas anchas caben 2 o mas
-     solas, sin necesidad de breakpoints a mano. */
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 0.85rem;
 }
 
 .tarjeta-cliente {
