@@ -24,10 +24,19 @@ export async function POST(req: NextRequest) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session
         if (session.customer && session.subscription) {
-          await supabaseAdmin
+          const { error } = await supabaseAdmin
             .from('emprendedores')
             .update({ stripe_subscription_id: session.subscription as string })
             .eq('stripe_customer_id', session.customer as string)
+          // Antes no mirabamos este "error" — supabase-js NO lanza excepcion
+          // si Postgres rechaza el update (por ejemplo, una columna que
+          // falta por no haber corrido una migracion en produccion). Sin
+          // este chequeo, el fallo era invisible: el webhook respondia 200
+          // "todo bien" a Stripe y en la base de datos no cambiaba nada.
+          if (error) {
+            console.error('[webhook] fallo el update de checkout.session.completed', error)
+            throw error
+          }
         }
         break
       }
@@ -51,7 +60,7 @@ export async function POST(req: NextRequest) {
         const estadoCambio = !actual || actual.stripe_subscription_status !== subscription.status
         const estadoDesde = estadoCambio ? new Date().toISOString() : actual?.stripe_estado_desde
 
-        await supabaseAdmin
+        const { error } = await supabaseAdmin
           .from('emprendedores')
           .update({
             stripe_subscription_id: subscription.id,
@@ -70,12 +79,21 @@ export async function POST(req: NextRequest) {
             stripe_cancela_al_final: subscription.cancel_at_period_end,
           })
           .eq('stripe_customer_id', subscription.customer as string)
+        // Ver comentario en checkout.session.completed: si esto falla (por
+        // ejemplo, falta la columna stripe_cancela_al_final en esta base de
+        // datos porque no se corrio la migracion SQL), lo lanzamos para que
+        // se vea en los logs y Stripe reintente el webhook mas tarde — en
+        // vez de fallar en silencio como antes.
+        if (error) {
+          console.error('[webhook] fallo el update de customer.subscription.*', error)
+          throw error
+        }
         break
       }
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription
-        await supabaseAdmin
+        const { error } = await supabaseAdmin
           .from('emprendedores')
           .update({
             stripe_subscription_status: 'canceled',
@@ -83,6 +101,10 @@ export async function POST(req: NextRequest) {
             stripe_cancela_al_final: false,
           })
           .eq('stripe_customer_id', subscription.customer as string)
+        if (error) {
+          console.error('[webhook] fallo el update de customer.subscription.deleted', error)
+          throw error
+        }
         break
       }
     }
