@@ -659,7 +659,11 @@ button.peligro {
 
 .rejilla-clientes {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* auto-fit + minmax en vez de "repeat(2, 1fr)" fijo: en movil estrecho
+     cabe 1 sola columna (antes se apretujaban 2 y se veia fatal, texto
+     cortado y botones encogidos); en pantallas mas anchas caben 2 o mas
+     solas, sin necesidad de breakpoints a mano. */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 0.85rem;
 }
 
