@@ -55,7 +55,6 @@ export default function ClientesPage() {
   const [loading, setLoading] = useState(true)
   const [emprendedor, setEmprendedor] = useState<any>(null)
   const [leads, setLeads] = useState<Lead[]>([])
-  const [vista, setVista] = useState<'lista' | 'cuadricula'>('lista')
 
   useEffect(() => {
     cargar()
@@ -105,32 +104,13 @@ export default function ClientesPage() {
         Personas que rellenaron el formulario de contacto de tu página y te escribieron por WhatsApp.
       </p>
 
-      {leads.length > 0 && (
-        <div className="selector-vista">
-          <button
-            type="button"
-            className={vista === 'lista' ? '' : 'secundario'}
-            onClick={() => setVista('lista')}
-          >
-            Lista
-          </button>
-          <button
-            type="button"
-            className={vista === 'cuadricula' ? '' : 'secundario'}
-            onClick={() => setVista('cuadricula')}
-          >
-            Cuadrícula
-          </button>
-        </div>
-      )}
-
       {leads.length === 0 && (
         <div className="card">
           <p style={{ margin: 0 }}>Todavía no tienes clientes que te hayan contactado desde tu página.</p>
         </div>
       )}
 
-      <div className={vista === 'cuadricula' ? 'rejilla-clientes' : 'lista-clientes'}>
+      <div className="lista-clientes">
         {leads.map((lead) => (
           <div key={lead.id} className="tarjeta-cliente">
             <div className="tarjeta-cliente-cabecera">
