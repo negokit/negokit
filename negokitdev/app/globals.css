@@ -18,15 +18,28 @@
 
 html {
   min-height: 100%;
+  max-width: 100%;
   background: var(--background);
   overflow-x: hidden;
 }
 
 body {
   min-height: 100vh;
+  max-width: 100%;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  /* Cinturón y tirantes además de lo de arriba: en algunos navegadores de
+     movil "overflow-x: hidden" solo en <html> no basta para evitar el
+     scroll horizontal, hay que repetirlo tambien en <body>. */
+  overflow-x: hidden;
+  /* Se hereda a (casi) todo el texto de la web: si algun texto no tiene
+     espacios donde cortar (un enlace pegado, una palabra rara sin
+     separaciones...) se parte igualmente en vez de desbordar la tarjeta y
+     empujar toda la pagina a un lado, que es lo que provocaba el scroll
+     horizontal en movil. */
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Solo se activa cuando corres "npm run dev" en tu ordenador — nunca en producción.
@@ -120,12 +133,17 @@ input[type="number"],
 textarea,
 select {
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
   padding: 0.6rem 0.75rem;
   border: 1px solid var(--border);
   border-radius: 8px;
   font-family: inherit;
-  font-size: 0.95rem;
+  /* 16px minimo a proposito: por debajo de eso, Safari en iPhone hace zoom
+     automatico de toda la pagina en cuanto tocas el campo (para que el
+     texto se lea) -- eso es lo que se sentia como "la pantalla se mueve"
+     al escribir en el formulario desde el movil. */
+  font-size: 16px;
   background: var(--surface);
   color: var(--foreground);
   margin-bottom: 0.75rem;

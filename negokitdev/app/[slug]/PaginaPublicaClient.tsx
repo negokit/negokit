@@ -170,7 +170,12 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
     if (!emprendedor?.whatsapp_number) return
     const numeroLimpio = emprendedor.whatsapp_number.replace(/\D/g, '')
     const mensaje = `Hola! Vi tu página y quería contarte lo que necesito.`
-    window.open(`https://wa.me/${numeroLimpio}?text=${encodeURIComponent(mensaje)}`, '_blank')
+    // location.href (no window.open con '_blank'): al abrir wa.me en una
+    // pestaña nueva, dentro de navegadores restringidos (el navegador
+    // interno de WhatsApp/Instagram, por ejemplo) el botón "atrás" cerraba
+    // la pestaña nueva Y la propia página de Emprenia de golpe. Navegando
+    // en la misma pestaña, "atrás" simplemente vuelve a Emprenia tal cual.
+    window.location.href = `https://wa.me/${numeroLimpio}?text=${encodeURIComponent(mensaje)}`
   }
 
   async function enviarFormulario(e: React.FormEvent) {
@@ -226,7 +231,9 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
       `Quedo pendiente, ¡gracias!`
     const numeroLimpio = emprendedor.whatsapp_number.replace(/\D/g, '')
     const url = `https://wa.me/${numeroLimpio}?text=${encodeURIComponent(mensaje)}`
-    window.open(url, '_blank')
+    // Mismo motivo que en hablarPorWhatsapp(): sin '_blank', para no dejar
+    // al cliente "atrapado" al darle a atrás desde WhatsApp.
+    window.location.href = url
     borrarBorrador(`contacto-${slug}`)
     setEnviando(false)
     setEnviado(true)

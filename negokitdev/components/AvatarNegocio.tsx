@@ -18,10 +18,13 @@ export default function AvatarNegocio({
     : {}
 
   if (emprendedor?.logo_url) {
-    // "contain" (no "cover"): un logo casi nunca es cuadrado — con "cover"
-    // se recortaba de forma rara según la foto (caras cortadas, logos
-    // "descuadrados"). Con "contain" y un fondo detrás, el logo siempre se
-    // ve completo y sin deformarse, sea cual sea su forma original.
+    // "cover" (no "contain"): así el logo rellena todo el círculo/cuadro sin
+    // dejar ver el fondo alrededor — antes usaba "contain" para no recortar
+    // logos no cuadrados, pero eso dejaba un borde de color visible detrás
+    // (el cliente de Gabriela lo vio como un "fondo beis" feo). Con "cover"
+    // se pierde un pelín de los bordes del logo si no es cuadrado, pero se
+    // ve como un logo de verdad (igual que WhatsApp, Instagram, etc.) y no
+    // como una foto metida con calzador dentro de una caja.
     return (
       <div
         style={{
@@ -40,7 +43,7 @@ export default function AvatarNegocio({
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'contain',
+            objectFit: 'cover',
             display: 'block',
           }}
         />
