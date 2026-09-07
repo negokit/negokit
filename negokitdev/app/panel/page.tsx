@@ -390,7 +390,7 @@ export default function PanelPage() {
             </div>
           )}
           <label htmlFor="foto-servicio-input" className="boton-subir-archivo">
-            {comprimiendoFoto ? 'Preparando foto...' : fotoPreviewUrl ? 'Cambiar foto' : 'Subir foto (cámara o galería)'}
+            {comprimiendoFoto ? 'Preparando foto...' : fotoPreviewUrl ? 'Cambiar foto' : 'Subir foto de galería'}
           </label>
           <input
             id="foto-servicio-input"

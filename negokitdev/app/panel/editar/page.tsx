@@ -409,7 +409,7 @@ export default function EditarNegocioPage() {
                 conAnillo
               />
               <label htmlFor="logo-input" className="boton-subir-archivo">
-                {comprimiendoLogo ? 'Preparando logo...' : logoActualUrl || logo ? 'Cambiar logo' : 'Subir logo (cámara o galería)'}
+                {comprimiendoLogo ? 'Preparando logo...' : logoActualUrl || logo ? 'Cambiar logo' : 'Subir logo de galería'}
               </label>
               <input
                 id="logo-input"
