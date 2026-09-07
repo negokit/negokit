@@ -414,7 +414,15 @@ export default function EditarNegocioPage() {
               <input
                 id="logo-input"
                 type="file"
-                accept="image/png, image/jpeg"
+                // "image/*" (no una lista de tipos concretos): con una lista
+                // explícita como "image/png, image/jpeg", varios móviles
+                // Android esconden la opción de "Cámara" en el selector — el
+                // sistema no sabe si la foto recién tomada va a encajar en
+                // esa lista, así que solo deja elegir galería. Con
+                // "image/*" siempre aparecen las dos opciones (cámara y
+                // galería); el tipo exacto lo seguimos validando igual en
+                // manejarSeleccionLogo, así que no se cuela nada raro.
+                accept="image/*"
                 disabled={comprimiendoLogo}
                 onChange={manejarSeleccionLogo}
                 style={{ position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden' }}

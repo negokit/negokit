@@ -395,7 +395,10 @@ export default function PanelPage() {
           <input
             id="foto-servicio-input"
             type="file"
-            accept="image/png, image/jpeg"
+            // Ver el comentario en el input del logo (app/panel/editar/page.tsx):
+            // "image/*" en vez de una lista de tipos, para que Android no
+            // esconda la opción de "Cámara" en el selector de archivo.
+            accept="image/*"
             disabled={comprimiendoFoto}
             onChange={manejarSeleccionFoto}
             style={{ position: 'absolute', width: 1, height: 1, opacity: 0, overflow: 'hidden' }}
