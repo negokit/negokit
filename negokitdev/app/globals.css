@@ -3,7 +3,9 @@
 :root {
   --background: #FAFAF7;
   --foreground: #1C1C27;
-  --accent: #5B6472;
+  /* Sin color de marca: negro/gris casi negro, neutro, sin azul. */
+  --accent: #17181C;
+  --accent-suave: #EEEEF1;
   --surface: #FFFFFF;
   --border: #E4DFD4;
   --muted: #8a8a99;
@@ -166,7 +168,7 @@ input[type="file"] {
 }
 
 input[type="file"]::file-selector-button {
-  background: var(--foreground);
+  background: var(--accent);
   color: #fff;
   border: none;
   padding: 0.55rem 1rem;
@@ -195,7 +197,7 @@ label {
 }
 
 button {
-  background: var(--foreground);
+  background: var(--accent);
   color: #fff;
   border: none;
   padding: 0.65rem 1.1rem;
@@ -346,7 +348,7 @@ button.peligro {
 }
 
 .chip-insignia.activo {
-  background: var(--foreground);
+  background: var(--accent);
   color: #fff;
   border-color: var(--foreground);
 }
@@ -423,7 +425,7 @@ button.peligro {
   width: 52px;
   height: 52px;
   border-radius: 16px;
-  background: var(--foreground);
+  background: var(--accent);
   color: #fff;
   display: flex;
   align-items: center;
@@ -545,7 +547,7 @@ button.peligro {
   justify-content: center;
   gap: 6px;
   width: 100%;
-  background: var(--foreground);
+  background: var(--accent);
   color: #fff;
   border: none;
   padding: 0.8rem 1rem;
@@ -586,6 +588,33 @@ button.peligro {
 
 .boton-pill-claro:hover {
   opacity: 0.9;
+}
+
+/* Variante para cuando el botón secundario cae sobre un fondo claro (el
+   nuevo hero, por ejemplo) en vez de sobre una tarjeta oscura/de color:
+   un botón blanco ya no se vería. Mismo tamaño, con borde en vez de relleno. */
+.boton-pill-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  background: var(--surface);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  padding: calc(0.8rem - 1px) 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.boton-pill-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .etiqueta-seccion {
@@ -664,7 +693,7 @@ button.peligro {
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  background: var(--foreground);
+  background: var(--accent);
   color: #fff;
   display: flex;
   align-items: center;
@@ -748,7 +777,10 @@ button.peligro {
 
 .landing-hero {
   width: 100%;
-  background: var(--foreground);
+  /* Antes era un bloque negro solido de pantalla completa -- el mayor
+     causante de que la app se sintiera oscura y sombria nada mas entrar.
+     Ahora es un lavado suave del azul de marca, mucho mas ligero. */
+  background: var(--accent-suave);
   padding: 2.75rem 1.25rem 2.25rem;
   box-sizing: border-box;
 }
@@ -760,7 +792,7 @@ button.peligro {
 }
 
 .landing-eyebrow {
-  color: #C9713D;
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.72rem;
@@ -769,7 +801,7 @@ button.peligro {
 }
 
 .landing-titulo {
-  color: #fff;
+  color: var(--foreground);
   font-size: 1.6rem;
   font-weight: 700;
   line-height: 1.3;
@@ -777,12 +809,12 @@ button.peligro {
 }
 
 .landing-titulo em {
-  color: #C3CAD6;
+  color: var(--accent);
   font-style: italic;
 }
 
 .landing-subtitulo {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--muted);
   font-size: 0.92rem;
   line-height: 1.55;
   margin: 0;
@@ -815,7 +847,7 @@ button.peligro {
 
 .landing-confianza span {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--muted);
 }
 
 .landing-ancho {
@@ -861,7 +893,7 @@ button.peligro {
   width: 30px;
   height: 30px;
   border-radius: 999px;
-  background: var(--foreground);
+  background: var(--accent);
   color: #fff;
   font-size: 0.85rem;
   font-weight: 700;
@@ -972,7 +1004,7 @@ button.peligro {
   }
 
   .rejilla-servicios-extra {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -987,7 +1019,7 @@ button.peligro {
 }
 
 .tarjeta-oscura {
-  background: var(--foreground);
+  background: var(--accent);
   color: #fff;
   border-radius: 16px;
   padding: 1.5rem;
@@ -1071,7 +1103,7 @@ button.peligro {
 
 .burbuja-respuesta {
   align-self: flex-end;
-  background: var(--foreground);
+  background: var(--accent);
   color: rgba(255, 255, 255, 0.92);
   border-radius: 16px 4px 16px 16px;
   box-shadow: 0 8px 20px rgba(28, 28, 39, 0.16);
@@ -1245,8 +1277,11 @@ button.peligro {
 }
 
 .auth-panel-marca {
-  background: var(--foreground);
-  color: #fff;
+  /* Antes negro solido, igual que el hero -- ahora el mismo lavado suave
+     de azul, para que login y registro dejen de sentirse tan serios/duros
+     nada mas entrar. */
+  background: var(--accent-suave);
+  color: var(--foreground);
   padding: 2.75rem 1.5rem 2.25rem;
 }
 
@@ -1258,12 +1293,12 @@ button.peligro {
 }
 
 .auth-panel-marca .auth-titulo em {
-  color: #C3CAD6;
+  color: var(--accent);
   font-style: italic;
 }
 
 .auth-panel-marca .auth-subtitulo {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--muted);
   font-size: 0.92rem;
   max-width: 420px;
   margin: 0;
@@ -1281,7 +1316,7 @@ button.peligro {
 
 .auth-lista li {
   font-size: 0.76rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--muted);
 }
 
 .auth-panel-formulario {
@@ -1404,7 +1439,7 @@ button.peligro {
   width: 30px;
   height: 30px;
   border-radius: 999px;
-  background: var(--foreground);
+  background: var(--accent);
   color: #fff;
   display: flex;
   align-items: center;

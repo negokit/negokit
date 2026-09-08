@@ -12,6 +12,7 @@ import {
 import { obtenerInsignias } from '@/lib/insignias'
 import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
 import { calcularAcceso } from '@/lib/acceso'
+import estilos from './pagina-publica.module.css'
 
 function IconoPin() {
   return (
@@ -43,7 +44,7 @@ function IconoTelefono() {
 
 function IconoCompartir() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 16V4M8 8l4-4 4 4" />
       <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
     </svg>
@@ -58,11 +59,38 @@ function IconoChat() {
   )
 }
 
+// Icono de "cómo llegar" (flecha de navegación) para el botón que abre
+// Google Maps con la dirección del negocio ya escrita.
+function IconoRuta() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <polygon points="3 11 22 2 13 21 11 13 3 11" />
+    </svg>
+  )
+}
+
+function IconoRayo() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" />
+    </svg>
+  )
+}
+
+function IconoCandado() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="10" width="16" height="10" rx="2" />
+      <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+    </svg>
+  )
+}
+
 // Icono real de WhatsApp (no uno genérico de chat), para que el botón
 // flotante se reconozca de un vistazo.
 function IconoWhatsapp() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413" />
     </svg>
   )
@@ -114,6 +142,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
 
   async function cargar() {
     setLoading(true)
+
     const { data: emp } = await supabase
       .from('emprendedores')
       .select('*')
@@ -151,10 +180,6 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
     setError('')
   }
 
-  function irAServicios() {
-    document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   function compartir() {
     const url = window.location.href
     if (typeof navigator !== 'undefined' && (navigator as any).share) {
@@ -176,6 +201,15 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
     // la pestaña nueva Y la propia página de Emprenia de golpe. Navegando
     // en la misma pestaña, "atrás" simplemente vuelve a Emprenia tal cual.
     window.location.href = `https://wa.me/${numeroLimpio}?text=${encodeURIComponent(mensaje)}`
+  }
+
+  // Abre Google Maps ya centrado en la dirección del negocio — usamos texto
+  // libre (dirección + ciudad), no coordenadas, porque es lo único que
+  // tenemos guardado y Maps lo resuelve perfectamente igual.
+  function comoLlegar() {
+    const texto = [emprendedor?.direccion, emprendedor?.ciudad].filter(Boolean).join(', ')
+    if (!texto) return
+    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(texto)}`, '_blank')
   }
 
   async function enviarFormulario(e: React.FormEvent) {
@@ -256,21 +290,21 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
   const lineaDireccion = [emprendedor.direccion, emprendedor.ciudad].filter(Boolean).join(', ')
 
   return (
-    <div className="contenedor pagina-publica">
-      <div className="tarjeta-cabecera-negocio">
-        <div className="fila-cabecera">
-          <AvatarNegocio emprendedor={emprendedor} tamano={64} conAnillo />
-          <div className="info-negocio">
-            <h1>{emprendedor.nombre_negocio}</h1>
-            {lineaOficioContacto && <p className="subtitulo-oficio">{lineaOficioContacto}</p>}
+    <div className={`contenedor ${estilos.pagina}`}>
+      <div className={estilos.cabecera}>
+        <div className={estilos.filaCabecera}>
+          <AvatarNegocio emprendedor={emprendedor} tamano={60} conAnillo colorFondo="var(--pp-accent)" />
+          <div className={estilos.infoNegocio}>
+            <h1 className={estilos.nombre}>{emprendedor.nombre_negocio}</h1>
+            {lineaOficioContacto && <p className={estilos.subtitulo}>{lineaOficioContacto}</p>}
           </div>
-          <div className="iconos-cabecera">
+          <div className={estilos.iconosCabecera}>
             {emprendedor.instagram_url && (
               <a
                 href={emprendedor.instagram_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="icono-circular"
+                className={estilos.iconoCircular}
                 title="Instagram"
                 aria-label="Instagram"
               >
@@ -282,34 +316,40 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
                 href={emprendedor.tiktok_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="icono-circular"
+                className={estilos.iconoCircular}
                 title="TikTok"
                 aria-label="TikTok"
               >
                 TT
               </a>
             )}
-            <button type="button" className="icono-circular" onClick={compartir} title="Compartir" aria-label="Compartir">
+            <button type="button" className={estilos.iconoCircular} onClick={compartir} title="Compartir" aria-label="Compartir">
               <IconoCompartir />
             </button>
           </div>
         </div>
 
         {emprendedor.descripcion && (
-          <p className="descripcion-negocio">{emprendedor.descripcion}</p>
+          <p className={estilos.descripcion}>{emprendedor.descripcion}</p>
         )}
 
-        {copiado && <p className="aviso-copiado">Enlace copiado ✓</p>}
+        {copiado && <p className={estilos.avisoCopiado}>Enlace copiado ✓</p>}
 
         {(lineaDireccion || emprendedor.whatsapp_number) && (
-          <div className="meta-columna">
+          <div className={estilos.metaFila}>
             {lineaDireccion && (
-              <span className="meta-item">
+              <a
+                className={estilos.metaItem}
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lineaDireccion)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
                 <IconoPin /> {lineaDireccion}
-              </span>
+              </a>
             )}
             {emprendedor.whatsapp_number && (
-              <a className="meta-item" href={`tel:${emprendedor.whatsapp_number}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <a className={estilos.metaItem} href={`tel:${emprendedor.whatsapp_number}`} style={{ textDecoration: 'none' }}>
                 <IconoTelefono /> {formatearTelefono(emprendedor.whatsapp_number)}
               </a>
             )}
@@ -317,41 +357,51 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
         )}
 
         {insigniasNegocio.length > 0 && (
-          <div className="etiquetas">
+          <div className={estilos.badges}>
             {insigniasNegocio.map((texto) => (
-              <span key={texto} className="etiqueta">{texto}</span>
+              <span key={texto} className={estilos.badge}>{texto}</span>
             ))}
+          </div>
+        )}
+
+        {emprendedor.whatsapp_number && (
+          <div className={estilos.filaAcciones}>
+            <button type="button" className={estilos.accionPrincipal} onClick={hablarPorWhatsapp}>
+              <IconoChat /> Contactar por WhatsApp
+            </button>
+            <a className={estilos.accionSecundaria} href={`tel:${emprendedor.whatsapp_number}`} title="Llamar" aria-label="Llamar">
+              <IconoTelefono />
+            </a>
+            {lineaDireccion && (
+              <button type="button" className={estilos.accionSecundaria} onClick={comoLlegar} title="Cómo llegar" aria-label="Cómo llegar">
+                <IconoRuta />
+              </button>
+            )}
           </div>
         )}
       </div>
 
-      {servicios.length > 0 && (
-        <button type="button" className="boton-pill" onClick={irAServicios}>
-          <IconoChat /> Contactar →
-        </button>
-      )}
+      <div id="servicios" className={estilos.seccionServicios}>
+        <p className={estilos.etiquetaSeccion}>SERVICIOS</p>
+        <h2 className={estilos.tituloServicios}>Elige lo que necesitas</h2>
 
-      <div id="servicios" className="seccion-servicios">
-        <p className="etiqueta-seccion">SERVICIOS</p>
-        <h2>Elige lo que necesitas.</h2>
+        {servicios.length === 0 && <p style={{ color: 'var(--pp-muted)' }}>Todavía no hay servicios publicados.</p>}
 
-        {servicios.length === 0 && <p style={{ color: 'var(--muted)' }}>Todavía no hay servicios publicados.</p>}
-
-        <div className="lista-servicios-nueva">
+        <div className={estilos.listaServicios}>
           {servicios.map((s) => (
-            <div key={s.id} className="tarjeta-servicio-nueva">
+            <div key={s.id} className={estilos.tarjetaServicio}>
               {s.foto_url && (
-                <div className="imagen-servicio-nueva">
+                <div className={estilos.imagenServicio}>
                   <img src={s.foto_url} alt={s.titulo} />
                 </div>
               )}
-              <div className="cuerpo-servicio-nueva">
-                <div className="fila-titulo-precio">
-                  <strong>{s.titulo}</strong>
-                  {s.mostrar_precio && s.precio != null && <span className="precio-servicio-nueva">Desde {s.precio} €</span>}
+              <div className={estilos.cuerpoServicio}>
+                <div className={estilos.filaTituloPrecio}>
+                  <span className={estilos.tituloServicio}>{s.titulo}</span>
+                  {s.mostrar_precio && s.precio != null && <span className={estilos.precioServicio}>Desde {s.precio} €</span>}
                 </div>
-                <p>{s.descripcion}</p>
-                <button type="button" className="boton-pill" onClick={() => abrirContacto(s.id)}>
+                <p className={estilos.descripcionServicio}>{s.descripcion}</p>
+                <button type="button" className={estilos.enlaceContactar} onClick={() => abrirContacto(s.id)}>
                   Contactar →
                 </button>
               </div>
@@ -361,7 +411,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
       </div>
 
       {servicioSeleccionado && !enviado && (
-        <div className="card" id="formulario-contacto">
+        <div className={`card ${estilos.formCard}`} id="formulario-contacto">
           <h2 style={{ marginTop: 0 }}>Contactar</h2>
           <form onSubmit={enviarFormulario}>
             <label style={{ display: 'block', marginBottom: 4 }}>Servicio</label>
@@ -428,7 +478,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
               </span>
             </label>
 
-            <button type="submit" className="boton-pill" disabled={enviando}>
+            <button type="submit" className={`boton-pill ${estilos.botonEnviar}`} disabled={enviando}>
               {enviando ? 'Enviando...' : 'Enviar por WhatsApp →'}
             </button>
             {error && <p style={{ color: 'var(--peligro)', marginTop: 10 }}>{error}</p>}
@@ -437,43 +487,43 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
       )}
 
       {enviado && (
-        <div className="card">
+        <div className={`card ${estilos.formCard}`}>
           <p>¡Listo! Se abrió WhatsApp con tu mensaje.</p>
         </div>
       )}
 
       {emprendedor.whatsapp_number && (
-        <div className="tarjeta-oscura">
-          <p className="etiqueta-oscura">HABLEMOS</p>
-          <h2 style={{ color: '#fff', border: 'none', margin: '4px 0 8px', paddingBottom: 0 }}>¿Tienes algo en mente?</h2>
-          <p style={{ color: 'rgba(255,255,255,0.75)' }}>Cuéntame qué necesitas y hablamos directamente por WhatsApp.</p>
-          <button type="button" className="boton-pill-claro" onClick={hablarPorWhatsapp}>
-            Hablar por WhatsApp →
-          </button>
+        <div className={estilos.ctaFinal}>
+          <div className={estilos.ctaFila}>
+            <div className={estilos.ctaIcono}><IconoChat /></div>
+            <div className={estilos.ctaTexto2}>
+              <p className={estilos.ctaEtiqueta}>HABLEMOS</p>
+              <h2 className={estilos.ctaTitulo}>¿Tienes algo en mente?</h2>
+              <p className={estilos.ctaTexto}>Cuéntame qué necesitas y hablamos directamente por WhatsApp.</p>
+            </div>
+            <button type="button" className={estilos.ctaBoton} onClick={hablarPorWhatsapp}>
+              <IconoChat /> Hablar por WhatsApp →
+            </button>
+          </div>
+          <div className={estilos.ctaNotas}>
+            <span className={estilos.ctaNota}><IconoRayo /> Respuesta rápida</span>
+            <span className={estilos.ctaNota}><IconoCandado /> Sin compromiso</span>
+          </div>
         </div>
       )}
 
-      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-        <a
-          href="/login"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: '0.75rem',
-            color: 'var(--muted)',
-            textDecoration: 'none',
-          }}
-        >
+      <div className={estilos.pie}>
+        <a href="/login" className={estilos.pieEnlace}>
           Creado con <LogoServix variante="icono" tamano={16} />
-          <strong style={{ color: 'var(--foreground)' }}>Emprenia</strong>
+          <strong>Emprenia</strong>
         </a>
+        <span className={estilos.pieTagline}>Tu negocio, más lejos.</span>
       </div>
 
       {emprendedor.whatsapp_number && (
         <button
           type="button"
-          className="boton-whatsapp-flotante"
+          className={estilos.flotante}
           onClick={hablarPorWhatsapp}
           title="Hablar por WhatsApp"
           aria-label="Hablar por WhatsApp"

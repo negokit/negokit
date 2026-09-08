@@ -44,10 +44,24 @@ export function normalizarWhatsapp(valor: string) {
   return limpio
 }
 
+// Filtra en tiempo real lo que se escribe en el campo de WhatsApp: si
+// alguien empieza escribiendo un "+" (para poner el prefijo de otro país),
+// dejamos ese "+" y solo dígitos después; si no, es un móvil español y solo
+// dejamos pasar dígitos (nada de letras ni símbolos mientras se escribe).
+export function filtrarWhatsappInput(valor: string) {
+  const tienePrefijo = valor.trim().startsWith('+')
+  const soloDigitos = valor.replace(/\D/g, '')
+  return tienePrefijo ? '+' + soloDigitos : soloDigitos
+}
+
 export function validarWhatsapp(valor: string) {
-  const limpio = normalizarWhatsapp(valor)
-  // + seguido de 8 a 15 dígitos (formato internacional E.164 aproximado)
-  return /^\+\d{8,15}$/.test(limpio)
+  const limpio = valor.trim()
+  if (limpio.startsWith('+')) {
+    // Prefijo de otro país: + seguido de 8 a 15 dígitos (formato internacional E.164 aproximado)
+    return /^\+\d{8,15}$/.test(limpio)
+  }
+  // Sin prefijo asumimos España: un móvil español son 9 dígitos exactos, solo números.
+  return /^\d{9}$/.test(limpio)
 }
 
 export function validarTitulo(valor: string) {
