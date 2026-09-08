@@ -3,10 +3,8 @@
 :root {
   --background: #FAFAF7;
   --foreground: #1C1C27;
-  /* Sin color de marca: gris oscuro neutro, ni azul ni negro puro -- un
-     único acento en toda la app, más suave que negro sólido pero con
-     contraste de sobra (9.4:1 con texto blanco). */
-  --accent: #45464E;
+  /* Sin color de marca: negro/gris casi negro, neutro, sin azul. */
+  --accent: #17181C;
   --accent-suave: #EEEEF1;
   --surface: #FFFFFF;
   --border: #E4DFD4;
