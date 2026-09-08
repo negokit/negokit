@@ -81,7 +81,6 @@ const OBJECIONES = [
 const SERVICIOS_EXTRA = [
   { titulo: 'Página web a medida', texto: 'Si quieres algo más completo que tu página de Emprenia.' },
   { titulo: 'Flyers profesionales', texto: 'Para repartir o imprimir, listos para usar.' },
-  { titulo: 'Gestión de redes sociales', texto: 'Si no te da tiempo llevarlas tú mismo.' },
 ]
 
 const mensajeWhatsapp = encodeURIComponent('¡Hola! Vi la página de Emprenia y tengo una idea / una duda.')
@@ -91,7 +90,7 @@ export default function LandingPage() {
     <div className="landing-pagina">
       <div className="landing-hero">
         <div className="landing-hero-contenido">
-          <LogoServix tamano={28} claro />
+          <LogoServix tamano={28} />
           <p className="landing-eyebrow">¿CUÁNTOS CLIENTES SE TE HAN IDO A LA COMPETENCIA ESTA SEMANA?</p>
           <h1 className="landing-titulo">
             Tu negocio, listo para que te <em>encuentren</em>.
@@ -105,7 +104,7 @@ export default function LandingPage() {
               <button type="button" className="boton-pill">Crear mi página gratis →</button>
             </a>
             <a href="/login">
-              <button type="button" className="boton-pill-claro">Ya tengo cuenta</button>
+              <button type="button" className="boton-pill-outline">Ya tengo cuenta</button>
             </a>
           </div>
           <p className="landing-confianza">

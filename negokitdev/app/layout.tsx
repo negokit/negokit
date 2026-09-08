@@ -55,31 +55,9 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-  const esDesarrollo = process.env.NODE_ENV !== "production";
   return (
     <html lang="es" className={`${inter.variable} h-full antialiased`}>
-      <body className={`min-h-full flex flex-col${esDesarrollo ? " entorno-dev" : ""}`}>
-        {esDesarrollo && (
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              zIndex: 9999,
-              background: "var(--foreground)",
-              color: "#fff",
-              fontSize: "0.65rem",
-              fontWeight: 600,
-              textAlign: "center",
-              padding: "3px 0",
-              letterSpacing: "0.05em",
-              opacity: 0.85,
-            }}
-          >
-            DESARROLLO (local)
-          </div>
-        )}
+      <body className="min-h-full flex flex-col">
         {children}
         <AvisoCookies />
       </body>

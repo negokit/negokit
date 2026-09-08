@@ -1,0 +1,443 @@
+/* ==== Página pública del emprendedor — rediseño ====
+   Planilla básica que usan negocios de cualquier oficio: por eso el estilo
+   es deliberadamente contenido — blanco, bordes finos, sombras casi
+   invisibles, un único color (el azul de marca de Emprenia, --accent) que
+   solo aparece en el botón principal y en los enlaces, nunca como bloques
+   grandes. Referencia buscada: software serio tipo Holded, no una app de
+   estética. Todo vive en este módulo — no se ha tocado ninguna otra hoja de
+   estilos, así que nada de esto afecta al resto de Emprenia. */
+
+.pagina {
+  --pp-bg: var(--background);
+  --pp-surface: var(--surface);
+  --pp-ink: var(--foreground);
+  --pp-muted: var(--muted);
+  --pp-border: var(--border);
+  --pp-accent: var(--accent);
+
+  background: var(--pp-bg);
+  color: var(--pp-ink);
+  padding-top: 1.25rem;
+}
+
+.pagina a {
+  color: var(--pp-accent);
+}
+
+/* ---- Cabecera del negocio ---- */
+
+.cabecera {
+  background: var(--pp-surface);
+  border: 1px solid var(--pp-border);
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem 1.4rem;
+  box-shadow: 0 1px 2px rgba(20, 20, 30, 0.03), 0 6px 16px rgba(20, 20, 30, 0.04);
+}
+
+.filaCabecera {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.infoNegocio {
+  flex: 1;
+  min-width: 0;
+}
+
+.nombre {
+  margin: 0 0 3px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--pp-ink);
+}
+
+.subtitulo {
+  margin: 0;
+  color: var(--pp-muted);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.iconosCabecera {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.iconoCircular {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--pp-border);
+  background: var(--pp-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--pp-muted);
+  text-decoration: none;
+  font-size: 0.64rem;
+  font-weight: 700;
+  padding: 0;
+}
+
+.iconoCircular:hover {
+  border-color: var(--pp-accent);
+  color: var(--pp-accent);
+}
+
+.descripcion {
+  margin: 12px 0 0;
+  font-size: 0.9rem;
+  color: var(--pp-muted);
+  line-height: 1.55;
+}
+
+.avisoCopiado {
+  font-size: 0.8rem;
+  color: var(--pp-accent);
+  margin: 8px 0 0;
+  font-weight: 600;
+}
+
+.metaFila {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 6px;
+  column-gap: 18px;
+  margin: 14px 0 0;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.83rem;
+  line-height: 1.3;
+  color: var(--pp-muted);
+}
+
+.metaItem svg {
+  flex-shrink: 0;
+  color: var(--pp-muted);
+}
+
+/* ---- Insignias / sellos de confianza: chips lisos, sin color ---- */
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border: 1px solid var(--pp-border);
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--pp-ink);
+  background: var(--pp-bg);
+}
+
+/* ---- Fila de acciones: un único botón con color, el resto neutro ---- */
+
+.filaAcciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--pp-border);
+}
+
+.accionPrincipal {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--pp-accent);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.15s ease;
+}
+
+.accionPrincipal:hover {
+  opacity: 0.9;
+}
+
+.accionSecundaria {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1px solid var(--pp-border);
+  background: var(--pp-surface);
+  color: var(--pp-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.accionSecundaria:hover {
+  border-color: var(--pp-accent);
+  color: var(--pp-accent);
+}
+
+/* ---- Sección de servicios ---- */
+
+.seccionServicios {
+  margin-top: 2rem;
+}
+
+.etiquetaSeccion {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+  color: var(--pp-muted);
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.tituloServicios {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--pp-ink);
+  margin: 0 0 1rem;
+}
+
+.listaServicios {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.tarjetaServicio {
+  background: var(--pp-surface);
+  border: 1px solid var(--pp-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(20, 20, 30, 0.03), 0 6px 16px rgba(20, 20, 30, 0.04);
+}
+
+.imagenServicio {
+  width: 100%;
+}
+
+.imagenServicio img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
+.cuerpoServicio {
+  min-width: 0;
+  padding: 0.95rem 1.1rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filaTituloPrecio {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.tituloServicio {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--pp-ink);
+}
+
+.precioServicio {
+  color: var(--pp-muted);
+  font-weight: 600;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.descripcionServicio {
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+  color: var(--pp-muted);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.enlaceContactar {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--pp-accent);
+  font-weight: 600;
+  font-size: 0.84rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.enlaceContactar:hover {
+  text-decoration: underline;
+}
+
+/* ---- Formulario de contacto ---- */
+
+.formCard {
+  border-radius: 14px !important;
+  border-color: var(--pp-border) !important;
+}
+
+.formCard input,
+.formCard select {
+  border-radius: 8px;
+}
+
+.formCard .botonEnviar {
+  background: var(--pp-accent);
+  box-shadow: none;
+}
+
+/* ---- Bloque final "Hablemos": tarjeta clara, no un panel de color ---- */
+
+.ctaFinal {
+  background: var(--pp-surface);
+  border: 1px solid var(--pp-border);
+  border-radius: 14px;
+  padding: 1.5rem 1.4rem;
+  margin-top: 1.75rem;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(20, 20, 30, 0.03), 0 6px 16px rgba(20, 20, 30, 0.04);
+}
+
+.ctaEtiqueta {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--pp-muted);
+  margin: 0 0 6px;
+}
+
+.ctaTitulo {
+  color: var(--pp-ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.ctaTexto {
+  color: var(--pp-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 1.1rem;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ctaBoton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--pp-accent);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.ctaBoton:hover {
+  opacity: 0.9;
+}
+
+.ctaNotas {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 14px 0 0;
+  flex-wrap: wrap;
+}
+
+.ctaNota {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.74rem;
+  color: var(--pp-muted);
+}
+
+/* ---- Pie de página ---- */
+
+.pie {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.pieEnlace {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--pp-muted);
+  text-decoration: none;
+}
+
+.pieEnlace strong {
+  color: var(--pp-ink);
+}
+
+/* ---- Botón flotante de WhatsApp (verde universal, no es color de marca) ---- */
+
+.flotante {
+  position: fixed;
+  bottom: 22px;
+  right: 18px;
+  z-index: 400;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(20, 20, 30, 0.2);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.flotante:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+}

@@ -45,10 +45,6 @@ const SERVICIOS_ADICIONALES = [
     titulo: 'Flyers profesionales',
     texto: '¿Necesitas flyers o carteles para repartir o imprimir? Contáctanos para verlo juntos.',
   },
-  {
-    titulo: 'Gestión de redes sociales',
-    texto: '¿Tienes redes sociales y no te da tiempo llevarlas, o todavía no tienes ninguna? Contáctanos para verlo juntos.',
-  },
 ]
 
 // useSearchParams() obliga a envolver la página en Suspense, si no Next.js

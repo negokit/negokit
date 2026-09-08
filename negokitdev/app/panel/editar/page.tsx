@@ -7,6 +7,7 @@ import {
   sanitizarSlugInput,
   validarWhatsapp,
   normalizarWhatsapp,
+  filtrarWhatsappInput,
   validarNombreNegocio,
   validarNombreContacto,
   validarOficio,
@@ -391,11 +392,6 @@ export default function EditarNegocioPage() {
       {!esNueva && <MenuPanel emprendedor={emprendedor} />}
 
       <h1>{esNueva ? 'Crea tu página' : 'Editar mi negocio'}</h1>
-      {esNueva && (
-        <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.9rem' }}>
-          Ya confirmaste tu correo — ahora completa estos datos para publicar tu página.
-        </p>
-      )}
 
       <div className="card">
         <form onSubmit={guardar}>
@@ -547,14 +543,14 @@ export default function EditarNegocioPage() {
             <input
               type="tel"
               inputMode="tel"
-              placeholder={emprendedor ? undefined : 'ej: 600 123 456'}
+              placeholder={emprendedor ? undefined : '600123456'}
               value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
-              maxLength={20}
+              onChange={(e) => setWhatsapp(filtrarWhatsappInput(e.target.value))}
+              maxLength={whatsapp.trim().startsWith('+') ? 16 : 9}
               required
             />
             <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.85rem' }}>
-              Escribe solo tu número — si no pones prefijo de país, asumimos España (+34). Si tu negocio está en otro
+              Escribe solo los 9 números de tu móvil, sin espacios — asumimos España (+34). Si tu negocio está en otro
               país, escribe el prefijo delante (ej. +52 para México).
             </p>
           </div>

@@ -62,7 +62,7 @@ export default function AvatarNegocio({
         width: tamano,
         height: tamano,
         borderRadius,
-        background: 'var(--foreground)',
+        background: 'var(--accent)',
         color: '#fff',
         display: 'flex',
         alignItems: 'center',
