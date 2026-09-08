@@ -549,10 +549,6 @@ export default function EditarNegocioPage() {
               maxLength={whatsapp.trim().startsWith('+') ? 16 : 9}
               required
             />
-            <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.85rem' }}>
-              Escribe solo los 9 números de tu móvil, sin espacios — asumimos España (+34). Si tu negocio está en otro
-              país, escribe el prefijo delante (ej. +52 para México).
-            </p>
           </div>
 
           <div className="seccion-formulario">

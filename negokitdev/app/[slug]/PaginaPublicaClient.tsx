@@ -63,7 +63,7 @@ function IconoChat() {
 // Google Maps con la dirección del negocio ya escrita.
 function IconoRuta() {
   return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none">
       <polygon points="3 11 22 2 13 21 11 13 3 11" />
     </svg>
   )
@@ -142,6 +142,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
 
   async function cargar() {
     setLoading(true)
+
     const { data: emp } = await supabase
       .from('emprendedores')
       .select('*')
@@ -292,7 +293,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
     <div className={`contenedor ${estilos.pagina}`}>
       <div className={estilos.cabecera}>
         <div className={estilos.filaCabecera}>
-          <AvatarNegocio emprendedor={emprendedor} tamano={60} conAnillo />
+          <AvatarNegocio emprendedor={emprendedor} tamano={60} conAnillo colorFondo="var(--pp-accent)" />
           <div className={estilos.infoNegocio}>
             <h1 className={estilos.nombre}>{emprendedor.nombre_negocio}</h1>
             {lineaOficioContacto && <p className={estilos.subtitulo}>{lineaOficioContacto}</p>}
@@ -337,9 +338,15 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
         {(lineaDireccion || emprendedor.whatsapp_number) && (
           <div className={estilos.metaFila}>
             {lineaDireccion && (
-              <span className={estilos.metaItem}>
+              <a
+                className={estilos.metaItem}
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lineaDireccion)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
                 <IconoPin /> {lineaDireccion}
-              </span>
+              </a>
             )}
             {emprendedor.whatsapp_number && (
               <a className={estilos.metaItem} href={`tel:${emprendedor.whatsapp_number}`} style={{ textDecoration: 'none' }}>
@@ -487,12 +494,17 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
 
       {emprendedor.whatsapp_number && (
         <div className={estilos.ctaFinal}>
-          <p className={estilos.ctaEtiqueta}>HABLEMOS</p>
-          <h2 className={estilos.ctaTitulo}>¿Tienes algo en mente?</h2>
-          <p className={estilos.ctaTexto}>Cuéntame qué necesitas y hablamos directamente por WhatsApp.</p>
-          <button type="button" className={estilos.ctaBoton} onClick={hablarPorWhatsapp}>
-            <IconoChat /> Hablar por WhatsApp →
-          </button>
+          <div className={estilos.ctaFila}>
+            <div className={estilos.ctaIcono}><IconoChat /></div>
+            <div className={estilos.ctaTexto2}>
+              <p className={estilos.ctaEtiqueta}>HABLEMOS</p>
+              <h2 className={estilos.ctaTitulo}>¿Tienes algo en mente?</h2>
+              <p className={estilos.ctaTexto}>Cuéntame qué necesitas y hablamos directamente por WhatsApp.</p>
+            </div>
+            <button type="button" className={estilos.ctaBoton} onClick={hablarPorWhatsapp}>
+              <IconoChat /> Hablar por WhatsApp →
+            </button>
+          </div>
           <div className={estilos.ctaNotas}>
             <span className={estilos.ctaNota}><IconoRayo /> Respuesta rápida</span>
             <span className={estilos.ctaNota}><IconoCandado /> Sin compromiso</span>
@@ -505,6 +517,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
           Creado con <LogoServix variante="icono" tamano={16} />
           <strong>Emprenia</strong>
         </a>
+        <span className={estilos.pieTagline}>Tu negocio, más lejos.</span>
       </div>
 
       {emprendedor.whatsapp_number && (

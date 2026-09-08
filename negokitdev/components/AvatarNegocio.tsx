@@ -6,11 +6,13 @@ export default function AvatarNegocio({
   tamano = 52,
   radio,
   conAnillo = false,
+  colorFondo = 'var(--accent)',
 }: {
   emprendedor: any
   tamano?: number
   radio?: number
   conAnillo?: boolean
+  colorFondo?: string
 }) {
   const borderRadius = radio ?? Math.round(tamano * 0.3)
   const anillo = conAnillo
@@ -62,7 +64,7 @@ export default function AvatarNegocio({
         width: tamano,
         height: tamano,
         borderRadius,
-        background: 'var(--accent)',
+        background: colorFondo,
         color: '#fff',
         display: 'flex',
         alignItems: 'center',
