@@ -84,6 +84,15 @@ ul {
 }
 
 .contenedor {
+  /* width:100% explícito, no solo max-width — sin esto, en pantallas
+     estrechas el navegador dejaba que ciertas filas internas (con flexbox
+     anidado, ej. los botones de "Contactar / Llamar / Cómo llegar")
+     empujaran el ancho del contenedor más allá de la pantalla en vez de
+     encogerse, y toda la página se desplazaba hacia la derecha con un
+     scroll horizontal invisible. Con width:100% el contenedor SIEMPRE
+     respeta el ancho real de la pantalla; max-width sigue limitándolo a
+     480px en pantallas grandes, igual que antes. */
+  width: 100%;
   max-width: 480px;
   margin: 0 auto;
   padding: 2rem 1.25rem 4rem;
