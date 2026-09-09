@@ -1284,15 +1284,19 @@ button.peligro {
      para que se note un contraste fuerte nada más entrar. */
   background: var(--foreground);
   color: #fff;
-  padding: 2.75rem 1.5rem 2.25rem;
+  padding: 2rem 1.5rem 1.5rem;
+  /* En movil todo centrado (texto, logo, insignias) — antes iba alineado a
+     la izquierda estilo "hero de escritorio" y se sentia descuadrado al
+     ir apilado encima del formulario. */
+  text-align: center;
 }
 
 .auth-panel-marca .auth-titulo {
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
   line-height: 1.3;
-  margin: 1.75rem 0 0.75rem;
+  margin: 1.25rem 0 0.6rem;
 }
 
 .auth-panel-marca .auth-titulo em {
@@ -1307,15 +1311,16 @@ button.peligro {
   color: rgba(255, 255, 255, 0.68);
   font-size: 0.92rem;
   max-width: 420px;
-  margin: 0;
+  margin: 0 auto;
   line-height: 1.5;
 }
 
 .auth-lista {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
-  margin: 1.75rem 0 0;
+  margin: 1.25rem 0 0;
   padding: 0;
   list-style: none;
 }
@@ -1330,11 +1335,17 @@ button.peligro {
 }
 
 .auth-panel-formulario {
+  /* En movil, este panel (el que de verdad importa, "Entrar"/"Crear mi
+     página") va PRIMERO — antes había que bajar por todo el bloque negro
+     de marca para llegar a él, y encima se cortaba a media tarjeta sin
+     hacer scroll. order:-1 lo sube arriba del todo; se anula en escritorio
+     (ahí van en fila, uno al lado del otro, como siempre). */
+  order: -1;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2.25rem 1.25rem 3.5rem;
+  padding: 1.75rem 1.25rem 1.25rem;
   background: var(--background);
 }
 
@@ -1397,6 +1408,7 @@ button.peligro {
   }
 
   .auth-panel-formulario {
+    order: 0;
     flex: 1;
   }
 
