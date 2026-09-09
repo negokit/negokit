@@ -409,6 +409,11 @@
   white-space: nowrap;
   flex-shrink: 0;
   transition: opacity 0.15s ease;
+  /* Con .ctaFila en flex-wrap, este botón casi siempre acaba en su propia
+     línea (el texto de al lado ya ocupa casi todo el ancho de la tarjeta).
+     Los márgenes automáticos lo centran en esa línea sin tocar el resto
+     de la fila cuando sí cabe todo junto. */
+  margin: 0 auto;
 }
 
 .ctaBoton:hover {

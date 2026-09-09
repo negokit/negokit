@@ -3,6 +3,13 @@
 // afecta a nada visible), no confundir con el nombre del negocio de cada
 // emprendedor — esto se usa en login, registro, panel y como firma "Creado
 // con Emprenia" al pie de las páginas públicas.
+//
+// El icono (hoja + barras ascendentes, en color terracota) es una imagen,
+// no un SVG dibujado a mano — viene directo de los dos archivos que dio
+// Gabriela. Hay dos variantes recortadas con fondo transparente, una para
+// colocar sobre fondos claros (barras en azul marino) y otra para fondos
+// oscuros (barras en blanco), controladas con la prop `claro` igual que
+// antes.
 export default function LogoServix({
   variante = 'completo',
   tamano = 32,
@@ -10,30 +17,18 @@ export default function LogoServix({
 }: {
   variante?: 'completo' | 'icono'
   tamano?: number
-  claro?: boolean // true = versión para fondos oscuros (icono invertido, texto blanco)
+  claro?: boolean // true = versión para fondos oscuros (barras del icono en blanco, texto blanco)
 }) {
-  const fondoIcono = claro ? '#FFFFFF' : 'var(--foreground)'
-  const colorS = claro ? 'var(--foreground)' : '#FFFFFF'
   const colorTexto = claro ? '#FFFFFF' : 'var(--foreground)'
+  const srcIcono = claro ? '/logo-emprenia-oscuro.png' : '/logo-emprenia-claro.png'
 
-  // Icono: 4 marcas de esquina (como puntos de enfoque de una cámara o de
-  // un lector de QR) con un punto central — representa "aquí te
-  // encuentran", ligado a lo que hace el producto (la página + el QR), en
-  // vez de ser una letra. Cuadrados sólidos y rectos a propósito (nada de
-  // curvas ni puntas redondeadas) para que no se puedan confundir con un
-  // corazón. Todo en un único color (antes el punto central era naranja —
-  // quedaba fuera de sitio ahora que el resto de la app es blanco y negro).
   const icono = (
-    <svg width={tamano} height={tamano} viewBox="0 0 100 100" aria-hidden="true" style={{ flexShrink: 0 }}>
-      <rect width="100" height="100" rx="24" fill={fondoIcono} />
-      <g fill={colorS}>
-        <rect x="24" y="24" width="12" height="12" />
-        <rect x="64" y="24" width="12" height="12" />
-        <rect x="24" y="64" width="12" height="12" />
-        <rect x="64" y="64" width="12" height="12" />
-      </g>
-      <circle cx="50" cy="50" r="8" fill={colorS} />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={srcIcono}
+      alt="Emprenia"
+      style={{ height: tamano, width: 'auto', flexShrink: 0, display: 'block' }}
+    />
   )
 
   if (variante === 'icono') return icono

@@ -23,17 +23,6 @@ function IconoPin() {
   )
 }
 
-// Formatea un teléfono español (+34 y 9 dígitos) en grupos, para que se lea
-// como un número de verdad y no como una fila de dígitos pegados. Cualquier
-// otro prefijo se muestra tal cual, sin arriesgarse a formatear mal.
-function formatearTelefono(numero: string) {
-  if (/^\+34\d{9}$/.test(numero)) {
-    const resto = numero.slice(3)
-    return `+34 ${resto.slice(0, 3)} ${resto.slice(3, 5)} ${resto.slice(5, 7)} ${resto.slice(7, 9)}`
-  }
-  return numero
-}
-
 function IconoTelefono() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -475,24 +464,20 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
 
         {copiado && <p className={estilos.avisoCopiado}>Enlace copiado ✓</p>}
 
-        {(lineaDireccion || emprendedor.whatsapp_number) && (
+        {/* El teléfono ya no se muestra aquí como texto: Gabriela lo pidió
+            quitar de la parte visual por ser redundante con el botón
+            "Llamar" de la fila de acciones de abajo (que sigue intacto). */}
+        {lineaDireccion && (
           <div className={estilos.metaFila}>
-            {lineaDireccion && (
-              <a
-                className={estilos.metaItem}
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lineaDireccion)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: 'none' }}
-              >
-                <IconoPin /> {lineaDireccion}
-              </a>
-            )}
-            {emprendedor.whatsapp_number && (
-              <a className={estilos.metaItem} href={`tel:${emprendedor.whatsapp_number}`} style={{ textDecoration: 'none' }}>
-                <IconoTelefono /> {formatearTelefono(emprendedor.whatsapp_number)}
-              </a>
-            )}
+            <a
+              className={estilos.metaItem}
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lineaDireccion)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none' }}
+            >
+              <IconoPin /> {lineaDireccion}
+            </a>
           </div>
         )}
 
