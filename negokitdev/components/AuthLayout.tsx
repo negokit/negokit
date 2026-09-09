@@ -14,7 +14,7 @@ export default function AuthLayout({
   return (
     <div className="auth-layout">
       <div className="auth-panel-marca">
-        <LogoServix tamano={26} />
+        <LogoServix tamano={26} claro />
         <h1 className="auth-titulo">{titulo}</h1>
         <p className="auth-subtitulo">{subtitulo}</p>
         <ul className="auth-lista">

@@ -22,8 +22,8 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
       />
       <AuthLayout
-        titulo={<>Tu negocio, listo para que te <em>encuentren</em>.</>}
-        subtitulo="Tu propia página para que tus clientes te encuentren, vean tus servicios y te escriban directo por WhatsApp — sin páginas complicadas ni nada que aprender."
+        titulo={<>Deja de perder clientes por no tener <em>dónde encontrarte</em>.</>}
+        subtitulo="Sube tus servicios y tus fotos en minutos, comparte tu página o tu código QR, y que te escriban directo por WhatsApp — sin diseñador, sin complicaciones."
         puntos={['Página profesional', 'Código QR permanente', 'Contacto por WhatsApp', 'Sin conocimientos técnicos']}
       >
         <div className="card" style={{ textAlign: 'center' }}>
