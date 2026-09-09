@@ -1318,7 +1318,7 @@ button.peligro {
 
 .auth-panel-marca .auth-subtitulo {
   color: rgba(255, 255, 255, 0.68);
-  font-size: 0.92rem;
+  font-size: 0.98rem;
   max-width: 420px;
   margin: 0 auto;
   line-height: 1.5;
@@ -1405,6 +1405,10 @@ button.peligro {
     flex-direction: column;
     justify-content: center;
     padding: 4rem;
+    /* En escritorio hay sitio de sobra: vuelve al alineado a la izquierda
+       de un "hero" normal (el centrado de arriba es solo para cuando el
+       panel va apilado encima del formulario en movil). */
+    text-align: left;
   }
 
   .auth-panel-marca .auth-titulo {
@@ -1413,7 +1417,12 @@ button.peligro {
   }
 
   .auth-panel-marca .auth-subtitulo {
-    font-size: 1rem;
+    font-size: 1.15rem;
+    margin: 0;
+  }
+
+  .auth-lista {
+    justify-content: flex-start;
   }
 
   .auth-panel-formulario {

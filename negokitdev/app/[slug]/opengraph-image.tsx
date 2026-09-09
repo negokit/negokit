@@ -1,5 +1,14 @@
 import { ImageResponse } from 'next/og'
 import { supabase } from '@/lib/supabaseClient'
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+
+// Logo real de Emprenia para la marca de agua pequeña de abajo a la
+// derecha — variante para fondo oscuro (barras en blanco) porque va dentro
+// de un cuadradito azul marino, igual que antes con el icono dibujado a mano.
+const logoDataUrl = `data:image/png;base64,${readFileSync(
+  path.join(process.cwd(), 'public', 'logo-emprenia-oscuro.png')
+).toString('base64')}`
 
 // Imagen que se ve cuando alguien comparte el enlace de un negocio por
 // WhatsApp, iMessage, etc. — con el logo del negocio (o sus iniciales si no
@@ -161,15 +170,19 @@ export default async function Image({ params }: Props) {
         )}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'absolute', bottom: 56, right: 76 }}>
-          {/* Mismo icono que el resto de la web (4 cuadrados + punto
-              terracota), a tamaño pequeño — reconstruido con divs porque
-              next/og no soporta bien paths de SVG complejos. */}
-          <div style={{ display: 'flex', position: 'relative', width: 30, height: 30, borderRadius: 9, background: '#1C1C27' }}>
-            <div style={{ display: 'flex', position: 'absolute', left: 7, top: 7, width: 4, height: 4, background: '#fff' }} />
-            <div style={{ display: 'flex', position: 'absolute', right: 7, top: 7, width: 4, height: 4, background: '#fff' }} />
-            <div style={{ display: 'flex', position: 'absolute', left: 7, bottom: 7, width: 4, height: 4, background: '#fff' }} />
-            <div style={{ display: 'flex', position: 'absolute', right: 7, bottom: 7, width: 4, height: 4, background: '#fff' }} />
-            <div style={{ display: 'flex', position: 'absolute', left: 12, top: 12, width: 6, height: 6, borderRadius: 3, background: '#C9713D' }} />
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 30,
+              height: 30,
+              borderRadius: 9,
+              background: '#1C1C27',
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logoDataUrl} width={19} height={19} style={{ objectFit: 'contain' }} alt="" />
           </div>
           <span style={{ display: 'flex', fontSize: 24, fontWeight: 600, color: '#5B6472' }}>
             Emprenia
