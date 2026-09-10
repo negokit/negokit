@@ -10,6 +10,11 @@
   --border: #E4DFD4;
   --muted: #8a8a99;
   --peligro: #B3261E;
+  /* Terracota real del logo nuevo — se usa solo como acento puntual en la
+     landing de venta (título, botón principal del hero, numeritos de
+     pasos...), no en el resto de la app, que se queda en blanco/negro. */
+  --landing-terracota: #C18663;
+  --landing-terracota-oscuro: #A66C4C;
 }
 
 @theme inline {
@@ -786,11 +791,13 @@ button.peligro {
 
 .landing-hero {
   width: 100%;
-  /* Antes era un bloque negro solido de pantalla completa -- el mayor
-     causante de que la app se sintiera oscura y sombria nada mas entrar.
-     Ahora es un lavado suave del azul de marca, mucho mas ligero. */
-  background: var(--accent-suave);
-  padding: 2.75rem 1.25rem 2.25rem;
+  /* Antes iba con un lavado azul tan suave (--accent-suave) que quedaba casi
+     igual que el fondo de la propia página — la landing entera se sentía
+     pálida y sin fuerza nada más entrar. Mismo tratamiento que ya lleva el
+     panel de login: negro sólido de marca, para que el primer bloque que
+     ve alguien tenga contraste real. */
+  background: var(--foreground);
+  padding: 3rem 1.25rem 2.5rem;
   box-sizing: border-box;
 }
 
@@ -801,29 +808,33 @@ button.peligro {
 }
 
 .landing-eyebrow {
-  color: var(--accent);
+  /* Terracota real del logo (no el negro de --accent, que se perdía sobre
+     el nuevo fondo oscuro) — de paso le da algo de color de marca a la
+     landing, que antes era enteramente blanco y negro. */
+  color: var(--landing-terracota);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.72rem;
   font-weight: 700;
-  margin: 1.5rem 0 0;
+  margin: 1.75rem 0 0;
 }
 
 .landing-titulo {
-  color: var(--foreground);
+  color: #fff;
   font-size: 1.6rem;
   font-weight: 700;
   line-height: 1.3;
   margin: 0.6rem 0 0.75rem;
+  text-wrap: balance;
 }
 
 .landing-titulo em {
-  color: var(--accent);
+  color: var(--landing-terracota);
   font-style: italic;
 }
 
 .landing-subtitulo {
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.72);
   font-size: 0.92rem;
   line-height: 1.55;
   margin: 0;
@@ -847,16 +858,45 @@ button.peligro {
   box-sizing: border-box;
 }
 
+/* El botón "Ya tengo cuenta" es un boton-pill-outline normal en el resto de
+   la app (pensado para ir sobre fondo claro) — sobre el nuevo hero oscuro
+   quedaba como una caja blanca fuera de lugar. Aquí, dentro del hero, se
+   reescribe para ir en línea con el fondo oscuro: transparente con borde
+   suave, y en terracota al pasar el ratón. */
+.landing-hero .boton-pill-outline {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.landing-hero .boton-pill-outline:hover {
+  border-color: var(--landing-terracota);
+  color: var(--landing-terracota);
+}
+
+/* El botón principal (.boton-pill) es negro por defecto en toda la app —
+   sobre el hero oscuro nuevo se volvía casi invisible (negro sobre negro).
+   Aquí, solo dentro del hero, pasa a terracota para que destaque como el
+   botón que realmente importa de toda la página. */
+.landing-hero .boton-pill {
+  background: var(--landing-terracota);
+  box-shadow: 0 10px 24px rgba(193, 134, 99, 0.35);
+}
+
+.landing-hero .boton-pill:hover {
+  background: var(--landing-terracota-oscuro);
+}
+
 .landing-confianza {
   display: flex;
   flex-wrap: wrap;
   gap: 6px 16px;
-  margin: 1rem 0 0;
+  margin: 1.1rem 0 0;
 }
 
 .landing-confianza span {
   font-size: 0.78rem;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .landing-ancho {
@@ -902,7 +942,7 @@ button.peligro {
   width: 30px;
   height: 30px;
   border-radius: 999px;
-  background: var(--accent);
+  background: var(--landing-terracota);
   color: #fff;
   font-size: 0.85rem;
   font-weight: 700;
@@ -968,7 +1008,7 @@ button.peligro {
 }
 
 .landing-precio-numero {
-  color: #fff;
+  color: var(--landing-terracota);
   font-size: 2rem;
   font-weight: 700;
   margin: 0 0 10px;

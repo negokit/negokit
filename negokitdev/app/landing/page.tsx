@@ -90,7 +90,7 @@ export default function LandingPage() {
     <div className="landing-pagina">
       <div className="landing-hero">
         <div className="landing-hero-contenido">
-          <LogoServix tamano={28} />
+          <LogoServix tamano={36} claro />
           <p className="landing-eyebrow">¿CUÁNTOS CLIENTES SE TE HAN IDO A LA COMPETENCIA ESTA SEMANA?</p>
           <h1 className="landing-titulo">
             Tu negocio, listo para que te <em>encuentren</em>.

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import LogoServix from '@/components/LogoServix'
 import AvatarNegocio from '@/components/AvatarNegocio'
+import CampoTelefono from '@/components/CampoTelefono'
 import {
   validarNombreCliente,
   validarTelefonoCliente,
@@ -557,15 +558,7 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
             />
 
             <label style={{ display: 'block', marginBottom: 4 }}>Tu teléfono</label>
-            <input
-              type="tel"
-              inputMode="tel"
-              placeholder="600 123 456"
-              value={telefono}
-              onChange={(e) => setTelefono(e.target.value)}
-              maxLength={LONGITUD_MAXIMA.telefonoCliente}
-              required
-            />
+            <CampoTelefono value={telefono} onChange={setTelefono} required />
 
             <label style={{ display: 'block', marginBottom: 4 }}>Tu dirección</label>
             <input

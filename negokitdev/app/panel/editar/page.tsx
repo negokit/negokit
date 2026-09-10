@@ -7,7 +7,6 @@ import {
   sanitizarSlugInput,
   validarWhatsapp,
   normalizarWhatsapp,
-  filtrarWhatsappInput,
   validarNombreNegocio,
   validarNombreContacto,
   validarOficio,
@@ -16,6 +15,7 @@ import {
   validarDescripcion,
   LONGITUD_MAXIMA,
 } from '@/lib/validaciones'
+import CampoTelefono from '@/components/CampoTelefono'
 import { INSIGNIAS_PRESET, MAX_INSIGNIAS, obtenerInsignias, validarInsignias } from '@/lib/insignias'
 import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
 import { calcularAcceso } from '@/lib/acceso'
@@ -540,15 +540,10 @@ export default function EditarNegocioPage() {
           <div className="seccion-formulario">
             <p className="etiqueta-seccion">Contacto</p>
             <label>Tu WhatsApp</label>
-            <input
-              type="tel"
-              inputMode="tel"
-              placeholder={emprendedor ? undefined : '600123456'}
-              value={whatsapp}
-              onChange={(e) => setWhatsapp(filtrarWhatsappInput(e.target.value))}
-              maxLength={whatsapp.trim().startsWith('+') ? 16 : 9}
-              required
-            />
+            <CampoTelefono value={whatsapp} onChange={setWhatsapp} required />
+            <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.85rem' }}>
+              Elige tu país y escribe solo los números de tu móvil, sin espacios.
+            </p>
           </div>
 
           <div className="seccion-formulario">
