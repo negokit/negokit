@@ -1,0 +1,2082 @@
+/* ====================================================================
+   Landing de venta (/landing) — reconstruida desde cero siguiendo la
+   referencia que mandó Gabriela: cabecera con menú, hero claro con
+   mockup de móvil + QR, sección de "dolor" con tarjetas de mensajes,
+   franja oscura de características, showcase portátil+móvil, 3 pasos,
+   precio y FAQ en acordeón, y footer con columnas.
+
+   Todo vive en este módulo (nada en globals.css) para no interferir con
+   el resto de la app. Mobile-first; breakpoints en 640 (tablet chica),
+   900 (tablet/portátil) y 1280 (escritorio). Un contenedor con
+   max-width en cada sección evita que en pantallas gigantes el
+   contenido se quede perdido en medio de un mar de fondo vacío — el
+   fondo de cada franja sí ocupa el 100% del ancho.
+   ==================================================================== */
+
+.pagina {
+  width: 100%;
+  overflow-x: hidden;
+  background: var(--background);
+}
+
+.ancho {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  box-sizing: border-box;
+}
+
+/* ---- Cabecera ---- */
+
+.cabecera {
+  width: 100%;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.cabeceraFila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  max-width: 1240px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.cabeceraLogo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.cabeceraNav {
+  display: none;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.cabeceraNav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cabeceraNav a:hover {
+  color: var(--foreground);
+}
+
+.cabeceraAcciones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cabeceraAcciones a {
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.botonLogin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.botonLogin:hover {
+  border-color: var(--landing-terracota);
+  color: var(--landing-terracota);
+}
+
+.botonHeader {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.6rem 1.15rem;
+  border-radius: 999px;
+  background: var(--foreground);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.botonHeader:hover {
+  opacity: 0.88;
+}
+
+@media (min-width: 900px) {
+  .cabeceraNav {
+    display: flex;
+  }
+}
+
+@media (max-width: 420px) {
+  .botonLogin {
+    display: none;
+  }
+
+  .botonHeader {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.82rem;
+  }
+}
+
+/* ---- Hero ---- */
+
+.hero {
+  width: 100%;
+  background:
+    radial-gradient(560px 420px at 82% 30%, rgba(193, 134, 99, 0.16), transparent 70%),
+    radial-gradient(420px 420px at 95% 65%, rgba(193, 134, 99, 0.12), transparent 70%),
+    var(--background);
+  padding: 2.75rem 0 3.5rem;
+  overflow: hidden;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.heroEyebrow {
+  color: var(--landing-terracota-oscuro);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin: 0 0 0.9rem;
+}
+
+.heroTitulo {
+  color: var(--foreground);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 0.9rem;
+  text-wrap: balance;
+}
+
+.heroTitulo strong {
+  display: block;
+  color: var(--landing-terracota-oscuro);
+}
+
+.heroSubtitulo {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 1.5rem;
+  max-width: 480px;
+}
+
+.heroCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.95rem 1.6rem;
+  border-radius: 999px;
+  background: var(--foreground);
+  color: #fff;
+  font-size: 0.98rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 14px 30px rgba(28, 28, 39, 0.18);
+}
+
+.heroCta:hover {
+  opacity: 0.9;
+}
+
+.heroNota {
+  margin: 0.9rem 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* Columna del mockup */
+
+.heroVisual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0 2.5rem;
+}
+
+.telefono {
+  width: 240px;
+  border-radius: 32px;
+  background: #0e0e14;
+  padding: 10px;
+  box-shadow: 0 30px 60px rgba(20, 20, 30, 0.28);
+  position: relative;
+  z-index: 2;
+}
+
+.telefonoPantalla {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.telefonoPortada {
+  position: relative;
+  height: 86px;
+  background:
+    radial-gradient(120% 160% at 12% -10%, rgba(255, 255, 255, 0.45), transparent 55%),
+    linear-gradient(135deg, #5a9c6d 0%, #1c3a22 100%);
+  box-shadow: inset 0 -14px 20px -6px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.telefonoPortada::before {
+  content: '';
+  position: absolute;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  top: -30px;
+  right: 6px;
+}
+
+.telefonoPortada::after {
+  content: '';
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  bottom: -22px;
+  left: 28%;
+}
+
+.telefonoMuesca {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 16px;
+  background: #0e0e14;
+  border-radius: 0 0 12px 12px;
+  z-index: 2;
+}
+
+.telefonoAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 10px rgba(20, 20, 30, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: -24px auto 0;
+}
+
+.telefonoCuerpo {
+  padding: 8px 0.9rem 1.2rem;
+}
+
+.telefonoNombre {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 6px 0 0;
+}
+
+.telefonoOficio {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin: 2px 0 12px;
+}
+
+.telefonoBotonWA {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--foreground);
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.55rem;
+  margin-bottom: 10px;
+}
+
+.telefonoAcciones {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.telefonoAcciones span {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.telefonoEtiqueta {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.telefonoServicio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.76rem;
+  color: var(--foreground);
+}
+
+.telefonoServicio span:first-child {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 -5px 8px -1px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(20, 20, 30, 0.2);
+}
+
+.telefonoServicio span:first-child svg,
+.movilServicio span:first-child svg,
+.rubroIcono svg {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.heroBlob {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(193, 134, 99, 0.22), rgba(193, 134, 99, 0) 70%);
+  top: -30px;
+  right: 10%;
+  z-index: 1;
+  filter: blur(2px);
+}
+
+.heroNotaManual {
+  position: absolute;
+  top: -6px;
+  right: 4%;
+  font-size: 0.78rem;
+  color: var(--landing-terracota-oscuro);
+  font-style: italic;
+  text-align: right;
+  line-height: 1.3;
+  transform: rotate(-3deg);
+  display: none;
+}
+
+.heroQr {
+  position: absolute;
+  bottom: 0;
+  right: 2%;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 16px 30px rgba(20, 20, 30, 0.12);
+  z-index: 3;
+  display: none;
+  text-align: center;
+}
+
+.heroQr img {
+  width: 76px;
+  height: 76px;
+  display: block;
+  margin: 0 auto 6px;
+}
+
+.heroQr span {
+  font-size: 0.62rem;
+  color: var(--muted);
+  max-width: 90px;
+  display: block;
+  line-height: 1.3;
+}
+
+@media (min-width: 720px) {
+  .heroNotaManual,
+  .heroQr {
+    display: block;
+  }
+}
+
+@media (min-width: 900px) {
+  .heroGrid {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 3rem;
+  }
+
+  .heroTitulo {
+    font-size: 2.6rem;
+  }
+
+  .heroSubtitulo {
+    font-size: 1.05rem;
+  }
+
+  .heroVisual {
+    padding: 0;
+  }
+
+  .telefono {
+    width: 260px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .heroTitulo {
+    font-size: 3rem;
+  }
+}
+
+/* ---- "¿Te suena?" ---- */
+
+.dolor {
+  padding: 3.5rem 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.dolorGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.25rem;
+  align-items: center;
+}
+
+.dolorTitulo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--foreground);
+  margin: 0 0 0.6rem;
+}
+
+.dolorTexto {
+  color: var(--muted);
+  font-size: 0.96rem;
+  line-height: 1.6;
+  margin: 0 0 1.5rem;
+  max-width: 420px;
+}
+
+.mensajesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  max-width: 420px;
+}
+
+.mensajeTarjeta {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 2px 8px rgba(28, 28, 39, 0.04);
+}
+
+.mensajeTarjeta p {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.mensajeTarjeta span {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.dolorIlustracion {
+  display: flex;
+  justify-content: center;
+}
+
+.burbujasIlustracion {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, rgba(193, 134, 99, 0.14), rgba(28, 28, 39, 0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.burbujasIlustracion svg {
+  width: 110px;
+  height: 110px;
+  color: var(--landing-terracota-oscuro);
+}
+
+.dolorNota {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+  font-style: italic;
+}
+
+@media (min-width: 900px) {
+  .dolorGrid {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem;
+  }
+}
+
+/* ---- Franja oscura de características ---- */
+
+.caracteristicas {
+  background: var(--foreground);
+  padding: 3.25rem 0;
+}
+
+.caracteristicasGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.caracteristicasEyebrow {
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+}
+
+.caracteristicasTitulo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 0.7rem;
+  line-height: 1.25;
+}
+
+.caracteristicasTitulo strong {
+  display: block;
+  color: var(--landing-terracota);
+}
+
+.caracteristicasTexto {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  max-width: 380px;
+  margin: 0;
+}
+
+.caracteristicasRejilla {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.caracteristicaTarjeta {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1.1rem 0.9rem;
+  text-align: center;
+}
+
+.caracteristicaTarjeta svg {
+  width: 26px;
+  height: 26px;
+  color: var(--landing-terracota);
+  margin: 0 auto 8px;
+}
+
+.caracteristicaTarjeta p {
+  margin: 0;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+@media (min-width: 900px) {
+  .caracteristicasGrid {
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 3rem;
+  }
+
+  .caracteristicasRejilla {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---- Showcase: portátil + móvil + rubros ---- */
+
+.showcase {
+  padding: 3.5rem 0;
+  background: var(--background);
+}
+
+.showcaseGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.mockups {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.portatil {
+  width: 100%;
+  max-width: 340px;
+}
+
+.portatilPantalla {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(20, 20, 30, 0.1);
+}
+
+.portatilBase {
+  height: 12px;
+  background: linear-gradient(180deg, #d8d8dc, #bdbdc4);
+  border-radius: 0 0 10px 10px;
+  margin: 0 -4px;
+}
+
+.portatilPortada {
+  height: 76px;
+  background:
+    radial-gradient(120% 160% at 12% -10%, rgba(255, 255, 255, 0.45), transparent 55%),
+    linear-gradient(135deg, #5a9c6d 0%, #1c3a22 100%);
+  box-shadow: inset 0 -14px 20px -6px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.portatilPortada::before {
+  content: '';
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  top: -34px;
+  right: 8%;
+}
+
+.portatilAvatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 10px rgba(20, 20, 30, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -26px auto 0;
+  position: relative;
+}
+
+.portatilCuerpo {
+  padding: 8px 1.25rem 1.5rem;
+}
+
+.mockNombre {
+  margin: 6px 0 0;
+  font-weight: 700;
+  color: var(--foreground);
+  font-size: 1rem;
+}
+
+.mockOficio {
+  margin: 2px 0 12px;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.mockBotonWA {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #25d366;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 12px;
+}
+
+.mockNav {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.movilPequeno {
+  width: 150px;
+  border-radius: 20px;
+  background: #0e0e14;
+  padding: 7px;
+  box-shadow: 0 20px 36px rgba(20, 20, 30, 0.18);
+}
+
+.movilPequenoPantalla {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.movilPequenoPortada {
+  height: 40px;
+  background:
+    radial-gradient(120% 160% at 12% -10%, rgba(255, 255, 255, 0.45), transparent 55%),
+    linear-gradient(135deg, #5a9c6d 0%, #1c3a22 100%);
+  box-shadow: inset 0 -8px 12px -4px rgba(0, 0, 0, 0.35);
+}
+
+.movilServicio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+  padding: 6px 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
+.movilServicio span:first-child {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 -4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.movilServicio span:first-child svg {
+  width: 11px;
+  height: 11px;
+}
+
+.movilServicio p {
+  margin: 0;
+  font-size: 0.66rem;
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.rubros {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rubrosTitulo {
+  font-size: 0.92rem;
+  color: var(--muted);
+  font-style: italic;
+  margin: 0;
+  text-align: center;
+}
+
+.rubrosRejilla {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.rubro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.rubroIcono {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: inset 0 -10px 16px -4px rgba(0, 0, 0, 0.32), 0 10px 20px rgba(20, 20, 30, 0.16);
+  transition: transform 0.15s ease;
+}
+
+.rubro:hover .rubroIcono {
+  transform: translateY(-3px);
+}
+
+.rubroIcono svg {
+  width: 24px;
+  height: 24px;
+}
+
+.rubro span {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .showcaseGrid {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 3rem;
+  }
+}
+
+/* ---- 3 pasos ---- */
+
+.pasos {
+  padding: 3.5rem 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.pasosCabecera {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.pasosTitulo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.pasosRejilla {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.pasoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pasoIcono {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(193, 134, 99, 0.14);
+  color: var(--landing-terracota-oscuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pasoIcono svg {
+  width: 22px;
+  height: 22px;
+}
+
+.pasoItem strong {
+  font-size: 0.98rem;
+  color: var(--foreground);
+}
+
+.pasoItem p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.pasosCta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pasosCtaNota {
+  font-size: 0.85rem;
+  color: var(--landing-terracota-oscuro);
+  font-style: italic;
+}
+
+@media (min-width: 900px) {
+  .pasosCabecera {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .pasosRejilla {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---- Precio ---- */
+
+.precio {
+  padding: 3.5rem 0;
+  background: var(--background);
+}
+
+.precioGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.precioTitulo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--foreground);
+  margin: 0.5rem 0 0.6rem;
+  line-height: 1.25;
+}
+
+.precioTexto {
+  color: var(--muted);
+  font-size: 0.94rem;
+  margin: 0;
+  max-width: 340px;
+}
+
+.precioTarjeta {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: 0 20px 50px rgba(20, 20, 30, 0.08);
+}
+
+.precioTarjetaNombre {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 6px;
+}
+
+.precioNumero {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 1.25rem;
+}
+
+.precioNumero strong {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.precioNumero span {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.precioLista {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.precioLista li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--foreground);
+}
+
+.precioLista svg {
+  width: 16px;
+  height: 16px;
+  color: var(--landing-terracota-oscuro);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.precioCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85rem 1rem;
+  border-radius: 999px;
+  background: var(--foreground);
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.precioCta:hover {
+  opacity: 0.9;
+}
+
+.precioBanda {
+  background: rgba(193, 134, 99, 0.1);
+  border: 1px solid rgba(193, 134, 99, 0.25);
+  border-radius: 16px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.precioBanda p {
+  margin: 0 0 10px;
+  font-size: 0.84rem;
+  color: var(--landing-terracota-oscuro);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+@media (min-width: 900px) {
+  .precioGrid {
+    grid-template-columns: 0.9fr 1fr 0.7fr;
+    gap: 2rem;
+  }
+}
+
+/* ---- FAQ ---- */
+
+.faq {
+  padding: 3.5rem 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.faqTitulo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--foreground);
+  margin: 0.5rem 0 0;
+  line-height: 1.25;
+}
+
+.faqLista {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  align-content: start;
+}
+
+.faqItem {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 0 1.1rem;
+  align-self: start;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faqItem:hover {
+  border-color: rgba(193, 134, 99, 0.45);
+}
+
+.faqItemAbierto {
+  border-color: var(--landing-terracota);
+  box-shadow: 0 14px 30px rgba(193, 134, 99, 0.14);
+}
+
+.faqPregunta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 1rem 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.faqIconoToggle {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(193, 134, 99, 0.12);
+  color: var(--landing-terracota-oscuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.faqItemAbierto .faqIconoToggle {
+  background: var(--landing-terracota);
+  color: #fff;
+}
+
+.faqRespuestaFila {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+
+.faqRespuestaFilaAbierta {
+  grid-template-rows: 1fr;
+}
+
+.faqRespuestaInner {
+  overflow: hidden;
+}
+
+.faqRespuesta {
+  margin: 0 0 1.1rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--foreground);
+  color: rgba(255, 255, 255, 0.88);
+  border-radius: 4px 14px 14px 14px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  max-width: 94%;
+}
+
+@media (min-width: 900px) {
+  .faqGrid {
+    grid-template-columns: 0.7fr 1.3fr;
+  }
+
+  .faqLista {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .faqItem {
+    align-self: start;
+  }
+}
+
+/* ---- Footer ---- */
+
+.pie {
+  background: var(--foreground);
+  padding: 3rem 0 1.5rem;
+}
+
+.pieGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.25rem;
+}
+
+.pieMarca {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 260px;
+}
+
+.pieMarca p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.pieColumnas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.pieColumna p {
+  color: var(--landing-terracota);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.pieColumna ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.pieColumna a {
+  color: rgba(255, 255, 255, 0.68);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.pieColumna a:hover {
+  color: #fff;
+}
+
+.pieCta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pieCtaEyebrow {
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.pieCta h3 {
+  color: #fff;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.pieCta p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  margin: 0 0 4px;
+  max-width: 260px;
+}
+
+.pieCtaBoton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 0.7rem 1.25rem;
+  border-radius: 999px;
+  background: var(--landing-terracota);
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.pieCtaBoton:hover {
+  background: var(--landing-terracota-oscuro);
+}
+
+.pieAbajo {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+@media (min-width: 640px) {
+  .pieAbajo {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 900px) {
+  .pieGrid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .pieColumnas {
+    grid-template-columns: 1fr 1fr;
+    display: contents;
+  }
+}
+
+/* ====================================================================
+   Ajuste visual SOLO de miniaturas/fotos del mockup.
+   No modifica textos, estructura, CTAs ni lógica de la landing.
+   ==================================================================== */
+
+/* Miniaturas de servicios: fotografía real + badge de icono discreto */
+.miniaturaServicio {
+  position: relative;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  isolation: isolate;
+}
+
+.miniaturaServicio::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(13, 32, 49, 0.02), rgba(13, 32, 49, 0.2));
+  z-index: 0;
+}
+
+.miniaturaServicioIcono {
+  position: absolute !important;
+  right: 2px;
+  bottom: 2px;
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 999px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(13, 32, 49, 0.78) !important;
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  box-shadow: 0 2px 6px rgba(13, 32, 49, 0.18) !important;
+  z-index: 2 !important;
+  overflow: hidden;
+}
+
+.miniaturaServicioIcono svg {
+  width: 8px !important;
+  height: 8px !important;
+  filter: none !important;
+}
+
+/* Hero móvil: las fotos pequeñas se leen mejor incluso a 320px */
+.telefonoServicio span:first-child {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  box-shadow: 0 2px 8px rgba(13, 32, 49, 0.13);
+}
+
+.telefonoServicio {
+  gap: 9px;
+  min-width: 0;
+}
+
+.telefonoServicio > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Móvil pequeño del showcase */
+.movilServicio span:first-child {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  box-shadow: 0 2px 7px rgba(13, 32, 49, 0.13);
+}
+
+.movilServicio {
+  gap: 8px;
+  padding: 7px 0.65rem;
+}
+
+.movilServicio p {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.25;
+}
+
+/* Oficios: pasan de círculos de color a miniaturas fotográficas */
+.rubroIcono {
+  width: 66px;
+  height: 66px;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: 3px solid var(--background);
+  box-shadow: 0 10px 24px rgba(13, 32, 49, 0.16);
+  isolation: isolate;
+}
+
+.rubroIcono::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(13, 32, 49, 0.02), rgba(13, 32, 49, 0.34));
+  z-index: 0;
+}
+
+.rubroIconoBadge {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 32, 49, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.rubroIconoBadge svg {
+  width: 13px;
+  height: 13px;
+  color: #fff;
+  filter: none;
+}
+
+.rubro span:last-child {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* Responsive fino de las miniaturas: sin alterar el resto de la landing */
+@media (max-width: 639px) {
+  .mockups {
+    gap: 14px;
+  }
+
+  .portatil {
+    max-width: min(100%, 320px);
+  }
+
+  .movilPequeno {
+    width: min(142px, 42vw);
+  }
+
+  .rubrosRejilla {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px 8px;
+  }
+
+  .rubroIcono {
+    width: clamp(48px, 14vw, 60px);
+    height: clamp(48px, 14vw, 60px);
+  }
+
+  .rubroIconoBadge {
+    width: 21px;
+    height: 21px;
+    right: 3px;
+    bottom: 3px;
+  }
+
+  .rubroIconoBadge svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .rubro span:last-child {
+    font-size: 0.64rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .rubrosRejilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .rubroIcono {
+    width: 64px;
+    height: 64px;
+  }
+
+  .rubro span:last-child {
+    font-size: 0.7rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .rubroIcono {
+    width: 72px;
+    height: 72px;
+  }
+
+  .telefonoServicio span:first-child {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+
+/* ============================================================
+   Showcase final — capturas exactas aprobadas de Jardines Verdes
+   Solo afecta a la sección #ejemplos.
+   ============================================================ */
+
+.showcaseExacto {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.34fr);
+  align-items: end;
+  gap: clamp(1rem, 2.5vw, 2.25rem);
+  padding: clamp(0.25rem, 1vw, 0.75rem) 0;
+}
+
+.showcaseExactoDesktop,
+.showcaseExactoMobile {
+  min-width: 0;
+}
+
+.showcaseExactoDesktop img,
+.showcaseExactoMobile img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.showcaseExactoDesktop img {
+  border-radius: 24px;
+  box-shadow: 0 26px 70px rgba(20, 20, 30, 0.10);
+}
+
+.showcaseExactoMobile {
+  width: 100%;
+  max-width: 330px;
+  justify-self: center;
+}
+
+.showcaseExactoMobile img {
+  border-radius: 34px;
+  box-shadow: 0 24px 55px rgba(20, 20, 30, 0.16);
+}
+
+@media (max-width: 899px) {
+  .showcaseExacto {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .showcaseExactoDesktop {
+    display: none;
+  }
+
+  .showcaseExactoMobile {
+    width: min(100%, 360px);
+    max-width: 360px;
+  }
+}
+
+@media (max-width: 420px) {
+  .showcaseExactoMobile {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .showcaseExactoMobile img {
+    border-radius: 28px;
+  }
+}
+
+
+
+/* ============================================================
+   EMPRENIA — DYNAMIC PREMIUM
+   Solo diseño: profundidad, movimiento y microinteracciones.
+   No modifica contenido, estructura ni funcionalidad.
+   ============================================================ */
+
+:root {
+  --dp-navy: #142235;
+  --dp-navy-2: #1c3048;
+  --dp-copper: #bd7d5a;
+  --dp-copper-soft: rgba(189,125,90,.10);
+  --dp-blue-soft: rgba(20,34,53,.045);
+  --dp-line: rgba(20,34,53,.09);
+  --dp-shadow: 0 18px 50px rgba(20,34,53,.09);
+}
+
+/* Movimiento suave de entrada */
+@keyframes empreniaReveal {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes empreniaFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+
+@keyframes empreniaGlow {
+  0%, 100% { opacity: .55; transform: scale(1); }
+  50%      { opacity: .85; transform: scale(1.08); }
+}
+
+/* Fondo base limpio, pero con profundidad muy sutil */
+.pagina {
+  background: #fff !important;
+}
+
+.hero,
+.dolor,
+.showcase,
+.pasos,
+.precio,
+.faq {
+  position: relative;
+  overflow: hidden;
+  background: #fff !important;
+}
+
+/* No bloques Canva: pequeñas luces ambientales, no franjas */
+.hero::before,
+.showcase::before,
+.precio::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  width: 420px !important;
+  height: 420px !important;
+  border-radius: 999px !important;
+  pointer-events: none !important;
+  filter: blur(2px);
+  background: radial-gradient(circle, var(--dp-copper-soft) 0%, rgba(189,125,90,0) 68%) !important;
+  animation: empreniaGlow 8s ease-in-out infinite;
+  z-index: 0;
+}
+
+.hero::before {
+  right: -180px !important;
+  top: 40px !important;
+  left: auto !important;
+}
+
+.showcase::before {
+  left: -220px !important;
+  top: 18% !important;
+}
+
+.precio::before {
+  right: -220px !important;
+  top: 12% !important;
+  left: auto !important;
+}
+
+.hero > *,
+.dolor > *,
+.showcase > *,
+.pasos > *,
+.precio > *,
+.faq > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ritmo amplio pero no vacío */
+.hero {
+  padding-top: 5rem !important;
+  padding-bottom: 6.5rem !important;
+}
+
+.dolor,
+.showcase,
+.pasos,
+.precio,
+.faq {
+  padding-top: 6rem !important;
+  padding-bottom: 6rem !important;
+}
+
+/* Separación sin sensación de hoja de examen */
+.dolor,
+.showcase,
+.pasos,
+.precio,
+.faq {
+  border: 0 !important;
+}
+
+.dolor {
+  background: linear-gradient(180deg, #fff 0%, #fafbfc 100%) !important;
+}
+
+.pasos {
+  background: linear-gradient(180deg, #fafbfc 0%, #fff 100%) !important;
+}
+
+/* Bloque oscuro: profundidad real */
+.caracteristicas {
+  position: relative;
+  overflow: hidden;
+  padding-top: 6rem !important;
+  padding-bottom: 6rem !important;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(189,125,90,.14), transparent 28%),
+    linear-gradient(135deg, #101c2b 0%, #17283c 100%) !important;
+  border: 0 !important;
+}
+
+/* Entrada visual de los grandes bloques */
+.heroGrid,
+.dolorGrid,
+.caracteristicasGrid,
+.showcaseGrid,
+.pasosGrid,
+.precioGrid,
+.faqGrid {
+  animation: empreniaReveal .7s ease-out both;
+}
+
+/* Hero: móvil flotante y con relieve */
+.heroVisual {
+  perspective: 1200px;
+}
+
+.hero img[src="/landing/jardines-mobile.png"] {
+  filter: drop-shadow(0 32px 46px rgba(20,34,53,.18)) !important;
+  animation: empreniaFloat 5.5s ease-in-out infinite;
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), filter .45s ease !important;
+}
+
+.hero img[src="/landing/jardines-mobile.png"]:hover {
+  transform: translateY(-8px) rotate(-1deg) scale(1.015) !important;
+  filter: drop-shadow(0 38px 58px rgba(20,34,53,.23)) !important;
+}
+
+/* Botones: relieve y respuesta */
+.heroCta,
+.navCta,
+.precioCta,
+.pieCtaButton {
+  background: var(--dp-navy) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 24px rgba(20,34,53,.16) !important;
+  transition: transform .22s ease, box-shadow .22s ease, background .22s ease !important;
+}
+
+.heroCta:hover,
+.navCta:hover,
+.precioCta:hover,
+.pieCtaButton:hover {
+  background: var(--dp-navy-2) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 16px 30px rgba(20,34,53,.20) !important;
+}
+
+/* Tarjetas: profundidad, pero sin efecto plantilla */
+.mensajeTarjeta,
+.precioTarjeta,
+.faqItem {
+  background: rgba(255,255,255,.94) !important;
+  border: 1px solid var(--dp-line) !important;
+  box-shadow: 0 8px 28px rgba(20,34,53,.055) !important;
+  transition: transform .28s cubic-bezier(.2,.8,.2,1),
+              box-shadow .28s ease,
+              border-color .28s ease !important;
+}
+
+.mensajeTarjeta:hover,
+.precioTarjeta:hover {
+  transform: translateY(-6px) !important;
+  border-color: rgba(189,125,90,.28) !important;
+  box-shadow: var(--dp-shadow) !important;
+}
+
+/* Características oscuras con glass MUY medido */
+.caracteristicaTarjeta {
+  background: rgba(255,255,255,.055) !important;
+  border: 1px solid rgba(255,255,255,.11) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05) !important;
+  transition: transform .28s ease, background .28s ease, border-color .28s ease !important;
+}
+
+.caracteristicaTarjeta:hover {
+  transform: translateY(-5px) !important;
+  background: rgba(255,255,255,.085) !important;
+  border-color: rgba(189,125,90,.35) !important;
+}
+
+/* Showcase: que el producto tenga presencia */
+.mockups {
+  background: transparent !important;
+  transition: transform .4s cubic-bezier(.2,.8,.2,1) !important;
+}
+
+.mockups:hover {
+  transform: translateY(-5px) !important;
+}
+
+.mockups img {
+  box-shadow: 0 28px 65px rgba(20,34,53,.13) !important;
+  transition: box-shadow .35s ease, transform .35s ease !important;
+}
+
+.mockups:hover img {
+  box-shadow: 0 34px 78px rgba(20,34,53,.17) !important;
+}
+
+/* Profesiones: interactivas sin parecer botones infantiles */
+.rubro {
+  transition: transform .22s ease !important;
+}
+
+.rubro:hover {
+  transform: translateY(-4px) !important;
+}
+
+.rubroIcono {
+  border: 1px solid rgba(20,34,53,.08) !important;
+  box-shadow: 0 8px 22px rgba(20,34,53,.07) !important;
+  transition: transform .25s ease, box-shadow .25s ease !important;
+}
+
+.rubro:hover .rubroIcono {
+  transform: scale(1.045) !important;
+  box-shadow: 0 14px 28px rgba(20,34,53,.11) !important;
+}
+
+/* Pasos: números/elementos ganan jerarquía al pasar */
+.paso {
+  transition: transform .25s ease !important;
+}
+
+.paso:hover {
+  transform: translateY(-4px) !important;
+}
+
+/* FAQ interactiva, limpia */
+.faqItem {
+  border-radius: 14px !important;
+  margin-bottom: .75rem !important;
+}
+
+.faqItem:hover {
+  border-color: rgba(20,34,53,.16) !important;
+  box-shadow: 0 10px 28px rgba(20,34,53,.07) !important;
+}
+
+/* Footer con profundidad coherente */
+.pie {
+  background:
+    radial-gradient(circle at 80% 0%, rgba(189,125,90,.11), transparent 30%),
+    var(--dp-navy) !important;
+}
+
+
+
+/* Móvil: menos movimiento para que siga siendo elegante */
+@media (max-width: 639px) {
+  .hero {
+    padding-top: 3rem !important;
+    padding-bottom: 4.5rem !important;
+  }
+
+  .dolor,
+  .showcase,
+  .pasos,
+  .precio,
+  .faq {
+    padding-top: 4.5rem !important;
+    padding-bottom: 4.5rem !important;
+  }
+
+  .hero img[src="/landing/jardines-mobile.png"] {
+    animation-duration: 6.5s;
+  }
+
+  .hero::before,
+  .showcase::before,
+  .precio::before {
+    width: 300px !important;
+    height: 300px !important;
+  }
+}
+
+
+
+/* ============================================================
+   EMPRENIA — COLOR & DEPTH FINAL
+   Más identidad de marca sin convertir la landing en bloques Canva.
+   ============================================================ */
+
+:root {
+  --brand-navy: #142235;
+  --brand-copper: #bd7d5a;
+  --brand-copper-light: rgba(189, 125, 90, .13);
+  --brand-navy-light: rgba(20, 34, 53, .065);
+}
+
+/* HERO: blanco con halo de marca, no fondo plano */
+.hero {
+  background:
+    radial-gradient(circle at 82% 28%, rgba(189,125,90,.17) 0%, rgba(189,125,90,.07) 24%, transparent 52%),
+    radial-gradient(circle at 5% 75%, rgba(20,34,53,.075) 0%, transparent 38%),
+    linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%) !important;
+}
+
+/* Dolor: transición muy sutil azul-gris */
+.dolor {
+  background:
+    radial-gradient(circle at 12% 15%, rgba(20,34,53,.055), transparent 34%),
+    linear-gradient(180deg, #fbfcfd 0%, #ffffff 100%) !important;
+}
+
+/* Showcase: halo cobre detrás del producto */
+.showcase {
+  background:
+    radial-gradient(circle at 24% 46%, rgba(189,125,90,.10), transparent 32%),
+    radial-gradient(circle at 88% 70%, rgba(20,34,53,.045), transparent 30%),
+    #ffffff !important;
+}
+
+/* Pasos: apenas teñido para romper el blanco continuo */
+.pasos {
+  background:
+    linear-gradient(135deg, rgba(20,34,53,.035) 0%, rgba(255,255,255,1) 45%, rgba(189,125,90,.045) 100%) !important;
+}
+
+/* Precio: foco cálido alrededor de la tarjeta */
+.precio {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(189,125,90,.105), transparent 36%),
+    #ffffff !important;
+}
+
+/* FAQ: profundidad mínima navy */
+.faq {
+  background:
+    radial-gradient(circle at 95% 15%, rgba(20,34,53,.05), transparent 30%),
+    #ffffff !important;
+}
+
+/* Hero móvil: más presencia */
+.hero img[src="/landing/jardines-mobile.png"] {
+  filter:
+    drop-shadow(0 34px 45px rgba(20,34,53,.20))
+    drop-shadow(0 10px 20px rgba(189,125,90,.10)) !important;
+}
+
+/* Tarjetas con relieve de marca */
+.mensajeTarjeta {
+  box-shadow:
+    0 16px 38px rgba(20,34,53,.075),
+    0 2px 8px rgba(189,125,90,.045) !important;
+}
+
+.mensajeTarjeta:hover {
+  box-shadow:
+    0 24px 48px rgba(20,34,53,.12),
+    0 8px 22px rgba(189,125,90,.09) !important;
+}
+
+/* Showcase: sombra elegante alrededor del producto */
+.mockups img {
+  box-shadow:
+    0 30px 70px rgba(20,34,53,.15),
+    0 8px 26px rgba(189,125,90,.07) !important;
+}
+
+/* Precio: tarjeta protagonista */
+.precioTarjeta {
+  box-shadow:
+    0 28px 65px rgba(20,34,53,.11),
+    0 8px 24px rgba(189,125,90,.08) !important;
+}
+
+/* Rubros: pequeño halo al interactuar */
+.rubro:hover .rubroIcono {
+  box-shadow:
+    0 16px 32px rgba(20,34,53,.12),
+    0 5px 14px rgba(189,125,90,.08) !important;
+}
+
+/* Mantener los dos bloques oscuros con identidad */
+.caracteristicas {
+  background:
+    radial-gradient(circle at 82% 20%, rgba(189,125,90,.18), transparent 30%),
+    radial-gradient(circle at 8% 90%, rgba(189,125,90,.07), transparent 26%),
+    linear-gradient(135deg, #101c2b 0%, #172a40 100%) !important;
+}
+
+.pie {
+  background:
+    radial-gradient(circle at 78% 0%, rgba(189,125,90,.15), transparent 30%),
+    linear-gradient(135deg, #101c2b 0%, #172a40 100%) !important;
+}
+
+/* Móvil: halos más contenidos */
+@media (max-width: 639px) {
+  .hero {
+    background:
+      radial-gradient(circle at 80% 32%, rgba(189,125,90,.13), transparent 42%),
+      #ffffff !important;
+  }
+
+  .showcase,
+  .precio {
+    background:
+      radial-gradient(circle at 50% 45%, rgba(189,125,90,.07), transparent 38%),
+      #ffffff !important;
+  }
+}
