@@ -417,7 +417,7 @@ export default function PanelPage() {
           />
           <input
             type="text"
-            placeholder='Pregunta 2 (ej. "¿Qué día te viene bien?")'
+            placeholder='Pregunta 2 (ej. "¿Algo más que debamos saber?")'
             value={pregunta2}
             onChange={(e) => setPregunta2(e.target.value)}
             maxLength={LONGITUD_MAXIMA.preguntaServicio}

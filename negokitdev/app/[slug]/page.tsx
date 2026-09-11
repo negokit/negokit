@@ -2,6 +2,15 @@ import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabaseClient'
 import PaginaPublicaClient from './PaginaPublicaClient'
 
+// Sin esto, Next.js puede tratar esta página como estática y servir a todo
+// el mundo la misma versión guardada en caché desde el último despliegue —
+// aunque el emprendedor cambie su WhatsApp cinco minutos después de eso,
+// seguiría enseñando el número viejo hasta el próximo redeploy. Forzamos
+// que se genere de nuevo en cada visita, para que el número (y todo lo
+// demás) esté siempre actualizado.
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 type Props = { params: Promise<{ slug: string }> }
 
 // Dominio real de la web — se usa para construir URLs absolutas en los
