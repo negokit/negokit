@@ -441,24 +441,18 @@ export default async function LandingPage() {
         <div className={estilos.ancho}>
           <div className={estilos.showcaseGrid}>
             <div className={estilos.mockups}>
-              <picture style={{ display: 'block', width: '100%' }}>
-                <source
-                  media="(max-width: 699px)"
-                  srcSet="/landing/jardines-mobile.png"
-                />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/landing/jardines-desktop.png"
-                  alt="Ejemplo de página profesional de Jardines Verdes creada con Emprenia"
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    height: 'auto',
-                    borderRadius: '24px',
-                    boxShadow: '0 24px 60px rgba(20, 20, 30, 0.12)',
-                  }}
-                />
-              </picture>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/landing/jardines-desktop.png"
+                alt="Ejemplo de página profesional de Jardines Verdes creada con Emprenia"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: '24px',
+                  boxShadow: '0 24px 60px rgba(20, 20, 30, 0.12)',
+                }}
+              />
             </div>
 
             <div className={estilos.rubros}>
