@@ -136,7 +136,7 @@ export default function CampoTelefono({
           emitir(codigo, prefijoLibre, v)
         }}
         placeholder={placeholderNumero}
-        maxLength={12}
+        maxLength={14}
         required={required}
         style={{ flex: '1 1 140px' }}
       />

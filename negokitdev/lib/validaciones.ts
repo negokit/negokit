@@ -1,3 +1,5 @@
+import { isValidPhoneNumber } from 'libphonenumber-js'
+
 export function slugify(texto: string) {
   return texto
     .toLowerCase()
@@ -54,14 +56,19 @@ export function filtrarWhatsappInput(valor: string) {
   return tienePrefijo ? '+' + soloDigitos : soloDigitos
 }
 
+// Antes esto solo comprobaba que hubiera entre 8 y 15 dígitos, sin mirar si
+// esa cantidad tenía sentido para el país del prefijo — así se podían guardar
+// números con dígitos de más o de menos (ej. un +593 de Ecuador con 12 dígitos
+// en vez de 9) que WhatsApp luego rechaza como "no es un número válido" cuando
+// un cliente intenta escribir. libphonenumber-js conoce la longitud real de
+// cada país y prefijo del mundo, así que valida de verdad, no solo por rango.
 export function validarWhatsapp(valor: string) {
   const limpio = valor.trim()
   if (limpio.startsWith('+')) {
-    // Prefijo de otro país: + seguido de 8 a 15 dígitos (formato internacional E.164 aproximado)
-    return /^\+\d{8,15}$/.test(limpio)
+    return isValidPhoneNumber(limpio)
   }
-  // Sin prefijo asumimos España: un móvil español son 9 dígitos exactos, solo números.
-  return /^\d{9}$/.test(limpio)
+  // Sin prefijo asumimos España.
+  return isValidPhoneNumber(limpio, 'ES')
 }
 
 export function validarTitulo(valor: string) {
