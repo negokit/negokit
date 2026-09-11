@@ -8,6 +8,7 @@ import {
   validarNombreCliente,
   validarTelefonoCliente,
   validarDireccionCliente,
+  validarRespuestaPregunta,
   LONGITUD_MAXIMA,
 } from '@/lib/validaciones'
 import { obtenerInsignias } from '@/lib/insignias'
@@ -89,6 +90,16 @@ function IconoWhatsapp() {
   )
 }
 
+// Opciones de la pregunta fija "¿Para cuándo lo necesitas?" — igual para
+// cualquier oficio, así el emprendedor sabe de un vistazo la urgencia real
+// sin tener que preguntarlo él, y sin que el cliente tenga que escribir nada.
+const OPCIONES_PARA_CUANDO = [
+  'Lo antes posible',
+  'Esta semana',
+  'Este mes',
+  'Sin prisa',
+]
+
 export default function PaginaPublicaClient({ slug }: { slug: string }) {
   const [emprendedor, setEmprendedor] = useState<any>(null)
   const [servicios, setServicios] = useState<any[]>([])
@@ -97,6 +108,11 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
   const [nombre, setNombre] = useState('')
   const [telefono, setTelefono] = useState('')
   const [direccion, setDireccion] = useState('')
+  const [paraCuando, setParaCuando] = useState('')
+  // Respuestas a las hasta 2 preguntas propias del servicio elegido (solo
+  // aparecen si el emprendedor las configuró para ese servicio en concreto).
+  const [respuesta1, setRespuesta1] = useState('')
+  const [respuesta2, setRespuesta2] = useState('')
   const [webSitio, setWebSitio] = useState('') // campo trampa anti-spam, no se muestra a personas
   const [aceptaDatos, setAceptaDatos] = useState(false)
   const [enviado, setEnviado] = useState(false)
@@ -112,25 +128,42 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
 
   // Recupera lo que el cliente ya había escrito en el formulario de
   // contacto, por si salió de la página sin llegar a enviarlo.
+  type BorradorContacto = {
+    nombre: string
+    telefono: string
+    direccion: string
+    paraCuando: string
+    respuesta1: string
+    respuesta2: string
+  }
+
   useEffect(() => {
-    const borrador = leerBorrador<{ nombre: string; telefono: string; direccion: string }>(`contacto-${slug}`)
+    const borrador = leerBorrador<BorradorContacto>(`contacto-${slug}`)
     if (borrador) {
       setNombre(borrador.nombre)
       setTelefono(borrador.telefono)
       setDireccion(borrador.direccion)
+      setParaCuando(borrador.paraCuando || '')
+      setRespuesta1(borrador.respuesta1 || '')
+      setRespuesta2(borrador.respuesta2 || '')
     }
     setListoParaGuardarBorrador(true)
   }, [slug])
 
   useEffect(() => {
     if (!listoParaGuardarBorrador) return
-    guardarBorrador(`contacto-${slug}`, { nombre, telefono, direccion })
-  }, [listoParaGuardarBorrador, slug, nombre, telefono, direccion])
+    guardarBorrador(`contacto-${slug}`, { nombre, telefono, direccion, paraCuando, respuesta1, respuesta2 })
+  }, [listoParaGuardarBorrador, slug, nombre, telefono, direccion, paraCuando, respuesta1, respuesta2])
 
   useEffect(() => {
     if (servicioSeleccionado) {
       document.getElementById('formulario-contacto')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
+    // Las preguntas guiadas son propias de cada servicio — si el cliente
+    // cambia de servicio, las respuestas anteriores ya no tienen sentido
+    // (podrían ni corresponder a una pregunta que exista en el nuevo).
+    setRespuesta1('')
+    setRespuesta2('')
   }, [servicioSeleccionado])
 
   async function cargar() {
@@ -364,6 +397,19 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
       setError('Escribe una dirección válida (5 a 150 caracteres).')
       return
     }
+    const servicio = servicios.find((s) => s.id === servicioSeleccionado)
+    if (!paraCuando) {
+      setError('Indica para cuándo lo necesitas.')
+      return
+    }
+    if (servicio?.pregunta_1 && !validarRespuestaPregunta(respuesta1)) {
+      setError(`Responde a "${servicio.pregunta_1}" (máximo ${LONGITUD_MAXIMA.respuestaPregunta} caracteres).`)
+      return
+    }
+    if (servicio?.pregunta_2 && !validarRespuestaPregunta(respuesta2)) {
+      setError(`Responde a "${servicio.pregunta_2}" (máximo ${LONGITUD_MAXIMA.respuestaPregunta} caracteres).`)
+      return
+    }
     if (!aceptaDatos) {
       setError('Debes aceptar que este negocio use tus datos para contactarte.')
       return
@@ -376,6 +422,9 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
       nombre_cliente: nombre,
       telefono_cliente: telefono,
       direccion_cliente: direccion,
+      para_cuando: paraCuando,
+      respuesta_1: servicio?.pregunta_1 ? respuesta1.trim() : null,
+      respuesta_2: servicio?.pregunta_2 ? respuesta2.trim() : null,
     })
     if (error) {
       setError(error.message)
@@ -383,15 +432,22 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
       return
     }
 
-    const servicio = servicios.find((s) => s.id === servicioSeleccionado)
     const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+    // Mensaje pensado para leerse de un vistazo: cada dato en su línea con un
+    // icono que lo identifica al momento, en vez de un bloque de texto plano.
+    const lineasPreguntas = [
+      servicio?.pregunta_1 ? `❓ ${servicio.pregunta_1}: ${respuesta1.trim()}` : null,
+      servicio?.pregunta_2 ? `❓ ${servicio.pregunta_2}: ${respuesta2.trim()}` : null,
+    ].filter(Boolean)
     const mensaje =
-      `¡Hola! Vengo desde tu página y quiero contactarte por esto:\n\n` +
-      `Servicio - "${servicio?.titulo}"\n` +
-      `Nombre - ${nombre}\n` +
-      `Teléfono - ${telefono}\n` +
-      `Dirección - ${direccion}\n` +
-      `Fecha - ${fecha}\n\n` +
+      `📩 Nuevo contacto desde tu página\n\n` +
+      `🛠️ Servicio: ${servicio?.titulo}\n` +
+      `⏱️ ¿Para cuándo?: ${paraCuando}\n` +
+      `👤 Nombre: ${nombre}\n` +
+      `📱 Teléfono: ${telefono}\n` +
+      `📍 Dirección: ${direccion}\n` +
+      (lineasPreguntas.length ? lineasPreguntas.join('\n') + '\n' : '') +
+      `📅 Fecha: ${fecha}\n\n` +
       `Quedo pendiente, ¡gracias!`
     const numeroLimpio = emprendedor.whatsapp_number.replace(/\D/g, '')
     const url = `https://wa.me/${numeroLimpio}?text=${encodeURIComponent(mensaje)}`
@@ -569,6 +625,50 @@ export default function PaginaPublicaClient({ slug }: { slug: string }) {
               maxLength={LONGITUD_MAXIMA.direccionCliente}
               required
             />
+
+            <label style={{ display: 'block', marginBottom: 4 }}>¿Para cuándo lo necesitas?</label>
+            <select value={paraCuando} onChange={(e) => setParaCuando(e.target.value)} required>
+              <option value="" disabled>Elige una opción</option>
+              {OPCIONES_PARA_CUANDO.map((opcion) => (
+                <option key={opcion} value={opcion}>{opcion}</option>
+              ))}
+            </select>
+
+            {(() => {
+              const servicio = servicios.find((s) => s.id === servicioSeleccionado)
+              return (
+                <>
+                  {servicio?.pregunta_1 && (
+                    <>
+                      <label style={{ display: 'block', marginBottom: 4 }}>{servicio.pregunta_1}</label>
+                      <textarea
+                        value={respuesta1}
+                        onChange={(e) => setRespuesta1(e.target.value)}
+                        maxLength={LONGITUD_MAXIMA.respuestaPregunta}
+                        required
+                      />
+                      <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.85rem' }}>
+                        {respuesta1.length}/{LONGITUD_MAXIMA.respuestaPregunta}
+                      </p>
+                    </>
+                  )}
+                  {servicio?.pregunta_2 && (
+                    <>
+                      <label style={{ display: 'block', marginBottom: 4 }}>{servicio.pregunta_2}</label>
+                      <textarea
+                        value={respuesta2}
+                        onChange={(e) => setRespuesta2(e.target.value)}
+                        maxLength={LONGITUD_MAXIMA.respuestaPregunta}
+                        required
+                      />
+                      <p style={{ marginTop: -8, color: 'var(--muted)', fontSize: '0.85rem' }}>
+                        {respuesta2.length}/{LONGITUD_MAXIMA.respuestaPregunta}
+                      </p>
+                    </>
+                  )}
+                </>
+              )
+            })()}
 
             {/* Campo trampa anti-spam: invisible para personas, los bots suelen rellenarlo igualmente */}
             <div style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }} aria-hidden="true">

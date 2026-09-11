@@ -3,14 +3,21 @@ import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import QRCode from 'qrcode'
-import { validarPrecio, validarTitulo, normalizarPrecio } from '@/lib/validaciones'
+import { validarPrecio, validarTitulo, normalizarPrecio, validarPreguntaServicio, LONGITUD_MAXIMA } from '@/lib/validaciones'
 import { guardarBorrador, leerBorrador, borrarBorrador } from '@/lib/borrador'
 import { calcularAcceso } from '@/lib/acceso'
 import { comprimirImagen } from '@/lib/imagenes'
 import MenuPanel from './MenuPanel'
 import AvatarNegocio from '@/components/AvatarNegocio'
 
-type BorradorServicio = { titulo: string; descripcion: string; precio: string; mostrarPrecio: boolean }
+type BorradorServicio = {
+  titulo: string
+  descripcion: string
+  precio: string
+  mostrarPrecio: boolean
+  pregunta1: string
+  pregunta2: string
+}
 
 const TAMANO_MAXIMO_FOTO = 5 * 1024 * 1024 // 5 MB
 const TIPOS_FOTO_PERMITIDOS = ['image/png', 'image/jpeg']
@@ -26,6 +33,12 @@ export default function PanelPage() {
   const [descripcion, setDescripcion] = useState('')
   const [precio, setPrecio] = useState('')
   const [mostrarPrecio, setMostrarPrecio] = useState(false)
+  // Hasta 2 preguntas propias de este servicio (ej. "¿Cuántos metros tiene tu
+  // jardín?") — opcionales. El cliente las responde en el formulario de
+  // contacto, en vez de que el emprendedor tenga que preguntarlo luego por
+  // WhatsApp (eso es justo lo que ahorra tiempo).
+  const [pregunta1, setPregunta1] = useState('')
+  const [pregunta2, setPregunta2] = useState('')
   const [foto, setFoto] = useState<File | null>(null)
   const [fotoActualUrl, setFotoActualUrl] = useState<string | null>(null)
   const [comprimiendoFoto, setComprimiendoFoto] = useState(false)
@@ -88,6 +101,8 @@ export default function PanelPage() {
         setDescripcion(borrador.descripcion)
         setPrecio(borrador.precio)
         setMostrarPrecio(borrador.mostrarPrecio)
+        setPregunta1(borrador.pregunta1 || '')
+        setPregunta2(borrador.pregunta2 || '')
       }
     }
 
@@ -99,8 +114,8 @@ export default function PanelPage() {
   useEffect(() => {
     if (!emprendedor) return
     const clave = `servicio-${emprendedor.id}-${servicioEditando || 'nuevo'}`
-    guardarBorrador(clave, { titulo, descripcion, precio, mostrarPrecio })
-  }, [emprendedor, servicioEditando, titulo, descripcion, precio, mostrarPrecio])
+    guardarBorrador(clave, { titulo, descripcion, precio, mostrarPrecio, pregunta1, pregunta2 })
+  }, [emprendedor, servicioEditando, titulo, descripcion, precio, mostrarPrecio, pregunta1, pregunta2])
 
   function limpiarFormulario() {
     if (emprendedor) borrarBorrador(`servicio-${emprendedor.id}-${servicioEditando || 'nuevo'}`)
@@ -109,6 +124,8 @@ export default function PanelPage() {
     setDescripcion('')
     setPrecio('')
     setMostrarPrecio(false)
+    setPregunta1('')
+    setPregunta2('')
     setFoto(null)
     setFotoActualUrl(null)
     setError('')
@@ -123,6 +140,8 @@ export default function PanelPage() {
     setDescripcion(borrador?.descripcion ?? s.descripcion ?? '')
     setPrecio(borrador?.precio ?? (s.precio != null ? String(s.precio) : ''))
     setMostrarPrecio(borrador?.mostrarPrecio ?? !!s.mostrar_precio)
+    setPregunta1(borrador?.pregunta1 ?? s.pregunta_1 ?? '')
+    setPregunta2(borrador?.pregunta2 ?? s.pregunta_2 ?? '')
     setFoto(null)
     setFotoActualUrl(s.foto_url || null)
     setError('')
@@ -166,6 +185,11 @@ export default function PanelPage() {
       return
     }
 
+    if (!validarPreguntaServicio(pregunta1) || !validarPreguntaServicio(pregunta2)) {
+      setError(`Cada pregunta puede tener como máximo ${LONGITUD_MAXIMA.preguntaServicio} caracteres.`)
+      return
+    }
+
     if (foto) {
       if (!TIPOS_FOTO_PERMITIDOS.includes(foto.type)) {
         setError('La foto debe ser un archivo .png o .jpg/.jpeg.')
@@ -198,6 +222,8 @@ export default function PanelPage() {
       precio: precio ? parseFloat(normalizarPrecio(precio)) : null,
       mostrar_precio: mostrarPrecio,
       foto_url,
+      pregunta_1: pregunta1.trim() || null,
+      pregunta_2: pregunta2.trim() || null,
     }
 
     if (servicioEditando) {
@@ -374,7 +400,30 @@ export default function PanelPage() {
             Mostrar precio en la página pública
           </label>
 
-          <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4 }}>
+          <label style={{ display: 'block', marginBottom: 4, marginTop: 10 }}>
+            Preguntas para el cliente (opcional, hasta 2)
+          </label>
+          <p style={{ marginTop: -2, marginBottom: 8, color: 'var(--muted)', fontSize: '0.85rem' }}>
+            Si las rellenas, el cliente las responde al contactarte por este servicio — así te llega ya la
+            información que necesitas, sin tener que preguntarla tú después.
+          </p>
+          <input
+            type="text"
+            placeholder='Pregunta 1 (ej. "¿Cuántos metros tiene tu jardín?")'
+            value={pregunta1}
+            onChange={(e) => setPregunta1(e.target.value)}
+            maxLength={LONGITUD_MAXIMA.preguntaServicio}
+            style={{ marginBottom: 8 }}
+          />
+          <input
+            type="text"
+            placeholder='Pregunta 2 (ej. "¿Qué día te viene bien?")'
+            value={pregunta2}
+            onChange={(e) => setPregunta2(e.target.value)}
+            maxLength={LONGITUD_MAXIMA.preguntaServicio}
+          />
+
+          <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4, marginTop: 10 }}>
             Foto del servicio (opcional)
           </label>
           {fotoPreviewUrl && (

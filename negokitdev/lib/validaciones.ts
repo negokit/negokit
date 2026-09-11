@@ -90,6 +90,8 @@ export const LONGITUD_MAXIMA = {
   telefonoCliente: 20,
   direccionCliente: 150,
   insigniaPersonalizada: 40,
+  preguntaServicio: 80,
+  respuestaPregunta: 300,
 }
 
 function textoValido(valor: string, min: number, max: number) {
@@ -164,4 +166,20 @@ export function validarDireccionCliente(valor: string) {
 export function validarInsigniaPersonalizada(valor: string) {
   if (!valor.trim()) return true
   return valor.trim().length <= LONGITUD_MAXIMA.insigniaPersonalizada
+}
+
+// Pregunta guiada que el propio emprendedor escribe al configurar un
+// servicio (ej. "¿Cuántos metros tiene tu jardín?") — hasta 2 por servicio.
+// Es opcional: dejarla vacía es válido, y esa pregunta simplemente no
+// aparece en el formulario del cliente para ese servicio.
+export function validarPreguntaServicio(valor: string) {
+  if (!valor.trim()) return true
+  return valor.trim().length <= LONGITUD_MAXIMA.preguntaServicio
+}
+
+// Respuesta del cliente final a una pregunta guiada — solo se llama a esto
+// cuando esa pregunta existe para el servicio elegido, así que aquí sí es
+// obligatoria (no puede quedar vacía) además del límite de caracteres.
+export function validarRespuestaPregunta(valor: string) {
+  return valor.trim().length > 0 && valor.trim().length <= LONGITUD_MAXIMA.respuestaPregunta
 }

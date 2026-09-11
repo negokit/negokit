@@ -13,8 +13,12 @@ type Lead = {
   telefono_cliente: string
   direccion_cliente: string
   created_at: string
+  updated_at: string
   estado: string
-  servicios: { titulo: string } | null
+  para_cuando: string | null
+  respuesta_1: string | null
+  respuesta_2: string | null
+  servicios: { titulo: string; pregunta_1: string | null; pregunta_2: string | null } | null
 }
 
 // Pipeline de seguimiento: en qué punto está cada cliente que contactó.
@@ -94,7 +98,9 @@ export default function ClientesPage() {
     // Solo los leads de los servicios de este negocio — nunca los de otro.
     const { data: leadsData } = await supabase
       .from('leads')
-      .select('id, servicio_id, nombre_cliente, telefono_cliente, direccion_cliente, created_at, estado, servicios!inner(titulo, emprendedor_id)')
+      .select(
+        'id, servicio_id, nombre_cliente, telefono_cliente, direccion_cliente, created_at, updated_at, estado, para_cuando, respuesta_1, respuesta_2, servicios!inner(titulo, pregunta_1, pregunta_2, emprendedor_id)'
+      )
       .eq('servicios.emprendedor_id', emp.id)
       .order('created_at', { ascending: false })
 
@@ -113,10 +119,14 @@ export default function ClientesPage() {
   // no tiene que darle a "Guardar" en ningún sitio, solo elige y ya está.
   async function cambiarEstado(lead: Lead, nuevoEstado: string) {
     const anterior = lead.estado
-    setLeads((prev) => prev.map((l) => (l.id === lead.id ? { ...l, estado: nuevoEstado } : l)))
+    const anteriorFecha = lead.updated_at
+    const ahora = new Date().toISOString()
+    setLeads((prev) => prev.map((l) => (l.id === lead.id ? { ...l, estado: nuevoEstado, updated_at: ahora } : l)))
     const { error } = await supabase.from('leads').update({ estado: nuevoEstado }).eq('id', lead.id)
     if (error) {
-      setLeads((prev) => prev.map((l) => (l.id === lead.id ? { ...l, estado: anterior } : l)))
+      setLeads((prev) =>
+        prev.map((l) => (l.id === lead.id ? { ...l, estado: anterior, updated_at: anteriorFecha } : l))
+      )
       alert('No se pudo guardar el cambio, inténtalo de nuevo.')
     }
   }
@@ -148,7 +158,11 @@ export default function ClientesPage() {
                 <span className="fecha-cliente">{formatearFecha(lead.created_at)}</span>
               </div>
             </div>
-            {lead.servicios?.titulo && <span className="etiqueta">{lead.servicios.titulo}</span>}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {lead.servicios?.titulo && <span className="etiqueta">{lead.servicios.titulo}</span>}
+              {lead.para_cuando && <span className="etiqueta">⏱️ {lead.para_cuando}</span>}
+              <span className="etiqueta">Actualizado: {formatearFecha(lead.updated_at || lead.created_at)}</span>
+            </div>
             <div className="meta-columna">
               <span className="meta-item">
                 <IconoPin /> {lead.direccion_cliente}
@@ -157,6 +171,16 @@ export default function ClientesPage() {
                 <IconoTelefono /> {lead.telefono_cliente}
               </span>
             </div>
+            {(lead.servicios?.pregunta_1 || lead.servicios?.pregunta_2) && (
+              <div className="meta-columna" style={{ marginTop: 4 }}>
+                {lead.servicios?.pregunta_1 && lead.respuesta_1 && (
+                  <span className="meta-item">❓ {lead.servicios.pregunta_1}: {lead.respuesta_1}</span>
+                )}
+                {lead.servicios?.pregunta_2 && lead.respuesta_2 && (
+                  <span className="meta-item">❓ {lead.servicios.pregunta_2}: {lead.respuesta_2}</span>
+                )}
+              </div>
+            )}
             <button type="button" className="boton-pill boton-pill-whatsapp" onClick={() => hablarPorWhatsapp(lead)}>
               <IconoWhatsapp /> Hablar por WhatsApp →
             </button>
