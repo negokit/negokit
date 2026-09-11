@@ -409,7 +409,7 @@ export default function PanelPage() {
           </p>
           <input
             type="text"
-            placeholder='Pregunta 1 (ej. "¿Cuántos metros tiene tu jardín?")'
+            placeholder='Pregunta 1 (ej. "¿Qué necesitas exactamente?")'
             value={pregunta1}
             onChange={(e) => setPregunta1(e.target.value)}
             maxLength={LONGITUD_MAXIMA.preguntaServicio}
