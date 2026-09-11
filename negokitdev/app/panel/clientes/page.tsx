@@ -13,7 +13,22 @@ type Lead = {
   telefono_cliente: string
   direccion_cliente: string
   created_at: string
+  estado: string
   servicios: { titulo: string } | null
+}
+
+// Pipeline de seguimiento: en qué punto está cada cliente que contactó.
+// El orden de este array es el orden en que aparecen en el desplegable.
+const ESTADOS = [
+  { valor: 'nuevo', etiqueta: 'Nuevo', color: '#6b7280' },
+  { valor: 'contactado', etiqueta: 'Contactado', color: '#2563eb' },
+  { valor: 'en_seguimiento', etiqueta: 'En seguimiento', color: '#d97706' },
+  { valor: 'cliente', etiqueta: 'Cliente', color: '#16a34a' },
+  { valor: 'no_cerrado', etiqueta: 'No cerrado', color: '#dc2626' },
+] as const
+
+function colorDeEstado(estado: string) {
+  return ESTADOS.find((e) => e.valor === estado)?.color || '#6b7280'
 }
 
 function IconoPin() {
@@ -79,7 +94,7 @@ export default function ClientesPage() {
     // Solo los leads de los servicios de este negocio — nunca los de otro.
     const { data: leadsData } = await supabase
       .from('leads')
-      .select('id, servicio_id, nombre_cliente, telefono_cliente, direccion_cliente, created_at, servicios!inner(titulo, emprendedor_id)')
+      .select('id, servicio_id, nombre_cliente, telefono_cliente, direccion_cliente, created_at, estado, servicios!inner(titulo, emprendedor_id)')
       .eq('servicios.emprendedor_id', emp.id)
       .order('created_at', { ascending: false })
 
@@ -91,6 +106,19 @@ export default function ClientesPage() {
     const numero = normalizarWhatsapp(lead.telefono_cliente).replace(/\D/g, '')
     const mensaje = `¡Hola ${lead.nombre_cliente}! Te escribo de ${emprendedor?.nombre_negocio}, vi que me contactaste por mi página.`
     window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank')
+  }
+
+  // Guarda el nuevo estado al momento (optimista: se actualiza en pantalla
+  // ya, y si falla el guardado se revierte y se avisa) — así el emprendedor
+  // no tiene que darle a "Guardar" en ningún sitio, solo elige y ya está.
+  async function cambiarEstado(lead: Lead, nuevoEstado: string) {
+    const anterior = lead.estado
+    setLeads((prev) => prev.map((l) => (l.id === lead.id ? { ...l, estado: nuevoEstado } : l)))
+    const { error } = await supabase.from('leads').update({ estado: nuevoEstado }).eq('id', lead.id)
+    if (error) {
+      setLeads((prev) => prev.map((l) => (l.id === lead.id ? { ...l, estado: anterior } : l)))
+      alert('No se pudo guardar el cambio, inténtalo de nuevo.')
+    }
   }
 
   if (loading) return <div className="contenedor"><p>Cargando...</p></div>
@@ -132,6 +160,29 @@ export default function ClientesPage() {
             <button type="button" className="boton-pill boton-pill-whatsapp" onClick={() => hablarPorWhatsapp(lead)}>
               <IconoWhatsapp /> Hablar por WhatsApp →
             </button>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10 }}>
+              <span
+                style={{
+                  width: 9,
+                  height: 9,
+                  borderRadius: '50%',
+                  background: colorDeEstado(lead.estado),
+                  flexShrink: 0,
+                }}
+              />
+              <select
+                value={lead.estado}
+                onChange={(e) => cambiarEstado(lead, e.target.value)}
+                aria-label="Estado del cliente"
+                style={{ flex: 1, fontSize: '0.85rem', padding: '6px 8px' }}
+              >
+                {ESTADOS.map((e) => (
+                  <option key={e.valor} value={e.valor}>
+                    {e.etiqueta}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
         ))}
       </div>
