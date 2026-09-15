@@ -3,31 +3,43 @@
 import { useState } from 'react'
 import estilos from './landing.module.css'
 
-const PREGUNTAS = [
+export const PREGUNTAS = [
   {
     pregunta: 'No tengo tiempo para esto.',
-    respuesta: 'No hace falta tiempo: subes 2-3 fotos y escribes qué ofreces. En minutos tu página está lista.',
+    respuesta:
+      'Lo pensamos justo para eso: subes 2 o 3 fotos, escribes qué ofreces, y tu página está lista en minutos. La gestionas tú, cuando puedas, sin depender de nadie más.',
   },
   {
     pregunta: 'No entiendo de tecnología.',
-    respuesta: 'No hace falta que entiendas nada. Si sabes escribir por WhatsApp, ya sabes usar Emprenia.',
+    respuesta:
+      'Emprenia está pensada exactamente para ti: si sabes escribir por WhatsApp, ya sabes usar Emprenia. Nada técnico, nada que aprender de más.',
   },
   {
     pregunta: 'Ya tengo Instagram, ¿para qué quiero esto?',
     respuesta:
-      'Tu Instagram es para que te vean. Emprenia es para que, cuando compartas tu enlace, te escriban directo a tu WhatsApp con un toque, sin que tengan que buscarte entre publicaciones.',
+      'Tu Instagram es para que te descubran. Emprenia es tu espacio propio: decides qué mostrar y qué preguntarle a cada cliente, y te escriben directo por WhatsApp con lo que necesitas saber — sin que se pierdan entre publicaciones.',
+  },
+  {
+    pregunta: '¿Esto es lo mismo que tener una página web?',
+    respuesta:
+      'Parecido, pero con una diferencia importante: una web muestra información. Con Emprenia además editas tú mismo tus servicios, fotos y precios cuando quieras, decides qué preguntarle a cada cliente, y cada solicitud te llega ya organizada — sin depender de un programador para cambiar nada.',
   },
   {
     pregunta: '¿Y si no me funciona?',
-    respuesta: 'Por eso hay 7 días de prueba gratis, sin compromiso. Si no te aporta nada, lo dejas y no pasa nada.',
+    respuesta: 'Por eso tienes 7 días de prueba gratis, sin compromiso. Lo pruebas con calma y, si no es para ti, lo dejas sin más.',
   },
   {
     pregunta: 'No tengo tarjeta.',
-    respuesta: 'No pasa nada — también puedes pagar con tu cuenta bancaria (domiciliación), sin necesidad de tarjeta.',
+    respuesta: 'No hace falta — también puedes pagar por transferencia o domiciliación bancaria, sin necesidad de tarjeta.',
   },
   {
     pregunta: '¿Puedo cancelar cuando quiera?',
-    respuesta: 'Sí, sin permanencia ni letra pequeña. Cancelas desde tu panel cuando quieras y dejas de pagar.',
+    respuesta: 'Sí. Sin permanencia ni letra pequeña: cancelas desde tu propio panel cuando quieras y dejas de pagar en ese momento.',
+  },
+  {
+    pregunta: '¿Esto me va a conseguir clientes?',
+    respuesta:
+      'Eso siempre depende de ti — no te lo prometemos. Lo que hace Emprenia es ponértelo fácil: que te encuentren, que sepan qué ofreces, y que lleguen a ti ya con la información que necesitas para poder atenderlos.',
   },
 ]
 

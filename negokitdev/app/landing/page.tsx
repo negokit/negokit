@@ -1,17 +1,60 @@
 import type { Metadata } from 'next'
 import QRCode from 'qrcode'
 import LogoServix from '@/components/LogoServix'
-import { PLAN_PRECIO } from '@/lib/config'
-import FaqAcordeon from './FaqAcordeon'
+import { PLAN_NOMBRE, PLAN_PRECIO } from '@/lib/config'
+import FaqAcordeon, { PREGUNTAS } from './FaqAcordeon'
 import estilos from './landing.module.css'
 
 export const metadata: Metadata = {
-  title: 'Emprenia — Comparte tu página, que te escriban por WhatsApp',
+  // Sin el prefijo "Emprenia —" aquí: el título ya se completa solo con
+  // "· Emprenia" gracias al template del layout raíz. Ponerlo aquí también
+  // hacía que "Emprenia" saliera dos veces en la pestaña del navegador.
+  title: 'Comparte tu página, que te escriban por WhatsApp',
   description:
     'Tu propia página, con tus fotos y tus servicios. La compartes con tu enlace o tu QR, y quien la vea te escribe directo por WhatsApp. Sin páginas complicadas ni nada que aprender.',
 }
 
 const DOMINIO_DEMO = 'https://emprenia.com'
+
+// Precio en formato schema.org (solo número con punto, sin símbolo ni "/mes").
+// Se calcula a partir de PLAN_PRECIO para que nunca se desactualice si el
+// precio cambia en lib/config.ts.
+const PRECIO_NUMERICO = PLAN_PRECIO.match(/[\d,.]+/)?.[0].replace(',', '.') ?? '14.99'
+
+// Datos estructurados (schema.org) de esta página comercial: qué es el
+// producto, cuánto cuesta, y las preguntas frecuentes tal cual las tiene la
+// propia página — para que Google y los asistentes de IA lo lean sin
+// ambigüedad, en vez de tener que adivinarlo del texto.
+const datosEstructurados = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Emprenia',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  url: `${DOMINIO_DEMO}/landing`,
+  description:
+    'Tu propia página, con tus fotos y tus servicios. La compartes con tu enlace o tu QR, y quien la vea te escribe directo por WhatsApp.',
+  offers: {
+    '@type': 'Offer',
+    name: PLAN_NOMBRE,
+    price: PRECIO_NUMERICO,
+    priceCurrency: 'EUR',
+    category: 'subscription',
+  },
+}
+
+const datosFaq = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: PREGUNTAS.map((item) => ({
+    '@type': 'Question',
+    name: item.pregunta,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.respuesta,
+    },
+  })),
+}
 
 /* ---------------------------------------------------------------- */
 /* Iconos (trazo simple, mismo estilo en toda la página)             */
@@ -305,7 +348,18 @@ export default async function LandingPage() {
   const qrDataUrl = await QRCode.toDataURL(DOMINIO_DEMO, { width: 200, margin: 1 })
 
   return (
-    <div className={estilos.pagina}>
+    <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(datosFaq) }}
+      />
+      <div className={estilos.pagina}>
       {/* ---- Cabecera ---- */}
       <header className={estilos.cabecera}>
         <div className={estilos.cabeceraFila}>
@@ -634,6 +688,7 @@ export default async function LandingPage() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   )
 }

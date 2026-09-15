@@ -1,0 +1,26 @@
+# Emprenia
+
+> Emprenia ayuda a autónomos y pequeños negocios (estética, reformas, jardinería, fotografía, limpieza, peluquería, entrenamiento personal) a crear en minutos una página profesional con sus fotos y servicios, un código QR permanente y un botón de WhatsApp siempre visible para que los clientes escriban directamente.
+
+## Qué ofrece
+- Página de negocio con fotos y servicios
+- Código QR permanente para compartir
+- Botón directo de contacto por WhatsApp
+- No requiere conocimientos técnicos
+- Acceso desde móvil y ordenador
+
+## Precio
+14,99 €/mes. Prueba gratuita de 7 días, sin tarjeta. Sin permanencia, cancelación en cualquier momento. También se puede pagar por transferencia bancaria.
+
+## Para quién
+Autónomos y pequeños negocios de servicios: estética, reformas, jardinería, fotografía, limpieza, peluquería, entrenamiento personal y similares.
+
+## Contacto
+Soporte por email: emprenia.app@gmail.com
+
+## Enlaces
+- Inicio: https://emprenia.com/
+- Cómo funciona: https://emprenia.com/landing
+- Registro: https://emprenia.com/registro
+- Términos: https://emprenia.com/terminos
+- Privacidad: https://emprenia.com/privacidad
