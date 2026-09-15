@@ -11,6 +11,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .from('emprendedores')
     .select('slug')
     .eq('activo', true)
+    // Las cuentas de prueba se quedan "activo = true" a propósito (para
+    // poder probarlas de verdad), pero nunca deben salir en el sitemap ni
+    // indexarse en Google — de ahí este segundo filtro.
+    .eq('es_prueba', false)
 
   const paginasDeNegocios = (emprendedores || []).map((e) => ({
     url: `${BASE_URL}/${e.slug}`,

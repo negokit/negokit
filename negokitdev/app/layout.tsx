@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import AvisoCookies from "@/components/AvisoCookies";
+
+// ID de medición de Google Analytics (propiedad "Emprenia" / flujo "Emprenia Web").
+const GA_ID = "G-1T7SBCC5HR";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -60,6 +64,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         {children}
         <AvisoCookies />
+        {/* Solo en producción: así tus pruebas en dev/preview no ensucian
+            las estadísticas reales de visitas. */}
+        {process.env.VERCEL_ENV === "production" && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   );
