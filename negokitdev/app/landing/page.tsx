@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import QRCode from 'qrcode'
 import LogoServix from '@/components/LogoServix'
 import { PLAN_NOMBRE, PLAN_PRECIO } from '@/lib/config'
-import FaqAcordeon, { PREGUNTAS } from './FaqAcordeon'
+import FaqAcordeon from './FaqAcordeon'
+import { PREGUNTAS } from './faqData'
 import estilos from './landing.module.css'
 
 export const metadata: Metadata = {
